@@ -7,4 +7,5 @@ public class mainClient implements ClientModInitializer {
   @Override
   public void onInitializeClient() {
   }
+
 }
