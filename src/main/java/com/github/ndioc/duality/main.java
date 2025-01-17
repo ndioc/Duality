@@ -13,6 +13,7 @@ public class main implements ModInitializer {
   @Override
   public void onInitialize() {
 
+    potions.initialize();
     blocks.initialize();
     fluids.initialize();
     equipment.initialize();
