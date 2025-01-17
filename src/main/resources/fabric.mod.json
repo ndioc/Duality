@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "duality",
+  "version": "${version}",
+
+  "name": "Duality",
+  "description": "A magic focused mod for Minecraf",
+  "authors": [],
+  "contact": {},
+
+  "license": "MIT",
+  "icon": "assets/duality/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "client": ["com.github.ndioc.duality.client.mainClient"],
+    "main": ["com.github.ndioc.duality.main"]
+  },
+
+  "mixins": [
+    "duality.mixins.json"
+    ,{
+      "config": "duality.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
