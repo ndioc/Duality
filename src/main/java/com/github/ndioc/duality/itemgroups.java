@@ -12,10 +12,10 @@ public class itemgroups {
 
   public static class Duality {
 
-    public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier(main.MOD_ID,"DUALITY"), FabricItemGroup.builder()
+    public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier(main.MOD_ID,"duality_itemgroup"), FabricItemGroup.builder()
 
         .icon(() -> new ItemStack(blocks.WISPWOOD_LOG))
-        .displayName(Text.translatable("itemgroup.duality.DUALITY"))
+        .displayName(Text.translatable("itemgroup.duality.duality"))
         .entries((context, entries) -> {
 
           // add item to item group: entries.add(class.ITEM_NAME);
@@ -26,10 +26,13 @@ public class itemgroups {
 
         .build());
 
+    public static void initializegroup(){
+    }
+
   }
 
   public static void initialize(){
-
+    Duality.initializegroup();
   }
 
 
