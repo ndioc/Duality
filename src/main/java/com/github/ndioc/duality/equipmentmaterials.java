@@ -1,6 +1,7 @@
 package com.github.ndioc.duality;
 
 import com.google.common.base.Suppliers;
+import net.minecraft.item.Items;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.recipe.Ingredient;
 
@@ -8,7 +9,7 @@ import java.util.function.Supplier;
 
 public enum equipmentmaterials implements ToolMaterial {
 
-  PLACEHOLDER(1, 1,1f,1f,1, () -> Ingredient.ofItems(items.PLACEHOLDER));
+  PLACEHOLDER(1, 1,1f,1f,1, () -> Ingredient.ofItems(Items.OAK_PLANKS));
 
   private final int miningLevel;
   private final int itemDurability;

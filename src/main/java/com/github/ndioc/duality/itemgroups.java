@@ -12,14 +12,14 @@ public class itemgroups {
 
   public static class Duality {
 
-    public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier("duality","DUALITY"), FabricItemGroup.builder()
+    public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier(main.MOD_ID,"DUALITY"), FabricItemGroup.builder()
 
-        .icon(() -> new ItemStack(items.CRYSTALLIZED_ESSENCE))
-        .displayName(Text.translatable("ItemGroup.duality.DUALITY"))
+        .icon(() -> new ItemStack(blocks.WISPWOOD_LOG))
+        .displayName(Text.translatable("itemgroup.duality.DUALITY"))
         .entries((context, entries) -> {
 
           // add item to item group: entries.add(class.ITEM_NAME);
-
+            entries.add(blocks.WISPWOOD_LOG);
 
           }
         )
@@ -29,6 +29,7 @@ public class itemgroups {
   }
 
   public static void initialize(){
+
   }
 
 

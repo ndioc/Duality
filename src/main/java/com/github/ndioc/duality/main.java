@@ -13,12 +13,12 @@ public class main implements ModInitializer {
   @Override
   public void onInitialize() {
 
+    itemgroups.initialize();
     potions.initialize();
     blocks.initialize();
     fluids.initialize();
     equipment.initialize();
     items.initialize();
-    itemgroups.initialize();
     enchantments.initialize();
     recipes.initialize();
 
