@@ -1,14 +1,14 @@
 {
   "variants": {
     "axis=x": {
-      "model": "duality:block/wispwood_log/wispwood_log_horizontal",
+      "model": "duality:block/wispwood_log/wispwood_log_1_horizontal",
       "y": 90
     },
     "axis=y": {
-      "model": "duality:block/wispwood_log/wispwood_log"
+      "model": "duality:block/wispwood_log/wispwood_log_1"
     },
     "axis=z": {
-      "model": "duality:block/wispwood_log/wispwood_log_horizontal"
+      "model": "duality:block/wispwood_log/wispwood_log_1_horizontal"
     }
   }
 }
