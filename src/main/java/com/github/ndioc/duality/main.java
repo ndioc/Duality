@@ -1,5 +1,6 @@
 package com.github.ndioc.duality;
 
+import com.github.ndioc.duality.blockentities.blockentitytypes;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ public class main implements ModInitializer {
     itemgroups.initialize();
     potions.initialize();
     blocks.initialize();
+    blockentitytypes.initialize();
     fluids.initialize();
     equipment.initialize();
     items.initialize();
