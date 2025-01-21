@@ -13,8 +13,8 @@ public class blockentitytypes {
     return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(main.MOD_ID, path), type);
   }
 
-  public static final BlockEntityType<animatedpillar> ANIMATED_PILLAR = register("animated_pillar",
-      FabricBlockEntityTypeBuilder.create(animatedpillar::new, blocks.WISPWOOD_LOG).build());
+  public static final BlockEntityType<AnimatedPillarEntity> ANIMATED_PILLAR = register("Animated_Pillar",
+      FabricBlockEntityTypeBuilder.create(AnimatedPillarEntity::new, blocks.WISPWOOD_LOG).build());
 
   public static void initialize(){
   }

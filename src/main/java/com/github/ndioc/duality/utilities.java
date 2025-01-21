@@ -1,9 +1,13 @@
 package com.github.ndioc.duality;
 
 
+import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.PillarBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -11,6 +15,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import static com.github.ndioc.duality.main.MOD_ID;
 
@@ -32,6 +37,11 @@ public class utilities {
 
     return Registry.register(Registries.BLOCK, regid, block);
 
+  }
+
+  @Nullable
+  public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> validateTicker(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<A> ticker) {
+    return expectedType == givenType ? ticker : null;
   }
 
 }

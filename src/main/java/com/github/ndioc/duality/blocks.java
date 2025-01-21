@@ -1,6 +1,6 @@
 package com.github.ndioc.duality;
 
-import com.github.ndioc.duality.block.wispwood_log;
+import com.github.ndioc.duality.block.Wispwood_Log;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
@@ -14,7 +14,7 @@ public class blocks {
 
   public static final Block WISPWOOD_LOG = registerblock(
       "wispwood_log", true,
-      new wispwood_log(FabricBlockSettings.create()
+      new Wispwood_Log(FabricBlockSettings.create()
           .sounds(BlockSoundGroup.WOOD)
           .hardness(6f)
           .requiresTool()
