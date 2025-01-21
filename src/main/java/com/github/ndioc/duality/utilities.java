@@ -10,6 +10,7 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
 import static com.github.ndioc.duality.main.MOD_ID;
 
@@ -32,4 +33,5 @@ public class utilities {
     return Registry.register(Registries.BLOCK, regid, block);
 
   }
+
 }
