@@ -39,9 +39,13 @@ public class utilities {
 
   }
 
+  public static <T extends BlockEntityType<?>> T RegisterBlockEntityType(String path, T type) {
+    return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(main.MOD_ID, path), type);
+  }
+
   @Nullable
-  public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> validateTicker(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<A> ticker) {
-    return expectedType == givenType ? ticker : null;
+  public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> validateTicker(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<? super E> ticker) {
+    return expectedType == givenType ? (BlockEntityTicker<A>) ticker : null;
   }
 
 }

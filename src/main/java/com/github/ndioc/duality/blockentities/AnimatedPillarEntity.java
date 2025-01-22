@@ -1,5 +1,6 @@
 package com.github.ndioc.duality.blockentities;
 
+import com.github.ndioc.duality.main;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -11,14 +12,14 @@ public class AnimatedPillarEntity extends BlockEntity {
   public String axis = "y";
   public int index = 0;
   public boolean trigger = false;
-  public int tickssincelast = 0;
+  public int tickssincereset = 0;
 
   @Override
   public void writeNbt(NbtCompound data) {
     data.putInt("index", index);
     data.putString("axis", axis);
     data.putBoolean("trigger", trigger);
-    data.putInt("tickssincelast", tickssincelast);
+    data.putInt("tickssincereset", tickssincereset);
     super.writeNbt(data);
   }
 
@@ -27,7 +28,7 @@ public class AnimatedPillarEntity extends BlockEntity {
     index = nbt.getInt("index");
     axis = nbt.getString("axis");
     trigger = nbt.getBoolean("trigger");
-    tickssincelast = nbt.getInt("tickssincelast");
+    tickssincereset = nbt.getInt("tickssincereset");
     super.readNbt(nbt);
   }
 
@@ -54,10 +55,11 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
-    entity.tickssincelast++;
+    entity.tickssincereset++;
 
-    if(entity.tickssincelast < 10) {
-      entity.tickssincelast = 0;
+    if(entity.tickssincereset >= 20) {
+      main.LOGGER.info("testing ticker, 20 ticks have passed since last reset");
+      entity.tickssincereset = 0;
     }
 
   }
