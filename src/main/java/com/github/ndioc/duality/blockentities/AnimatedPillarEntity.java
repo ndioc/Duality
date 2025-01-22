@@ -20,7 +20,6 @@ public class AnimatedPillarEntity extends BlockEntity {
     data.putInt("index", index);
     data.putString("axis", axis);
     data.putBoolean("trigger", trigger);
-    data.putInt("tickssincereset", tickssincereset);
     super.writeNbt(data);
   }
 
@@ -29,7 +28,6 @@ public class AnimatedPillarEntity extends BlockEntity {
     index = nbt.getInt("index");
     axis = nbt.getString("axis");
     trigger = nbt.getBoolean("trigger");
-    tickssincereset = nbt.getInt("tickssincereset");
     super.readNbt(nbt);
   }
 
@@ -58,8 +56,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
     entity.tickssincereset++;
 
-    if(entity.tickssincereset >= 20) {
-      main.LOGGER.info("testing ticker, 20 ticks have passed since last reset");
+    if(entity.tickssincereset >= 23) {
       entity.tickssincereset = 0;
     }
 
