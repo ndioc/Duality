@@ -59,7 +59,6 @@ public class AnimatedPillarEntity extends BlockEntity {
     entity.tickssincereset++;
 
     if(entity.tickssincereset >= 20) {
-      main.LOGGER.info("testing ticker, 20 ticks have passed since last reset");
       entity.tickssincereset = 0;
     }
 
