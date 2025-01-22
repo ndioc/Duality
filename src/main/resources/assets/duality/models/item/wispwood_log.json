@@ -1,5 +1,5 @@
 {
-  "parent": "duality:block/wispwood_log/wispwood_log",
+  "parent": "duality:block/wispwood_log/wispwood_log_1",
   "gui_light": "side",
   "display": {
     "gui": {
