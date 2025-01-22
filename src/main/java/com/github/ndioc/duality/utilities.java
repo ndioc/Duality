@@ -40,7 +40,7 @@ public class utilities {
   }
 
   @Nullable
-  public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> validateTicker(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<A> ticker) {
+  public static <E extends BlockEntity, T extends BlockEntity> BlockEntityTicker<T> validateTicker(BlockEntityType<T> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<T> ticker) {
     return expectedType == givenType ? ticker : null;
   }
 
