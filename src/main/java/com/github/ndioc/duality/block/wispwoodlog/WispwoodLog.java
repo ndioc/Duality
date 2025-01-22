@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.block;
+package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
@@ -11,9 +11,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class Wispwood_Log extends PillarBlock implements BlockEntityProvider {
+public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
 
-  public Wispwood_Log(Settings settings) {
+  public WispwoodLog(Settings settings) {
     super(settings);
   }
 
@@ -24,8 +24,9 @@ public class Wispwood_Log extends PillarBlock implements BlockEntityProvider {
 
   @Override
   public BlockRenderType getRenderType(BlockState state) {
-    return BlockRenderType.MODEL;
+    return BlockRenderType.INVISIBLE;
   }
+
 
   @Nullable
   @Override

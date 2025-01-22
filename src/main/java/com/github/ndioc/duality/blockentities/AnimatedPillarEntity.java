@@ -56,7 +56,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
     entity.tickssincereset++;
 
-    if(entity.tickssincereset >= 23) {
+    if (entity.tickssincereset >= 23) {
       entity.tickssincereset = 0;
     }
 
