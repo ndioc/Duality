@@ -1,6 +1,6 @@
 package com.github.ndioc.duality.block.wispwoodlog;
 
-import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
+import com.github.ndioc.duality.blockentitytypes.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;

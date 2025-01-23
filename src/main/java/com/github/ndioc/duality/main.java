@@ -1,6 +1,6 @@
 package com.github.ndioc.duality;
 
-import com.github.ndioc.duality.blockentities.blockentitytypes;
+import com.github.ndioc.duality.blockentitytypes.blockentitytypes;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
