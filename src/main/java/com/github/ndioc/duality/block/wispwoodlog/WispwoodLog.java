@@ -7,11 +7,14 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.event.listener.GameEventListener;
 import net.minecraft.world.gen.stateprovider.PillarBlockStateProvider;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,6 +30,7 @@ public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
   @Override
   protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
     builder.add(ANIMATED);
+    builder.add(Properties.AXIS);
   }
 
   @Override

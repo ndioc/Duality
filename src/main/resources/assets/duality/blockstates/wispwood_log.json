@@ -1,5 +1,7 @@
 {
   "variants": {
+    "animated=false": {
+
     "axis=x": {
       "model": "duality:block/wispwood_log/wispwood_log_1_horizontal",
       "y": 90
@@ -9,6 +11,21 @@
     },
     "axis=z": {
       "model": "duality:block/wispwood_log/wispwood_log_1_horizontal"
+    }},
+
+    "animated=true": {
+
+      "axis=x": {
+        "model": "duality:block/wispwood_log/wispwood_log_1_horizontal_animated",
+        "y": 90
+      },
+      "axis=y": {
+        "model": "duality:block/wispwood_log/wispwood_log_1_animated"
+      },
+      "axis=z": {
+        "model": "duality:block/wispwood_log/wispwood_log_1_horizontal_animated"
+      }
+
     }
   }
 }

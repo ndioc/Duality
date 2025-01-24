@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import static com.github.ndioc.duality.main.MOD_ID;
@@ -31,6 +32,25 @@ public class utilities {
 
     return Registry.register(Registries.BLOCK, regid, block);
 
+  }
+
+  public static Direction.Axis StringtoAxis(String input) {
+    Direction.Axis output;
+    switch (input) {
+      case "x":
+         output = Direction.Axis.X;
+        break;
+      case "y":
+        output = Direction.Axis.Y;
+        break;
+      case "z":
+        output = Direction.Axis.Z;
+        break;
+      default:
+        output = Direction.Axis.Y;
+        main.LOGGER.warn("Method " + MOD_ID + "utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
+    }
+    return output;
   }
 
   public static <T extends BlockEntityType<?>> T RegisterBlockEntityType(String path, T type) {
