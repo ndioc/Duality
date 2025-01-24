@@ -1,13 +1,16 @@
 package com.github.ndioc.duality.blockentitytypes;
 
-import com.github.ndioc.duality.main;
+import com.github.ndioc.duality.utilities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import static com.github.ndioc.duality.block.wispwoodlog.WispwoodLog.ANIMATED;
+import java.util.concurrent.ThreadFactory;
+
 import static net.minecraft.block.PillarBlock.AXIS;
 
 public class AnimatedPillarEntity extends BlockEntity {
@@ -38,12 +41,34 @@ public class AnimatedPillarEntity extends BlockEntity {
     super.readNbt(nbt);
   }
 
+
   public int getIndex() {
     return index;
   }
 
   public String getAxis() {
     return axis;
+  }
+
+  public boolean compareEntity(String axis, BlockEntity entity) {
+
+    boolean output = false;
+
+    BlockEntityType<?> typeofme = blockentitytypes.ANIMATED_PILLAR;
+    BlockEntityType<?> typeofthem = entity.getType();
+
+    Direction.Axis axisofme = utilities.StringtoAxis(axis);
+    NbtCompound nbtofthem = entity.createNbt();
+    Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
+
+    if (typeofme == typeofthem) {
+      if (axisofme == axisofthem) {
+        output = true;
+      }
+    }
+
+      return output;
+
   }
 
   public AnimatedPillarEntity(BlockPos position, BlockState state) {
@@ -60,26 +85,12 @@ public class AnimatedPillarEntity extends BlockEntity {
       entity.markDirty();
     }
 
-    if(entity.checkindex) {
-      entity.sync = true;
+    if (entity.checkindex) {
+      for (int x = 1; x < 256; ) {
 
-      entity.checkindex = false;
+      }
     }
 
-    if (entity.sync && state.get(ANIMATED)) {
-      world.setBlockState(position, state.with(ANIMATED, false));
-      entity.sync = false;
-      main.LOGGER.info("syncing pillar @ " + position.toShortString());
-    }
-
-    if (entity.tickssincereset % ((entity.animationlength - entity.animationoverlap) * entity.index) == 0) {
-      entity.trigger = true;
-    }
-
-    if (entity.trigger && !state.get(ANIMATED)) {
-      world.setBlockState(position, state.with(ANIMATED, true));
-      main.LOGGER.info("triggering pillar @ " + position.toShortString());
-    }
 
     if (entity.tickssincereset >= ((entity.animationlength + entity.animationpause) * 512)) {
       entity.tickssincereset = 0;
