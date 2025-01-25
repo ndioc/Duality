@@ -34,6 +34,13 @@ public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
   }
 
   @Override
+  public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify) {
+    super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+    world.getBlockEntity();
+
+  }
+
+  @Override
   public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
     return new AnimatedPillarEntity(pos, state);
   }

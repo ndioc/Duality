@@ -41,6 +41,9 @@ public class AnimatedPillarEntity extends BlockEntity {
     super.readNbt(nbt);
   }
 
+  public void updateEntity() {
+    checkindex = true;
+  }
 
   public int getIndex() {
     return index;
@@ -54,21 +57,25 @@ public class AnimatedPillarEntity extends BlockEntity {
 
     boolean output = false;
 
-    BlockEntityType<?> typeofme = blockentitytypes.ANIMATED_PILLAR;
-    BlockEntityType<?> typeofthem = entity.getType();
-
-    Direction.Axis axisofme = utilities.StringtoAxis(axis);
-    NbtCompound nbtofthem = entity.createNbt();
-    Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
-
-    if (typeofme == typeofthem) {
-      if (axisofme == axisofthem) {
-        output = true;
-      }
+    if (entity == null) {
+      return output;
     }
+    else {
+      BlockEntityType<?> typeofme = blockentitytypes.ANIMATED_PILLAR;
+      BlockEntityType<?> typeofthem = entity.getType();
+
+      Direction.Axis axisofme = utilities.StringtoAxis(axis);
+      NbtCompound nbtofthem = entity.createNbt();
+      Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
+
+      if (typeofme == typeofthem) {
+        if (axisofme == axisofthem) {
+          output = true;
+        }
+      }
 
       return output;
-
+    }
   }
 
   public AnimatedPillarEntity(BlockPos position, BlockState state) {
@@ -82,13 +89,21 @@ public class AnimatedPillarEntity extends BlockEntity {
       entity.axis = state.get(AXIS).asString();
       entity.checkindex = true;
       entity.firsttick = false;
-      entity.markDirty();
     }
 
     if (entity.checkindex) {
-      for (int x = 1; x < 256; ) {
-
+      for (int x = 0; x < 256; ) {
+        BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis),(x * -1) - 1));
+        if (entity.compareEntity(entity.axis, entitytocheck)) {
+          x++;
+        }
+        else {
+          entity.index = x;
+          entity.checkindex = false;
+          break;
+        }
       }
+      entity.markDirty();
     }
 
 
