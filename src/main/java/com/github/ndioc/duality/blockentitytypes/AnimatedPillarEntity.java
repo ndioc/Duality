@@ -9,8 +9,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.concurrent.ThreadFactory;
-
 import static net.minecraft.block.PillarBlock.AXIS;
 
 public class AnimatedPillarEntity extends BlockEntity {
@@ -41,16 +39,8 @@ public class AnimatedPillarEntity extends BlockEntity {
     super.readNbt(nbt);
   }
 
-  public void updateEntity() {
+  public void checkindex() {
     checkindex = true;
-  }
-
-  public int getIndex() {
-    return index;
-  }
-
-  public String getAxis() {
-    return axis;
   }
 
   public boolean compareEntity(String axis, BlockEntity entity) {
@@ -77,6 +67,8 @@ public class AnimatedPillarEntity extends BlockEntity {
       return output;
     }
   }
+
+
 
   public AnimatedPillarEntity(BlockPos position, BlockState state) {
     super(blockentitytypes.ANIMATED_PILLAR, position, state);
