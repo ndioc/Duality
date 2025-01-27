@@ -7,10 +7,10 @@ import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 public class FlywheelInstances {
   public static void initialize(){
 
-    //InstancedRenderRegistry.configure(blockentitytypes.ANIMATED_PILLAR)
-        //.alwaysSkipRender()
-        //.factory(WispwoodLogInstance::new)
-        //.apply();
+    InstancedRenderRegistry.configure(blockentitytypes.ANIMATED_PILLAR)
+        .alwaysSkipRender()
+        .factory(WispwoodLogInstance::new)
+        .apply();
 
   }
 

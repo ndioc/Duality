@@ -1,6 +1,7 @@
 package com.github.ndioc.duality.blockentitytypes;
 
 import com.github.ndioc.duality.utilities;
+import com.jozufozu.flywheel.api.Instancer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

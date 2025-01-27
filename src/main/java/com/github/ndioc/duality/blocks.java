@@ -23,4 +23,9 @@ public class blocks {
           .requiresTool()
           .burnable()));
 
+  public static final Block WISPWOOD_VEIN = registerblock(
+      "wispwood_log_vein", false,
+      new WispwoodLog(FabricBlockSettings.create()
+      ));
+
 }
