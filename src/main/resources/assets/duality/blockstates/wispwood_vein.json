@@ -1,0 +1,25 @@
+{
+  "variants": {
+    "veinstate=0": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_1"
+    },
+    "veinstate=1": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_2"
+    },
+    "veinstate=2": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_3"
+    },
+    "veinstate=3": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_4"
+    },
+    "veinstate=4": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_5"
+    },
+    "veinstate=5": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_6"
+    },
+    "veinstate=6": {
+      "model": "duality:block/wispwood_log/veins/wispwood_vein_7"
+    }
+  }
+}

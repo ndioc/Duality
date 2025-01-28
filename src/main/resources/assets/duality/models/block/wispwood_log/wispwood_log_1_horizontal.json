@@ -1,8 +1,8 @@
 {
 	"texture_size": [32, 32],
 	"textures": {
-		"1": "duality:block/wispwood_log_base",
-		"particle": "duality:block/wispwood_log_base"
+		"1": "duality:block/wispwood_log/wispwood_log",
+		"particle": "duality:block/wispwood_log/wispwood_log"
 	},
 	"elements": [
 		{

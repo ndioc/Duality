@@ -1,8 +1,6 @@
 {
-	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "Wispwood Log Animated:veins",
-		"particle": "Wispwood Log Animated:veins"
+		"0": "duality:block/wispwood_log/veins"
 	},
 	"elements": [
 		{
