@@ -30,8 +30,8 @@ public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
   }
 
   @Override
-  public BlockRenderType getRenderType(BlockState state) {
-    return BlockRenderType.MODEL;
+  public BlockRenderType getRenderType(BlockState state) { //delete this later
+    return BlockRenderType.INVISIBLE;
   }
 
   @Nullable

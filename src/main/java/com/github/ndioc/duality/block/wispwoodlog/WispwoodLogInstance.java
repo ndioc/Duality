@@ -26,8 +26,6 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
       model.loadIdentity()
           .translate(getInstancePosition());
-
-    main.LOGGER.info("frame of wispwood log @ {} is on frame: {}", getInstancePosition().toShortString(), frame);
   }
 
   @Override
@@ -35,10 +33,40 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
     int frame = blockEntity.frame;
 
+    main.LOGGER.info("frame of wispwood log @ {} is on frame: {}", getInstancePosition().toShortString(), frame);
+
+    int veinmodel = 0;
+
+    switch (frame) {
+      case 1,23:
+        veinmodel = 0;
+        break;
+      case 2,22:
+        veinmodel = 1;
+        break;
+      case 3,21:
+        veinmodel = 2;
+        break;
+      case 4,20:
+        veinmodel = 3;
+        break;
+      case 5,19:
+        veinmodel = 4;
+        break;
+      case 6,18:
+        veinmodel = 5;
+        break;
+      case 7,8,9,10,11,12,13,14,15,16,17:
+        veinmodel = 6;
+    }
+
+    if (frame > 23) {
+      model.delete();
+    }
 
     materialManager.defaultSolid()
         .material(Materials.TRANSFORMED)
-        .getModel(blocks.WISPWOOD_VEIN.getStateWithProperties(blockState.with(WispwoodVein.VEINSTATES, veinmodel)))
+        .getModel(blocks.WISPWOOD_VEIN.getDefaultState().with(WispwoodVein.VEINSTATES, veinmodel))
         .stealInstance(model);
 
   }
