@@ -47,7 +47,7 @@ public class utilities {
         output = Direction.Axis.Z;
         break;
       default:
-        output = Direction.Axis.Y;
+        output = null;
         main.LOGGER.warn("Method " + MOD_ID + "utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
     }
     return output;

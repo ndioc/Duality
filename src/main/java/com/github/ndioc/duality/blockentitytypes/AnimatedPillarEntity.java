@@ -1,7 +1,10 @@
 package com.github.ndioc.duality.blockentitytypes;
 
+import com.github.ndioc.duality.block.wispwoodlog.WispwoodLogInstance;
 import com.github.ndioc.duality.utilities;
 import com.jozufozu.flywheel.api.Instancer;
+import com.jozufozu.flywheel.api.MaterialManager;
+import com.jozufozu.flywheel.api.instance.Instance;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,13 +17,16 @@ import static net.minecraft.block.PillarBlock.AXIS;
 
 public class AnimatedPillarEntity extends BlockEntity {
 
-  public String axis = "y";
+  public String axis = "";
   public int index = 0;
-  public boolean trigger = false;
-  public boolean sync = false;
+
   public boolean firsttick = true;
   public boolean checkindex = true;
+  public boolean checkframeoffset = true;
+
   public int tickssincereset = 0;
+  public int frame = 0;
+  public int frameoffset = 0;
 
   public final int animationlength = 23;
   public final int animationoverlap = 4;
@@ -59,17 +65,23 @@ public class AnimatedPillarEntity extends BlockEntity {
       NbtCompound nbtofthem = entity.createNbt();
       Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
 
+      if(axisofthem == null) {
+        checkindex = true;
+        return output;
+      }
+      else {
+        checkindex = false;
+      }
       if (typeofme == typeofthem) {
         if (axisofme == axisofthem) {
           output = true;
         }
       }
-
+      checkframeoffset = true;
       return output;
     }
+
   }
-
-
 
   public AnimatedPillarEntity(BlockPos position, BlockState state) {
     super(blockentitytypes.ANIMATED_PILLAR, position, state);
@@ -77,6 +89,12 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
     entity.tickssincereset++;
+
+    if(entity.checkframeoffset) {
+      entity.frameoffset = (entity.animationlength + entity.animationpause - entity.animationoverlap) * entity.index;
+    }
+
+    entity.frame = Math.toIntExact((world.getTime() + entity.frameoffset) % (entity.animationlength + entity.animationpause));
 
     if (entity.firsttick) {
       entity.axis = state.get(AXIS).asString();
@@ -92,7 +110,6 @@ public class AnimatedPillarEntity extends BlockEntity {
         }
         else {
           entity.index = x;
-          entity.checkindex = false;
           break;
         }
       }

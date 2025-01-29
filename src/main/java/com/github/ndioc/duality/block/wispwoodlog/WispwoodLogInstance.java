@@ -2,21 +2,21 @@ package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentitytypes.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
+import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
+import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 
-public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntity> {
+public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntity> implements TickableInstance {
 
   private final ModelData model;
 
-  public WispwoodLogInstance(MaterialManager matMan, AnimatedPillarEntity entity){
+  public WispwoodLogInstance (MaterialManager matMan, AnimatedPillarEntity entity){
     super(matMan, entity);
 
-    long t = world.getTime() % (entity.animationlength + entity.animationpause);
-    int frame = Math.toIntExact(t);
-    int index = entity.index;
+    int frame = entity.frame;
 
     model = matMan.defaultSolid()
         .material(Materials.TRANSFORMED)
@@ -26,6 +26,20 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
       model.loadIdentity()
           .translate(getInstancePosition());
+
+    main.LOGGER.info("frame of wispwood log @ {} is on frame: {}", getInstancePosition().toShortString(), frame);
+  }
+
+  @Override
+  public void tick() {
+
+    int frame = blockEntity.frame;
+
+
+    materialManager.defaultSolid()
+        .material(Materials.TRANSFORMED)
+        .getModel(blocks.WISPWOOD_VEIN.getStateWithProperties(blockState.with(WispwoodVein.VEINSTATES, veinmodel)))
+        .stealInstance(model);
 
   }
 
