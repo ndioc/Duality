@@ -2,12 +2,12 @@ package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentitytypes.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
-import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import net.minecraft.util.math.Direction;
 
 public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntity> implements TickableInstance {
 
@@ -16,8 +16,6 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
   public WispwoodLogInstance (MaterialManager matMan, AnimatedPillarEntity entity){
     super(matMan, entity);
 
-    int frame = entity.frame;
-
     model = matMan.defaultSolid()
         .material(Materials.TRANSFORMED)
         .getModel(blocks.WISPWOOD_VEIN.getDefaultState())
@@ -25,17 +23,29 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
 
       model.loadIdentity()
-          .translate(getInstancePosition());
+          .translate(getInstancePosition())
+          .setBlockLight(15)
+          .setSkyLight(15);
   }
 
   @Override
   public void tick() {
 
+    int veinmodel = 0;
+
+    float flip;
+    float x = 0;
+    float y = 0;
+    float z = 0;
+
     int frame = blockEntity.frame;
 
-    main.LOGGER.info("frame of wispwood log @ {} is on frame: {}", getInstancePosition().toShortString(), frame);
-
-    int veinmodel = 0;
+    if (frame >= 18) {
+      flip = 3.141592f;
+    }
+    else {
+      flip = 0;
+    }
 
     switch (frame) {
       case 1,23:
@@ -58,9 +68,20 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
         break;
       case 7,8,9,10,11,12,13,14,15,16,17:
         veinmodel = 6;
+        switch (blockEntity.axis) {
+          case "x":
+            x = 0.0625f * (frame - 7);
+            break;
+          case "y":
+            y = 0.0625f * (frame - 7);
+            break;
+          case "z":
+            z = 0.0625f * (frame - 7);
+            break;
+        }
     }
 
-    if (frame > 23) {
+    if(frame > 17 || frame < 7) {
       model.delete();
     }
 
@@ -68,6 +89,12 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
         .material(Materials.TRANSFORMED)
         .getModel(blocks.WISPWOOD_VEIN.getDefaultState().with(WispwoodVein.VEINSTATES, veinmodel))
         .stealInstance(model);
+
+        model.loadIdentity()
+            .translate(getInstancePosition())
+            .translate(x, y, z)
+            .rotateCentered(Direction.NORTH, flip)
+            .setSkyLight(15);
 
   }
 

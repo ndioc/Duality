@@ -1,10 +1,6 @@
 package com.github.ndioc.duality.blockentitytypes;
 
-import com.github.ndioc.duality.block.wispwoodlog.WispwoodLogInstance;
 import com.github.ndioc.duality.utilities;
-import com.jozufozu.flywheel.api.Instancer;
-import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.api.instance.Instance;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -24,18 +20,18 @@ public class AnimatedPillarEntity extends BlockEntity {
   public boolean checkindex = true;
   public boolean checkframeoffset = true;
 
-  public int tickssincereset = 0;
   public int frame = 0;
   public int frameoffset = 0;
 
   public final int animationlength = 23;
-  public final int animationoverlap = 4;
-  public final int animationpause = 20;
+  public final int animationoverlap = 6;
+  public final int animationpause = 23;
 
   @Override
   public void writeNbt(NbtCompound data) {
     data.putInt("index", index);
     data.putString("axis", axis);
+    data.putInt("frameoffset", frameoffset);
     super.writeNbt(data);
   }
 
@@ -43,6 +39,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public void readNbt(NbtCompound nbt) {
     index = nbt.getInt("index");
     axis = nbt.getString("axis");
+    nbt.getInt("frameoffset");
     super.readNbt(nbt);
   }
 
@@ -88,10 +85,10 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
-    entity.tickssincereset++;
 
     if(entity.checkframeoffset) {
-      entity.frameoffset = (entity.animationlength + entity.animationpause - entity.animationoverlap) * entity.index;
+      entity.frameoffset = (entity.animationlength + entity.animationoverlap) * entity.index;
+      entity.markDirty();
     }
 
     entity.frame = Math.toIntExact((world.getTime() + entity.frameoffset) % (entity.animationlength + entity.animationpause));
@@ -114,11 +111,6 @@ public class AnimatedPillarEntity extends BlockEntity {
         }
       }
       entity.markDirty();
-    }
-
-
-    if (entity.tickssincereset >= ((entity.animationlength + entity.animationpause) * 512)) {
-      entity.tickssincereset = 0;
     }
 
   }
