@@ -33,56 +33,94 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
     int veinmodel = 0;
 
-    float flip;
+    // basic transform variables
+    float rotate;
+
     float x = 0;
     float y = 0;
     float z = 0;
 
+    // Direction for flipping animation towards the end
+    Direction direction = Direction.NORTH;
+
+    // to stop clipping
+    float scalex = 1;
+    float scaley = 1;
+    float scalez = 1;
+
+    // also to stop clipping
+    float offset = 0.00005f;
+
+
     int frame = blockEntity.frame;
 
-    if (frame >= 18) {
-      flip = 3.141592f;
+    if (frame > 16) {
+      rotate = 3.141592f;
     }
     else {
-      flip = 0;
+      rotate = 0;
+    }
+
+    switch (blockEntity.axis) {
+      case "x":
+        scalex = 0.999f;
+        x = offset;
+        rotate += 1.570796f;
+        direction = Direction.NORTH;
+
+        break;
+      case "y":
+        scaley = 0.999f;
+        y = offset;
+        direction = Direction.NORTH;
+        break;
+      case "z":
+        scalez = 0.999f;
+        z = offset;
+        rotate += 1.570796f;
+        direction = Direction.EAST;
+        break;
     }
 
     switch (frame) {
-      case 1,23:
+      case 1,22:
         veinmodel = 0;
         break;
-      case 2,22:
+      case 2,21:
         veinmodel = 1;
         break;
-      case 3,21:
+      case 3,20:
         veinmodel = 2;
         break;
-      case 4,20:
+      case 4,19:
         veinmodel = 3;
         break;
-      case 5,19:
+      case 5,18:
         veinmodel = 4;
         break;
-      case 6,18:
+      case 6,17:
         veinmodel = 5;
         break;
-      case 7,8,9,10,11,12,13,14,15,16,17:
+      case 7,8,9,10,11,12,13,14,15,16:
         veinmodel = 6;
         switch (blockEntity.axis) {
           case "x":
-            x = 0.0625f * (frame - 7);
+            x = x + 0.0625f * (frame - 7);
             break;
           case "y":
-            y = 0.0625f * (frame - 7);
+            y = y + 0.0625f * (frame - 7);
             break;
           case "z":
-            z = 0.0625f * (frame - 7);
+            z = z + 0.0625f * (frame - 7);
             break;
         }
+
     }
 
-    if(frame > 17 || frame < 7) {
-      model.delete();
+    if (frame > 22) {
+      scalex = 0.25f;
+      scaley = 0.25f;
+      scalez = 0.25f;
     }
 
     materialManager.defaultSolid()
@@ -93,7 +131,8 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
         model.loadIdentity()
             .translate(getInstancePosition())
             .translate(x, y, z)
-            .rotateCentered(Direction.NORTH, flip)
+            .scale(scalex, scaley, scalez)
+            .rotateCentered(direction, rotate)
             .setSkyLight(15);
 
   }

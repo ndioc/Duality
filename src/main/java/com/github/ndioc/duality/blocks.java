@@ -24,6 +24,6 @@ public class blocks {
   public static final Block WISPWOOD_VEIN = registerblock(
       "wispwood_vein", false,
       new WispwoodVein(FabricBlockSettings.create()
-      ));
+          .luminance(9)));
 
 }
