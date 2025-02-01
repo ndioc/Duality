@@ -19,6 +19,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public boolean firsttick = true;
   public boolean checkindex = true;
   public boolean checkframeoffset = true;
+  public boolean remakeinstance = false;
 
   public int frame = 0;
   public int frameoffset = 0;
@@ -39,12 +40,13 @@ public class AnimatedPillarEntity extends BlockEntity {
   public void readNbt(NbtCompound nbt) {
     index = nbt.getInt("index");
     axis = nbt.getString("axis");
-    nbt.getInt("frameoffset");
+    frameoffset = nbt.getInt("frameoffset");
     super.readNbt(nbt);
   }
 
-  public void checkindex() {
+  public void onblockupdate() {
     checkindex = true;
+    checkframeoffset = true;
   }
 
   public boolean compareEntity(String axis, BlockEntity entity) {
@@ -54,6 +56,7 @@ public class AnimatedPillarEntity extends BlockEntity {
     if (entity == null) {
       return output;
     }
+
     else {
       BlockEntityType<?> typeofme = blockentitytypes.ANIMATED_PILLAR;
       BlockEntityType<?> typeofthem = entity.getType();
@@ -62,19 +65,19 @@ public class AnimatedPillarEntity extends BlockEntity {
       NbtCompound nbtofthem = entity.createNbt();
       Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
 
-      if(axisofthem == null) {
-        checkindex = true;
-        return output;
-      }
-      else {
-        checkindex = false;
-      }
       if (typeofme == typeofthem) {
-        if (axisofme == axisofthem) {
+
+        if(axisofthem == null) {
+          checkindex = true;
+          return output;
+        }
+
+        else if (axisofme == axisofthem) {
           output = true;
         }
+
       }
-      checkframeoffset = true;
+
       return output;
     }
 
@@ -86,32 +89,39 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public static void tick(World world, BlockPos position, BlockState state, AnimatedPillarEntity entity) {
 
-    if(entity.checkframeoffset) {
-      entity.frameoffset = (entity.animationlength + entity.animationoverlap) * entity.index;
-      entity.markDirty();
-    }
-
-    entity.frame = Math.toIntExact((world.getTime() + entity.frameoffset) % (entity.animationlength + entity.animationpause));
-
     if (entity.firsttick) {
       entity.axis = state.get(AXIS).asString();
       entity.checkindex = true;
+      entity.checkframeoffset = true;
       entity.firsttick = false;
     }
 
     if (entity.checkindex) {
       for (int x = 0; x < 256; ) {
-        BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis),(x * -1) - 1));
-        if (entity.compareEntity(entity.axis, entitytocheck)) {
-          x++;
-        }
+        BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
+
+          if (entity.compareEntity(entity.axis, entitytocheck)) {
+            x++;
+          }
+
         else {
           entity.index = x;
+          entity.checkindex = false;
           break;
         }
       }
+      
       entity.markDirty();
     }
+
+    if(entity.checkframeoffset) {
+      entity.frameoffset = (entity.animationlength + entity.animationoverlap) * entity.index;
+      entity.checkframeoffset = false;
+      entity.markDirty();
+    }
+
+
+    entity.frame = Math.toIntExact((world.getTime() + entity.frameoffset) % (entity.animationlength + entity.animationpause));
 
   }
 
