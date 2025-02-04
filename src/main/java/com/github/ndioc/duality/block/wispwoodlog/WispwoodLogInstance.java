@@ -42,8 +42,10 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
       int veinmodel = 0;
       int frame = Math.toIntExact((world.getTime() + (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.index) % (blockEntity.animationlength + blockEntity.animationpause));
 
-      main.LOGGER.info("block @ " + pos.toShortString() + " is on frame: " + frame);
-      main.LOGGER.info("block @ " + pos.toShortString() + " has index: " + blockEntity.getIndex() + " and has a frame offset of: " + (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.index);
+      if (frame == 0) {
+        main.LOGGER.info("block @ " + pos.toShortString() + " is on frame: " + frame);
+        main.LOGGER.info("block @ " + pos.toShortString() + " has index: " + blockEntity.index + " and has a frame offset of: " + (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.index);
+      }
 
       // basic transform variables
       float rotate;

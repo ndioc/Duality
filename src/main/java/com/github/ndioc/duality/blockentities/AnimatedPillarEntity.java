@@ -1,6 +1,7 @@
 package com.github.ndioc.duality.blockentities;
 
 import com.github.ndioc.duality.blockentitytypes;
+import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.networking;
 import com.github.ndioc.duality.utilities;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -21,6 +22,7 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public String axis = "";
   public int index = 0;
+  public int delay = 1;
 
   public boolean firsttick = true;
   public boolean checkindex = true;
@@ -45,6 +47,8 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public void onblockupdate() {
     checkindex = true;
+    delay = 1;
+    main.LOGGER.info("block update triggered on {}", pos.toShortString());
   }
 
   public int getIndex() {
@@ -105,7 +109,7 @@ public class AnimatedPillarEntity extends BlockEntity {
       entity.firsttick = false;
     }
 
-    if (entity.checkindex) {
+    if (entity.checkindex && entity.delay <= 0) {
       for (int x = 0; x < 256; ) {
         BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
           if (entity.compareEntity(entity.axis, entitytocheck)) {
@@ -113,7 +117,9 @@ public class AnimatedPillarEntity extends BlockEntity {
           }
 
         else {
+            main.LOGGER.info("index of block @ {} set to : {}", position.toShortString(), x);
           entity.index = x;
+          main.LOGGER.info("read index: {}", entity.index);
           entity.checkindex = false;
           if (!world.isClient()) {
             entity.syncentity(entity);
@@ -123,6 +129,11 @@ public class AnimatedPillarEntity extends BlockEntity {
       }
       entity.markDirty();
     }
+
+    if (entity.delay > 0) {
+      entity.delay--;
+    }
+
   }
 }
 
