@@ -1,6 +1,5 @@
 package com.github.ndioc.duality;
 
-import com.github.ndioc.duality.block.wispwoodlog.WispwoodLog;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -17,4 +16,5 @@ public class networking {
   public static void sendpacket(ServerPlayerEntity player, Identifier id, PacketByteBuf buffer) {
     ServerPlayNetworking.send(player, id, buffer);
   }
+
 }

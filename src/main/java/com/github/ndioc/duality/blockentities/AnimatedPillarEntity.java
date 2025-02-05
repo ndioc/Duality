@@ -51,8 +51,20 @@ public class AnimatedPillarEntity extends BlockEntity {
     main.LOGGER.info("block update triggered on {}", pos.toShortString());
   }
 
+  public String getAxis() {
+    return axis;
+  }
+
+  public void setAxis(String input) {
+   axis = input;
+  }
+
   public int getIndex() {
     return index;
+  }
+
+  public void setIndex(int input) {
+    index = input;
   }
 
   public void syncentity (BlockEntity entity) {
@@ -60,12 +72,13 @@ public class AnimatedPillarEntity extends BlockEntity {
     packet.writeBlockPos(pos);
     packet.writeString(axis);
     packet.writeInt(index);
+
     for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
       networking.sendpacket(player, networking.ANIMATED_PILLAR_PACKET_ID, packet);
     }
   }
 
-  public boolean compareEntity(String axis, BlockEntity entity) {
+  public boolean compareEntity(BlockEntity entity) {
 
     boolean output = false;
 
@@ -110,23 +123,22 @@ public class AnimatedPillarEntity extends BlockEntity {
     }
 
     if (entity.checkindex && entity.delay <= 0) {
+
       for (int x = 0; x < 256; ) {
         BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
-          if (entity.compareEntity(entity.axis, entitytocheck)) {
+
+          if (entity.compareEntity(entitytocheck)) {
             x++;
           }
 
         else {
-            main.LOGGER.info("index of block @ {} set to : {}", position.toShortString(), x);
-          entity.index = x;
-          main.LOGGER.info("read index: {}", entity.index);
+          entity.setIndex(x);
           entity.checkindex = false;
-          if (!world.isClient()) {
-            entity.syncentity(entity);
-          }
+          entity.syncentity(entity);
           break;
         }
       }
+
       entity.markDirty();
     }
 

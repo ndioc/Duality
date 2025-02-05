@@ -2,7 +2,6 @@ package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
-import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.Backend;
@@ -40,12 +39,9 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
     else {
 
       int veinmodel = 0;
-      int frame = Math.toIntExact((world.getTime() + (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.index) % (blockEntity.animationlength + blockEntity.animationpause));
 
-      if (frame == 0) {
-        main.LOGGER.info("block @ " + pos.toShortString() + " is on frame: " + frame);
-        main.LOGGER.info("block @ " + pos.toShortString() + " has index: " + blockEntity.index + " and has a frame offset of: " + (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.index);
-      }
+      int frameoffset = (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.getIndex();
+      int frame = Math.toIntExact((world.getTime() + frameoffset) % (blockEntity.animationlength + blockEntity.animationpause));
 
       // basic transform variables
       float rotate;
