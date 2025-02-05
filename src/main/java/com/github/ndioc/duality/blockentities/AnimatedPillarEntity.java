@@ -22,14 +22,9 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public String axis = "";
   public int index = 0;
-  public int delay = 1;
 
   public boolean firsttick = true;
   public boolean checkindex = true;
-
-  public final int animationlength = 23;
-  public final int animationoverlap = 6;
-  public final int animationpause = 23;
 
   @Override
   public void writeNbt(NbtCompound data) {
@@ -47,7 +42,6 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public void onblockupdate() {
     checkindex = true;
-    delay = 1;
     main.LOGGER.info("block update triggered on {}", pos.toShortString());
   }
 
@@ -122,7 +116,7 @@ public class AnimatedPillarEntity extends BlockEntity {
       entity.firsttick = false;
     }
 
-    if (entity.checkindex && entity.delay <= 0) {
+    if (entity.checkindex) {
 
       for (int x = 0; x < 256; ) {
         BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
@@ -141,11 +135,6 @@ public class AnimatedPillarEntity extends BlockEntity {
 
       entity.markDirty();
     }
-
-    if (entity.delay > 0) {
-      entity.delay--;
-    }
-
   }
 }
 

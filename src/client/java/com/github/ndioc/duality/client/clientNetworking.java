@@ -29,7 +29,11 @@ public class clientNetworking {
       });
     });
 
-
+    
 
   }
+
+  public static void initialize() {
+  }
+
 }

@@ -2,6 +2,7 @@ package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
+import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.Backend;
@@ -38,20 +39,26 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
     else {
 
-      int veinmodel = 0;
+      final int animationlength = 23;
+      final int animationoverlap = 6;
+      final int animationpause = 23;
 
-      int frameoffset = (blockEntity.animationlength + blockEntity.animationoverlap) * blockEntity.getIndex();
-      int frame = Math.toIntExact((world.getTime() + frameoffset) % (blockEntity.animationlength + blockEntity.animationpause));
+      int frameoffset = (animationlength + animationoverlap) * blockEntity.getIndex();
+      int frame = Math.toIntExact((world.getTime() + frameoffset) % (animationlength + animationpause));
+
+
+      main.LOGGER.info("Wispwood Log Instance @ {}, frame: {}, frameoffset: {}, index: {}, axis: {}", pos.toShortString(), frame, frameoffset , blockEntity.getIndex(), blockEntity.axis);
 
       // basic transform variables
+      int veinmodel;
+
       float rotate;
 
       float x = 0;
       float y = 0;
       float z = 0;
 
-      // Direction for flipping animation towards the end
-      Direction direction = Direction.NORTH;
+      Direction direction;
 
       // to stop clipping
       float scalex = 1;
@@ -85,6 +92,11 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
           z = offset;
           rotate += 1.570796f;
           direction = Direction.EAST;
+          break;
+        default:
+          scaley = 0.999f;
+          y = offset;
+          direction = Direction.NORTH;
           break;
       }
 
@@ -120,7 +132,11 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
               z = z + 0.0625f * (frame - 7);
               break;
           }
+          break;
 
+        default:
+          veinmodel = 0;
+          break;
       }
 
       if (frame > 22) {
