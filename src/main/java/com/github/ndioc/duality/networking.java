@@ -7,13 +7,13 @@ import net.minecraft.util.Identifier;
 
 public class networking {
 
-  // declare some constants
-  public static final Identifier ANIMATED_PILLAR_PACKET_ID = new Identifier(main.MOD_ID, "animated_pillar");
+  // declare packet IDs
+  public static final Identifier ANIMATED_PILLAR_SYNC_PACKET_ID = new Identifier(main.MOD_ID, "animated_pillar");
 
 
   // a general purpose networking function straight from the wiki
 
-  public static void sendpacket(ServerPlayerEntity player, Identifier id, PacketByteBuf buffer) {
+  public static void sendPacketToClient(ServerPlayerEntity player, Identifier id, PacketByteBuf buffer) {
     ServerPlayNetworking.send(player, id, buffer);
   }
 

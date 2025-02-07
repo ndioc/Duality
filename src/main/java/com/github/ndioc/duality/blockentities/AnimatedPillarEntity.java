@@ -22,6 +22,7 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   public String axis = "";
   public int index = 0;
+  public int delay = 1;
 
   public boolean firsttick = true;
   public boolean checkindex = true;
@@ -40,8 +41,14 @@ public class AnimatedPillarEntity extends BlockEntity {
     super.readNbt(nbt);
   }
 
+  @Override
+  public NbtCompound toInitialChunkDataNbt() {
+    return createNbt();
+  }
+
   public void onblockupdate() {
     checkindex = true;
+    delay = 1;
     main.LOGGER.info("block update triggered on {}", pos.toShortString());
   }
 
@@ -68,7 +75,7 @@ public class AnimatedPillarEntity extends BlockEntity {
     packet.writeInt(index);
 
     for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
-      networking.sendpacket(player, networking.ANIMATED_PILLAR_PACKET_ID, packet);
+      networking.sendPacketToClient(player, networking.ANIMATED_PILLAR_SYNC_PACKET_ID, packet);
     }
   }
 
@@ -76,11 +83,7 @@ public class AnimatedPillarEntity extends BlockEntity {
 
     boolean output = false;
 
-    if (entity == null) {
-      return output;
-    }
-
-    else {
+    if (entity != null) {
       BlockEntityType<?> typeofme = blockentitytypes.ANIMATED_PILLAR;
       BlockEntityType<?> typeofthem = entity.getType();
 
@@ -89,19 +92,15 @@ public class AnimatedPillarEntity extends BlockEntity {
       Direction.Axis axisofthem = utilities.StringtoAxis(nbtofthem.getString("axis"));
 
       if (typeofme == typeofthem) {
-
-        if(axisofthem == null) {
-          checkindex = true;
+        if (axisofthem == null) {
           return output;
-        }
-
-        else if (axisofme == axisofthem) {
+        } else if (axisofme == axisofthem) {
           output = true;
         }
       }
 
-      return output;
     }
+    return output;
   }
 
   public AnimatedPillarEntity(BlockPos position, BlockState state) {
@@ -113,10 +112,11 @@ public class AnimatedPillarEntity extends BlockEntity {
     if (entity.firsttick) {
       entity.axis = state.get(AXIS).asString();
       entity.checkindex = true;
+      entity.delay = 1;
       entity.firsttick = false;
     }
 
-    if (entity.checkindex) {
+    if (entity.checkindex && entity.delay <= 0) {
 
       for (int x = 0; x < 256; ) {
         BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
@@ -135,6 +135,11 @@ public class AnimatedPillarEntity extends BlockEntity {
 
       entity.markDirty();
     }
+
+   if (entity.delay > 0) {
+     entity.delay--;
+   }
+
   }
 }
 

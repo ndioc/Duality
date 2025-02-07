@@ -2,7 +2,6 @@ package com.github.ndioc.duality.block.wispwoodlog;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks;
-import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.Backend;
@@ -46,8 +45,7 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
       int frameoffset = (animationlength + animationoverlap) * blockEntity.getIndex();
       int frame = Math.toIntExact((world.getTime() + frameoffset) % (animationlength + animationpause));
 
-
-      main.LOGGER.info("Wispwood Log Instance @ {}, frame: {}, frameoffset: {}, index: {}, axis: {}", pos.toShortString(), frame, frameoffset , blockEntity.getIndex(), blockEntity.axis);
+      //main.LOGGER.info("Wispwood Log Instance @ {}, frame: {}, frameoffset: {}, index: {}, axis: {}", pos.toShortString(), frame, frameoffset , blockEntity.getIndex(), blockEntity.axis);
 
       // basic transform variables
       int veinmodel;
@@ -66,7 +64,11 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
       float scalez = 1;
 
       // also to stop clipping
-      float offset = 0.00005f;
+      float offset = 0.0025f;
+
+      if (frame > 15) {
+        offset = -0.0025f;
+      }
 
       if (frame > 16) {
         rotate = 3.141592f;
@@ -76,25 +78,25 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
       switch (blockEntity.axis) {
         case "x":
-          scalex = 0.999f;
+          scalex = 0.995f;
           x = offset;
           rotate += 1.570796f;
           direction = Direction.NORTH;
 
           break;
         case "y":
-          scaley = 0.999f;
+          scaley = 0.995f;
           y = offset;
           direction = Direction.NORTH;
           break;
         case "z":
-          scalez = 0.999f;
+          scalez = 0.995f;
           z = offset;
           rotate += 1.570796f;
           direction = Direction.EAST;
           break;
         default:
-          scaley = 0.999f;
+          scaley = 0.995f;
           y = offset;
           direction = Direction.NORTH;
           break;

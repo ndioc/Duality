@@ -3,8 +3,6 @@ package com.github.ndioc.duality.block.wispwoodlog;
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blockentitytypes;
 import com.github.ndioc.duality.utilities;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -33,9 +31,13 @@ public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
 
   @Nullable
   @Override
-  @Environment(EnvType.SERVER)
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-    return utilities.validateTicker(type, blockentitytypes.ANIMATED_PILLAR, AnimatedPillarEntity::tick);
+    if (!world.isClient()) {
+      return utilities.validateTicker(type, blockentitytypes.ANIMATED_PILLAR, AnimatedPillarEntity::tick);
+    }
+    else {
+      return null;
+    }
   }
 
 }

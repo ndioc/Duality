@@ -4,21 +4,23 @@ import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blockentitytypes;
 import com.github.ndioc.duality.networking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class clientNetworking {
 
-
   public static void registerpackets () {
-    ClientPlayNetworking.registerGlobalReceiver(networking.ANIMATED_PILLAR_PACKET_ID, (client, handler, buffer, responseSender) -> {
+    ClientPlayNetworking.registerGlobalReceiver(networking.ANIMATED_PILLAR_SYNC_PACKET_ID, (client, handler, buffer, responseSender) -> {
 
       BlockPos position = buffer.readBlockPos();
       String axis = buffer.readString();
       int index = buffer.readInt();
 
       client.execute(() -> {
-        assert client.world != null;
-        AnimatedPillarEntity entity = (AnimatedPillarEntity) client.world.getBlockEntity(position);
+        World world = handler.getWorld();
+        AnimatedPillarEntity entity = (AnimatedPillarEntity) world.getBlockEntity(position);
 
         if (entity != null) {
           if (entity.getType() == blockentitytypes.ANIMATED_PILLAR) {
@@ -29,11 +31,16 @@ public class clientNetworking {
       });
     });
 
-    
+    //add more custom packets here
 
   }
 
+  public static void sendPacketToServer(Identifier id, PacketByteBuf buffer) {
+    ClientPlayNetworking.send(id, buffer);
+  }
+
   public static void initialize() {
+    registerpackets();
   }
 
 }
