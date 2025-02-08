@@ -2,11 +2,13 @@
   "schemaVersion": 1,
   "id": "duality",
   "version": "${version}",
-
   "name": "Duality",
   "description": "A magic focused mod for Minecraft",
-  "authors": [],
-  "contact": {},
+  "authors": ["ndioc", "theloaf"],
+
+  "jars": [{
+    "file": "libs/flywheel-fabric-1.20.1-0.6.11-4.jar"
+  }],
 
   "license": "MIT",
   "icon": "assets/duality/icon.png",
