@@ -8,6 +8,9 @@ public class main implements ModInitializer {
 
   public static String MOD_ID = "duality";
   public static String MOD_NAME = "DUALITY";
+
+  public static String CREATORS = "ndioc & TheLoaf55";
+
   public static Logger LOGGER = LogManager.getLogger(MOD_ID);
 
   @Override
@@ -23,6 +26,6 @@ public class main implements ModInitializer {
     enchantments.initialize();
     recipes.initialize();
 
-    LOGGER.info(MOD_NAME + " By ndioc has been Successfully Loaded.");
+    LOGGER.info("{} By {} has been Successfully Loaded.", MOD_NAME, CREATORS);
   }
 }

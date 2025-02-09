@@ -127,6 +127,11 @@ public class AnimatedPillarEntity extends BlockEntity {
       entity.axis = state.get(AXIS).asString();
       entity.checkindex = true;
       entity.delay = 1;
+
+      if (entity.randomoffset < 0) {
+        entity.randomoffset = (int) Math.round(entity.maxrandomoffset * Math.random());
+      }
+
       entity.firsttick = false;
     }
 
@@ -134,19 +139,12 @@ public class AnimatedPillarEntity extends BlockEntity {
 
       for (int x = 0; x < 256; ) {
         BlockEntity entitytocheck = world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), (x * -1) - 1));
-
           if (entity.compareEntity(entitytocheck)) {
             x++;
           }
-
         else {
-
-          if (x == 0 && entity.randomoffset < 0) {
-            entity.randomoffset = (int) Math.round(entity.maxrandomoffset * Math.random());
-          }
-
-          else {
-              AnimatedPillarEntity entityobject = (AnimatedPillarEntity) world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), x * -1));
+          if (x > 0) {
+            AnimatedPillarEntity entityobject = (AnimatedPillarEntity) world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), x * -1));
             assert entityobject != null;
             entity.randomoffset = entityobject.getRandomoffset();
           }
