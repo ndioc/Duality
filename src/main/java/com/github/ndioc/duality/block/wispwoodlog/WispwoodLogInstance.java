@@ -43,7 +43,7 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
       final int animationpause = 23;
 
       int frameoffset = (animationlength + animationoverlap) * blockEntity.getIndex();
-      int frame = Math.toIntExact((world.getTime() + frameoffset) % (animationlength + animationpause));
+      int frame = Math.toIntExact((world.getTime() + frameoffset + blockEntity.randomoffset) % (animationlength + animationpause));
 
       //main.LOGGER.info("Wispwood Log Instance @ {}, frame: {}, frameoffset: {}, index: {}, axis: {}", pos.toShortString(), frame, frameoffset , blockEntity.getIndex(), blockEntity.axis);
 
@@ -157,7 +157,7 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
           .translate(x, y, z)
           .scale(scalex, scaley, scalez)
           .rotateCentered(direction, rotate)
-          .setSkyLight(15);
+          .setBlockLight(15);
 
     }
   }

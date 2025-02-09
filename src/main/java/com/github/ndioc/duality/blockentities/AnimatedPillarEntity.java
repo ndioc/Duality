@@ -23,6 +23,9 @@ public class AnimatedPillarEntity extends BlockEntity {
   public String axis = "";
   public int index = 0;
   public int delay = 1;
+  public int randomoffset = -1;
+
+  public final double maxrandomoffset = 23;
 
   public boolean firsttick = true;
   public boolean checkindex = true;
@@ -31,6 +34,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public void writeNbt(NbtCompound data) {
     data.putInt("index", index);
     data.putString("axis", axis);
+    data.putInt("randomoffset", randomoffset);
     super.writeNbt(data);
   }
 
@@ -38,6 +42,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public void readNbt(NbtCompound nbt) {
     index = nbt.getInt("index");
     axis = nbt.getString("axis");
+    randomoffset = nbt.getInt("randomoffset");
     super.readNbt(nbt);
   }
 
@@ -68,11 +73,20 @@ public class AnimatedPillarEntity extends BlockEntity {
     index = input;
   }
 
+  public int getRandomoffset() {
+    return randomoffset;
+  }
+
+  public void setRandomoffset(int input) {
+    randomoffset = input;
+  }
+
   public void syncentity (BlockEntity entity) {
     PacketByteBuf packet = PacketByteBufs.create();
     packet.writeBlockPos(pos);
     packet.writeString(axis);
     packet.writeInt(index);
+    packet.writeInt(randomoffset);
 
     for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
       networking.sendPacketToClient(player, networking.ANIMATED_PILLAR_SYNC_PACKET_ID, packet);
@@ -126,6 +140,17 @@ public class AnimatedPillarEntity extends BlockEntity {
           }
 
         else {
+
+          if (x == 0 && entity.randomoffset < 0) {
+            entity.randomoffset = (int) Math.round(entity.maxrandomoffset * Math.random());
+          }
+
+          else {
+              AnimatedPillarEntity entityobject = (AnimatedPillarEntity) world.getBlockEntity(position.offset(utilities.StringtoAxis(entity.axis), x * -1));
+            assert entityobject != null;
+            entity.randomoffset = entityobject.getRandomoffset();
+          }
+
           entity.setIndex(x);
           entity.checkindex = false;
           entity.syncentity(entity);
@@ -139,7 +164,6 @@ public class AnimatedPillarEntity extends BlockEntity {
    if (entity.delay > 0) {
      entity.delay--;
    }
-
   }
 }
 
