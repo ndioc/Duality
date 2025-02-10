@@ -40,12 +40,10 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
 
       final int animationlength = 23;
       final int animationoverlap = 6;
-      final int animationpause = 23;
+      final int animationpause = 46;
 
-      int frameoffset = (animationlength + animationoverlap) * blockEntity.getIndex();
-      int frame = Math.toIntExact((world.getTime() + frameoffset + blockEntity.randomoffset) % (animationlength + animationpause));
-
-      //main.LOGGER.info("Wispwood Log Instance @ {}, frame: {}, frameoffset: {}, index: {}, axis: {}", pos.toShortString(), frame, frameoffset , blockEntity.getIndex(), blockEntity.axis);
+      int frameoffset = (animationlength - animationoverlap) * blockEntity.getIndex();
+      int frame = Math.toIntExact((world.getTime() - frameoffset + blockEntity.randomoffset) % (animationlength + animationpause));
 
       // basic transform variables
       int veinmodel;

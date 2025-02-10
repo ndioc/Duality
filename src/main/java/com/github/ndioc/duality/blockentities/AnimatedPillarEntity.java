@@ -1,7 +1,6 @@
 package com.github.ndioc.duality.blockentities;
 
 import com.github.ndioc.duality.blockentitytypes;
-import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.networking;
 import com.github.ndioc.duality.utilities;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -25,7 +24,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   public int delay = 1;
   public int randomoffset = -1;
 
-  public final double maxrandomoffset = 23;
+  public final double maxrandomoffset = 46;
 
   public boolean firsttick = true;
   public boolean checkindex = true;
@@ -54,7 +53,6 @@ public class AnimatedPillarEntity extends BlockEntity {
   public void onblockupdate() {
     checkindex = true;
     delay = 1;
-    main.LOGGER.info("block update triggered on {}", pos.toShortString());
   }
 
   public String getAxis() {
@@ -148,7 +146,6 @@ public class AnimatedPillarEntity extends BlockEntity {
             assert entityobject != null;
             entity.randomoffset = entityobject.getRandomoffset();
           }
-
           entity.setIndex(x);
           entity.checkindex = false;
           entity.syncentity(entity);

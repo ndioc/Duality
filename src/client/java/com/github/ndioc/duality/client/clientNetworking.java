@@ -2,7 +2,6 @@ package com.github.ndioc.duality.client;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blockentitytypes;
-import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.networking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
@@ -18,9 +17,7 @@ public class clientNetworking {
       BlockPos position = buffer.readBlockPos();
       String axis = buffer.readString();
       int index = buffer.readInt();
-      main.LOGGER.info("index: {}", index);
       int randomoffset = buffer.readInt();
-      main.LOGGER.info("randomoffset: {}", randomoffset);
 
       client.execute(() -> {
         World world = handler.getWorld();
