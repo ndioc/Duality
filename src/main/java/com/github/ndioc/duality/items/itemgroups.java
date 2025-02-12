@@ -1,5 +1,7 @@
-package com.github.ndioc.duality;
+package com.github.ndioc.duality.items;
 
+import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.main;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -21,6 +23,7 @@ public class itemgroups {
           // add item to item group: entries.add(class.ITEM_NAME);
             entries.add(blocks.WISPWOOD_LOG);
             entries.add(items.ESSENCE_ORB);
+            entries.add(items.WISP_FRUIT);
 
           }
         )

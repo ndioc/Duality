@@ -1,15 +1,16 @@
 package com.github.ndioc.duality;
 
-
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
-import net.minecraft.block.PillarBlock;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import static com.github.ndioc.duality.main.MOD_ID;
 
@@ -32,4 +33,33 @@ public class utilities {
     return Registry.register(Registries.BLOCK, regid, block);
 
   }
+
+  public static Direction.Axis StringtoAxis(String input) {
+    Direction.Axis output;
+    switch (input) {
+      case "x":
+         output = Direction.Axis.X;
+        break;
+      case "y":
+        output = Direction.Axis.Y;
+        break;
+      case "z":
+        output = Direction.Axis.Z;
+        break;
+      default:
+        output = null;
+        main.LOGGER.warn("Method " + MOD_ID + "utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
+    }
+    return output;
+  }
+
+  public static <T extends BlockEntityType<?>> T RegisterBlockEntityType(String path, T type) {
+    return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(main.MOD_ID, path), type);
+  }
+
+  @Nullable
+  public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> validateTicker(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<? super E> ticker) {
+    return expectedType == givenType ? (BlockEntityTicker<A>) ticker : null;
+  }
+
 }

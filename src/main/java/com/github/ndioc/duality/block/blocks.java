@@ -1,6 +1,7 @@
-package com.github.ndioc.duality;
+package com.github.ndioc.duality.block;
 
-import com.github.ndioc.duality.block.wispwood_log;
+import com.github.ndioc.duality.block.wispwood.WispwoodLog;
+import com.github.ndioc.duality.block.wispwood.WispwoodVein;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
@@ -14,11 +15,15 @@ public class blocks {
 
   public static final Block WISPWOOD_LOG = registerblock(
       "wispwood_log", true,
-      new wispwood_log(FabricBlockSettings.create()
+      new WispwoodLog(FabricBlockSettings.create()
           .sounds(BlockSoundGroup.WOOD)
           .hardness(6f)
           .requiresTool()
-          .luminance(3)
           .burnable()));
+
+  public static final Block WISPWOOD_VEIN = registerblock(
+      "wispwood_vein", false,
+      new WispwoodVein(FabricBlockSettings.create()
+          ));
 
 }
