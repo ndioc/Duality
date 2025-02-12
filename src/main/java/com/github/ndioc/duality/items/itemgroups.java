@@ -1,5 +1,7 @@
-package com.github.ndioc.duality;
+package com.github.ndioc.duality.items;
 
+import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.main;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;

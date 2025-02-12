@@ -1,6 +1,5 @@
 package com.github.ndioc.duality.blockentities;
 
-import com.github.ndioc.duality.blockentitytypes;
 import com.github.ndioc.duality.networking;
 import com.github.ndioc.duality.utilities;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;

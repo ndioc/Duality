@@ -1,7 +1,7 @@
-package com.github.ndioc.duality.block.wispwoodlog;
+package com.github.ndioc.duality.block.wispwood;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
-import com.github.ndioc.duality.blockentitytypes;
+import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.utilities;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

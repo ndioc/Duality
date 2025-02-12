@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.client;
 
-import com.github.ndioc.duality.block.wispwoodlog.WispwoodLogInstance;
-import com.github.ndioc.duality.blockentitytypes;
+import com.github.ndioc.duality.client.instances.WispwoodLogInstance;
+import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 
 public class flywheelInstances {

@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.client;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
-import com.github.ndioc.duality.blockentitytypes;
+import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.networking;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.PacketByteBuf;

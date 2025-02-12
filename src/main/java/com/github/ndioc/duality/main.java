@@ -1,5 +1,10 @@
 package com.github.ndioc.duality;
 
+import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.blockentities.blockentitytypes;
+import com.github.ndioc.duality.equipment.equipment;
+import com.github.ndioc.duality.items.itemgroups;
+import com.github.ndioc.duality.items.items;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

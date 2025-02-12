@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.block.wispwoodlog;
+package com.github.ndioc.duality.block.wispwood;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

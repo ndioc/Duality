@@ -1,6 +1,7 @@
-package com.github.ndioc.duality;
+package com.github.ndioc.duality.blockentities;
 
-import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
+import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.utilities;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
 

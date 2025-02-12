@@ -1,7 +1,7 @@
-package com.github.ndioc.duality;
+package com.github.ndioc.duality.block;
 
-import com.github.ndioc.duality.block.wispwoodlog.WispwoodLog;
-import com.github.ndioc.duality.block.wispwoodlog.WispwoodVein;
+import com.github.ndioc.duality.block.wispwood.WispwoodLog;
+import com.github.ndioc.duality.block.wispwood.WispwoodVein;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
