@@ -35,23 +35,23 @@ public enum essenceType implements essenceCore {
   }
 
   @Override
-  public float getbaseEfficiencyMult(essenceType type) {
-    return type.baseEfficiencyMult;
+  public float getbaseEfficiencyMult() {
+    return this.baseEfficiencyMult;
   }
 
   @Override
-  public float getbaseTravelSpeed(essenceType type) {
-    return type.baseTravelSpeed;
+  public float getbaseTravelSpeed() {
+    return this.baseTravelSpeed;
   }
 
   @Override
-  public int getbaseDistanceBeforeLoss(essenceType type) {
-    return type.baseDistanceBeforeLoss;
+  public int getbaseDistanceBeforeLoss() {
+    return this.baseDistanceBeforeLoss;
   }
 
   @Override
-  public int geteffectOnLife(essenceType type) {
-    return type.effectOnLife;
+  public int geteffectOnLife() {
+    return this.effectOnLife;
   }
 
 }

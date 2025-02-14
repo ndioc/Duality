@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.block.wispwood;
+package com.github.ndioc.duality.blocks.natural.wispwood;
 
 import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
 import com.github.ndioc.duality.blockentities.blockentitytypes;

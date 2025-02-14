@@ -1,6 +1,6 @@
 package com.github.ndioc.duality.items;
 
-import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.main;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 public class itemgroups {
 
   public static class Duality {
-
     public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier(main.MOD_ID,"duality_itemgroup"), FabricItemGroup.builder()
 
         .icon(() -> new ItemStack(blocks.WISPWOOD_LOG))

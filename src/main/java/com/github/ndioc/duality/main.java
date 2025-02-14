@@ -1,6 +1,6 @@
 package com.github.ndioc.duality;
 
-import com.github.ndioc.duality.block.blocks;
+import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.equipment.equipment;
 import com.github.ndioc.duality.items.itemgroups;
