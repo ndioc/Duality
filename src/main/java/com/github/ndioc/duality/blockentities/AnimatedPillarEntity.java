@@ -38,9 +38,9 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   @Override
   public void readNbt(NbtCompound nbt) {
-    index = nbt.getInt("index");
-    axis = nbt.getString("axis");
-    randomoffset = nbt.getInt("randomoffset");
+    this.index = nbt.getInt("index");
+    this.axis = nbt.getString("axis");
+    this.randomoffset = nbt.getInt("randomoffset");
     super.readNbt(nbt);
   }
 
@@ -50,8 +50,8 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public void onblockupdate() {
-    checkindex = true;
-    delay = 1;
+    this.checkindex = true;
+    this.delay = 1;
   }
 
   public String getAxis() {
@@ -59,7 +59,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public void setAxis(String input) {
-   axis = input;
+   this.axis = input;
   }
 
   public int getIndex() {
@@ -67,7 +67,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public void setIndex(int input) {
-    index = input;
+    this.index = input;
   }
 
   public int getRandomoffset() {
@@ -75,7 +75,7 @@ public class AnimatedPillarEntity extends BlockEntity {
   }
 
   public void setRandomoffset(int input) {
-    randomoffset = input;
+    this.randomoffset = input;
   }
 
   public void syncentity (BlockEntity entity) {
