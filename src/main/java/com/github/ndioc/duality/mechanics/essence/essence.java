@@ -1,13 +1,17 @@
 package com.github.ndioc.duality.mechanics.essence;
 
+
 public class essence {
 
   private final essenceType TYPE;
+  private final int ID;
+
   private int quantity;
   private final int capacity;
 
   public essence(essenceType type, int capacity) {
     TYPE = type;
+    ID = type.getNumericalID();
     this.capacity = capacity;
     quantity = 0;
   }

@@ -7,5 +7,6 @@ public interface essenceCore {
   float getbaseTravelSpeed();
   int getbaseDistanceBeforeLoss();
   int geteffectOnLife();
+  int getNumericalID();
 
 }
