@@ -5,10 +5,8 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.event.listener.GameEventListener;
 import org.jetbrains.annotations.Nullable;
 
 public class testrelay extends BlockWithEntity {
@@ -27,8 +25,4 @@ public class testrelay extends BlockWithEntity {
     return super.getTicker(world, state, type);
   }
 
-  @Override
-  public @Nullable <T extends BlockEntity> GameEventListener getGameEventListener(ServerWorld world, T blockEntity) {
-    return super.getGameEventListener(world, blockEntity);
-  }
 }

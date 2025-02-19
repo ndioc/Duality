@@ -7,12 +7,16 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.Objects;
+
 public class EssenceContainerEntity extends BlockEntity implements essenceContainer {
 
   int volumePerContainer;
   int maxTransferPerSecond;
   int numberOfContainers;
   int[] allowedContainers;
+
+  boolean unlimited;
 
   public EssenceContainerEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_CONTAINER, pos, state);
@@ -28,6 +32,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
       volumePerContainer = AiA[0][0];
       maxTransferPerSecond = AiA[0][1];
       numberOfContainers = AiA[0][2];
+      unlimited = AiA[0][3] == 1;
       allowedContainers = AiA[1];
     }
   }
@@ -35,19 +40,11 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
   @Override
   public void writeNbt(NbtCompound data) {
     super.writeNbt(data);
-    data.putInt("VolumePerContainer", volumePerContainer);
-    data.putInt("maxTransferPerSecond", maxTransferPerSecond);
-    data.putInt("numberOfContainers", numberOfContainers);
-    data.putIntArray("allowedContainers", allowedContainers);
   }
 
   @Override
   public void readNbt(NbtCompound nbt) {
     super.readNbt(nbt);
-    volumePerContainer = nbt.getInt("VolumePerContainer");
-    maxTransferPerSecond = nbt.getInt("maxTransferPerSecond");
-    numberOfContainers = nbt.getInt("numberOfContainers");
-    allowedContainers = nbt.getIntArray("allowedContainers");
   }
 
   public essence createEssenceObject(essenceType type, int capacity) {
@@ -57,15 +54,24 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
   public void deleteEssenceObject(int arraynum) {
     container[arraynum] = null;
     allocatedContainers[arraynum] = 0;
+    markDirty();
   }
 
   public EssenceContainerEntity getContainerEntity(BlockPos position) {
-    assert world != null;
-    BlockEntity checktype = world.getBlockEntity(position);
+    BlockEntity checktype = Objects.requireNonNull(this.world).getBlockEntity(position);
     if (checktype != null && checktype.getType() == blockentitytypes.ESSENCE_CONTAINER) {
       return (EssenceContainerEntity) checktype;
     }
     return null;
+  }
+
+  public boolean canReceiveEssence(essenceType type) {
+    for (int x = 0; x < allocatedContainers.length; x++) {
+      if (type.getNumericalID() == allocatedContainers[x]) {
+        return container[x].getQuantity() < container[x].getCapacity();
+      }
+    }
+    return false;
   }
 
   public int removeEssence(essenceType type, int amount) {
@@ -80,6 +86,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
         break;
       }
     }
+    markDirty();
     return amountRemoved;
   }
 
@@ -97,19 +104,30 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
     }
 
     for (int x = 0; x < numberOfContainers; x++) {
-      if (allocatedContainers[x] == 0 && firstfreecontainer == -1) {
-          firstfreecontainer = x;
-      }
-        if (type.getNumericalID() == allocatedContainers[x]) {
+      if (type.getNumericalID() == allocatedContainers[x]) {
+        markDirty();
+        if (container[x].getQuantity() < 0) {
+          container[x].forceSetQuantity(0);
+        }
         return container[x].addEssence(amount);
+      }
+      if (allocatedContainers[x] == 0) {
+          firstfreecontainer = x;
+          break;
+      }
+      if (container[x] != null && container[x].getQuantity() == -1) {
+        deleteEssenceObject(x);
+        firstfreecontainer = x;
+        break;
       }
     }
 
     if (firstfreecontainer != -1) {
       container[firstfreecontainer] = createEssenceObject(type, volumePerContainer);
+      markDirty();
       return container[firstfreecontainer].addEssence(amount);
     }
-
+    markDirty();
     return 0;
   }
 

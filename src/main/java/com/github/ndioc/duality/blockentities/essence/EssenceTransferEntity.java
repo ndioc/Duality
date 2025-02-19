@@ -11,17 +11,35 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
 
   public EssenceTransferEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_TRANSFER_ENTITY, pos, state);
+    setConstants();
   }
 
+  public void setConstants() {
+    int[][] AiA = essenceBlockConstants.fetchConstants(this.getCachedState().getBlock().getTranslationKey());
+    if (AiA != null) {
+      amountPerTransfer = AiA[0][0];
+      ticksBetweenTransfer = AiA[0][1];
+      travelSpeedMult = AiA[0][2];
+      distanceBeforeLossMult = AiA[0][3];
+      maxSourceContainers = AiA[0][4];
+      maxDestinationContainers = AiA[0][5];
+    }
+  }
+
+  private int amountPerTransfer;
+  private int ticksBetweenTransfer;
+  private int travelSpeedMult;
+  private int distanceBeforeLossMult;
+  private int maxSourceContainers;
+  private int maxDestinationContainers;
+
   private final int entityCacheSize = 16;
-  private final int maxSourceContainers = 3;
-  private final int maxDestinationContainers = 5;
+  private int lastEntityTakenFrom = 0;
+  private int lastEntitySentTo = 0;
 
   // TEMPORARY SETTINGS TO SHOW LINUS AND GET SOME FEEDBACK.
 
   private final boolean SendToAllAtOnce = true;
-
-
 
   private EssenceContainerEntity[] cachedEntities = new EssenceContainerEntity[entityCacheSize];
   private BlockPos[] cachedEntityPos = new BlockPos[entityCacheSize];
@@ -62,11 +80,44 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
     return null;
   }
 
-  public void transferEssence(EssenceContainerEntity source, EssenceContainerEntity target, int amount, essenceType type) {
-
+  public void transferEssence(EssenceContainerEntity source, EssenceContainerEntity destination, int amount, essenceType type) {
+    int essencetosend = source.removeEssence(type, amount);
+    if (essencetosend != 0) {
+      int essencetoreturn = destination.addEssence(type, essencetosend);
+      if(essencetoreturn != 0) {
+        source.addEssence(type, essencetoreturn);
+      }
+    }
   }
 
-  public void transferEssenceToAll(EssenceContainerEntity[] sources, EssenceContainerEntity[] destinations, int amount, essenceType type) {
+  public void transferEssenceRoundRobin(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, essenceType type) {
+      int essencetosend = 0;
+    for (int x = lastEntityTakenFrom + 1, y = lastEntitySentTo + 1, z = 0; z < Math.max(source.length, destination.length); z++) {
+
+      if (essencetosend == 0) {
+        essencetosend = source[x].removeEssence(type, amount);
+      }
+
+      if (essencetosend != 0) {
+        if (destination[y].canReceiveEssence(type)) {
+          int essencetoreturn = destination[y].addEssence(type, essencetosend);
+          if (essencetoreturn != 0) {
+            source[x].addEssence(type, essencetoreturn);
+          }
+          lastEntityTakenFrom = x;
+          lastEntitySentTo = y;
+          break;
+        }
+        else{
+          y++;
+        }
+      } else {
+        x++;
+      }
+    }
+  }
+
+  public void transferEssenceToAll(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, essenceType type) {
 
   }
 }
