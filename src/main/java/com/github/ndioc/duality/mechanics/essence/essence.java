@@ -20,6 +20,18 @@ public class essence {
     return quantity;
   }
 
+  public int getCapacity() {
+    return this.capacity;
+  }
+
+  public int getID() {
+    return this.ID;
+  }
+
+  public essenceType getType() {
+    return this.TYPE;
+  }
+
   public int addEssence(int input) {
     int overflow = (quantity + input) - capacity;
 
@@ -44,6 +56,10 @@ public class essence {
       quantity -= input;
       return input;
     }
+  }
+
+  public void forceSetQuantity(int amount) {
+    quantity = amount;
   }
 
 }

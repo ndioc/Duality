@@ -1,5 +1,6 @@
-package com.github.ndioc.duality.blockentities;
+package com.github.ndioc.duality.blockentities.animation;
 
+import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.networking;
 import com.github.ndioc.duality.utilities;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -30,18 +31,18 @@ public class AnimatedPillarEntity extends BlockEntity {
 
   @Override
   public void writeNbt(NbtCompound data) {
+    super.writeNbt(data);
     data.putInt("index", index);
     data.putString("axis", axis);
     data.putInt("randomoffset", randomoffset);
-    super.writeNbt(data);
   }
 
   @Override
   public void readNbt(NbtCompound nbt) {
+    super.readNbt(nbt);
     this.index = nbt.getInt("index");
     this.axis = nbt.getString("axis");
     this.randomoffset = nbt.getInt("randomoffset");
-    super.readNbt(nbt);
   }
 
   @Override

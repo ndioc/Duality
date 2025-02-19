@@ -1,8 +1,8 @@
 package com.github.ndioc.duality.blocks;
 
-import com.github.ndioc.duality.blocks.essence.storage.testorb;
-import com.github.ndioc.duality.blocks.natural.wispwood.WispwoodLog;
-import com.github.ndioc.duality.blocks.natural.wispwood.WispwoodVein;
+import com.github.ndioc.duality.blocks.essence.storage.*;
+import com.github.ndioc.duality.blocks.essence.transport.*;
+import com.github.ndioc.duality.blocks.natural.wispwood.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
@@ -25,11 +25,21 @@ public class blocks {
   public static final Block WISPWOOD_VEIN = registerblock(
       "wispwood_vein", false,
       new WispwoodVein(FabricBlockSettings.create()
-          ));
+      ));
 
   public static final Block TEST_ORB = registerblock(
       "test_orb", true,
       new testorb(FabricBlockSettings.create()
-          ));
+      ));
+
+  public static final Block CREATIVE_ORB = registerblock(
+      "creative_orb", true,
+      new creativeorb(FabricBlockSettings.create()
+      ));
+
+  public static final Block TEST_RELAY = registerblock(
+      "test_relay", true,
+      new testrelay(FabricBlockSettings.create()
+      ));
 
 }

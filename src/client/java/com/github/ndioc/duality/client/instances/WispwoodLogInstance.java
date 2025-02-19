@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.client.instances;
 
 import com.github.ndioc.duality.blocks.natural.wispwood.WispwoodVein;
-import com.github.ndioc.duality.blockentities.AnimatedPillarEntity;
+import com.github.ndioc.duality.blockentities.animation.AnimatedPillarEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
