@@ -2,7 +2,7 @@ package com.github.ndioc.duality.mechanics.essence;
 
 public enum essenceType implements essenceCore {
 
-  HARMONIOUS(10, 0.98f, 1f, 48, 0),
+  HARMONIOUS(0, 0.98f, 1f, 48, 0),
   BLISS(1, 0.90f, 1.5f, 24, 2),
   AGONY(-1, 0.85f, 0.5f, 16, -2);
 
@@ -39,6 +39,15 @@ public enum essenceType implements essenceCore {
 
   public essenceType getEssenceType() {
     return this;
+  }
+
+  public static essenceType getEssenceTypeByID(int ID) {
+    return switch (ID) {
+      case -1 -> essenceType.AGONY;
+      case 0 -> essenceType.HARMONIOUS;
+      case 1 -> essenceType.BLISS;
+      default -> null;
+    };
   }
 
   public float getbaseEfficiencyMult() {

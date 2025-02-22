@@ -37,10 +37,6 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
   private int lastEntityTakenFrom = 0;
   private int lastEntitySentTo = 0;
 
-  // TEMPORARY SETTINGS TO SHOW LINUS AND GET SOME FEEDBACK.
-
-  private final boolean SendToAllAtOnce = true;
-
   private EssenceContainerEntity[] cachedEntities = new EssenceContainerEntity[entityCacheSize];
   private BlockPos[] cachedEntityPos = new BlockPos[entityCacheSize];
 
@@ -50,10 +46,25 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
   public EssenceContainerEntity checkCacheForTarget(BlockPos position) {
     for (int x = 0; x < entityCacheSize; x++) {
       if (position == cachedEntityPos[x]) {
-        return cachedEntities[x];
+        try{
+          if (cachedEntities[x].getPos() == position) {
+            return cachedEntities[x];
+          }
+        } catch (Exception e) {
+          cachedEntities[x] = null;
+          cachedEntityPos[x] = null;
+          throw new NullPointerException("getPos() of block @ " + position.toShortString() + "returned NULL");
+        }
       }
     }
     return getEntity(position);
+  }
+
+  public void wipeCache() {
+    for (int x = 0; x < cachedEntityPos.length - 1; x++) {
+      cachedEntities[x] = null;
+      cachedEntityPos[x] = null;
+    }
   }
 
   public void writeToCache(EssenceContainerEntity entity, BlockPos pos) {
@@ -95,7 +106,12 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
     for (int x = lastEntityTakenFrom + 1, y = lastEntitySentTo + 1, z = 0; z < Math.max(source.length, destination.length); z++) {
 
       if (essencetosend == 0) {
-        essencetosend = source[x].removeEssence(type, amount);
+        try {
+          essencetosend = source[x].removeEssence(type, amount);
+        }
+        catch (Exception e) {
+          throw new RuntimeException("Essence Transfer: Can't remove essence from container");
+        }
       }
 
       if (essencetosend != 0) {

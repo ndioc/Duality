@@ -1,13 +1,14 @@
 package com.github.ndioc.duality.blocks;
 
 import com.github.ndioc.duality.blocks.essence.storage.*;
-import com.github.ndioc.duality.blocks.essence.transport.*;
+import com.github.ndioc.duality.blocks.essence.transfer.*;
 import com.github.ndioc.duality.blocks.natural.wispwood.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
 
-import static com.github.ndioc.duality.utilities.registerblock;
+import static com.github.ndioc.duality.items.items.*;
+import static com.github.ndioc.duality.utilities.*;
 
 public class blocks {
 
@@ -38,8 +39,9 @@ public class blocks {
       ));
 
   public static final Block TEST_RELAY = registerblock(
-      "test_relay", true,
-      new testrelay(FabricBlockSettings.create()
+      "test_relay",
+      false,
+      new TestRelay(FabricBlockSettings.create()
       ));
 
 }

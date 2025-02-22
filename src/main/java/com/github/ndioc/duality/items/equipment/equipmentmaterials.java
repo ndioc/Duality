@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.equipment;
+package com.github.ndioc.duality.items.equipment;
 
 import com.google.common.base.Suppliers;
 import net.minecraft.item.Items;

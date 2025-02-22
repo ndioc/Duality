@@ -20,6 +20,10 @@ public class utilities {
     return Registry.register(Registries.ITEM, Identifier.of(MOD_ID, id), item);
   }
 
+  public static BlockItem registerblockitem(String id, BlockItem blockitem) {
+    return Registry.register(Registries.ITEM, Identifier.of(MOD_ID, id), blockitem);
+  }
+
   public static Block registerblock(String blockname, boolean registerblockitem, Block block) {
 
     //create id/name for block

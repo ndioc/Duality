@@ -1,17 +1,23 @@
 package com.github.ndioc.duality.items;
 
+import com.github.ndioc.duality.blocks.essence.transfer.TestRelay;
+import com.github.ndioc.duality.items.blockitems.essence.transfer.TestRelayItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 
-import static com.github.ndioc.duality.utilities.registeritem;
+import static com.github.ndioc.duality.blocks.blocks.*;
+import static com.github.ndioc.duality.utilities.*;
 
 public class items {
 
   public static void initialize() {
   }
+
+  // Register Regular Items
 
   public static final Item ESSENCE_ORB = registeritem("essence_orb",new Item(new Item.Settings().maxCount(1)));
 
@@ -24,5 +30,10 @@ public class items {
                   .build())
 
   ));
+
+  // Register Custom Block Items
+
+  public static final BlockItem TEST_RELAY_ITEM = registerblockitem("test_relay", new TestRelayItem(TEST_RELAY, new FabricItemSettings()));
+
 }
 

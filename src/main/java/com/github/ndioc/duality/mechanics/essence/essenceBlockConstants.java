@@ -2,8 +2,8 @@ package com.github.ndioc.duality.mechanics.essence;
 public abstract class essenceBlockConstants {
     public enum essenceContainers {
 
-        TESTORB(64000, 320, 3, 0, new int[]{-1, 1, 10}),
-        CREATIVEORB(256000, 1280, 5, 1, new int[]{-1,1,10});
+        TESTORB(64000, 320, 3, 0, new int[]{-1, 0, 1}),
+        CREATIVEORB(256000, 1280, 5, 1, new int[]{-1,0,1});
 
         private final int volumePerContainer; // Highest Quantity allowed per 'essence' object
         private final int maxTransferPerSecond; // Quantity of essence allowed to be transferred per second
@@ -46,6 +46,10 @@ public abstract class essenceBlockConstants {
 
         public int[] getAllowedEssenceTypes() {
             return this.AllowedEssenceTypes;
+        }
+
+        public int getHighestContainerCount() {
+            return 5;
         }
 
     }

@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.blocks.essence.transport;
+package com.github.ndioc.duality.blocks.essence.transfer;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -9,9 +9,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class testrelay extends BlockWithEntity {
+public class TestRelay extends BlockWithEntity {
 
-  public testrelay(Settings settings) {
+  public TestRelay(Settings settings) {
     super(settings);
   }
 

@@ -2,7 +2,7 @@ package com.github.ndioc.duality;
 
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
-import com.github.ndioc.duality.equipment.equipment;
+import com.github.ndioc.duality.items.equipment.equipment;
 import com.github.ndioc.duality.items.itemgroups;
 import com.github.ndioc.duality.items.items;
 import net.fabricmc.api.ModInitializer;
@@ -22,10 +22,10 @@ public class main implements ModInitializer {
   public void onInitialize() {
 
     itemgroups.initialize();
-    potions.initialize();
-    blocks.initialize();
     blockentitytypes.initialize();
+    blocks.initialize();
     fluids.initialize();
+    potions.initialize();
     equipment.initialize();
     items.initialize();
     enchantments.initialize();

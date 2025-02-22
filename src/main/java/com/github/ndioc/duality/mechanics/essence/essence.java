@@ -9,11 +9,31 @@ public class essence {
   private int quantity;
   private final int capacity;
 
-  public essence(essenceType type, int capacity) {
+  public essence(essenceType type, int capacity, boolean unlimited) {
     TYPE = type;
     ID = type.getNumericalID();
     this.capacity = capacity;
-    quantity = 0;
+
+    if (unlimited) {
+      quantity = this.capacity;
+    }
+    else {
+      quantity = 0;
+    }
+
+  }
+
+  public essence(essenceType type, int capacity, int Q, boolean unlimited) {
+    TYPE = type;
+    ID = type.getNumericalID();
+    this.capacity = capacity;
+
+    if (unlimited) {
+      quantity = this.capacity;
+    }
+    else {
+      quantity = Q;
+    }
   }
 
   public int getQuantity() {

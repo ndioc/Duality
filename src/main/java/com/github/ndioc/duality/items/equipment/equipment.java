@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.equipment;
+package com.github.ndioc.duality.items.equipment;
 
 public class equipment {
 
