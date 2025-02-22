@@ -1,7 +1,6 @@
 package com.github.ndioc.duality.items;
 
-import com.github.ndioc.duality.blocks.essence.transfer.TestRelay;
-import com.github.ndioc.duality.items.blockitems.essence.transfer.TestRelayItem;
+import com.github.ndioc.duality.items.blockitems.essence.transfer.essenceTransferBlockItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -33,7 +32,7 @@ public class items {
 
   // Register Custom Block Items
 
-  public static final BlockItem TEST_RELAY_ITEM = registerblockitem("test_relay", new TestRelayItem(TEST_RELAY, new FabricItemSettings()));
+  public static final BlockItem TEST_RELAY_ITEM = registerblockitem("test_relay", new essenceTransferBlockItem(TEST_RELAY, new FabricItemSettings()));
 
 }
 
