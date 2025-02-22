@@ -6,12 +6,27 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import com.github.ndioc.duality.mechanics.essence.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class EssenceTransferEntity extends BlockEntity implements essenceTransfer {
 
   public EssenceTransferEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_TRANSFER_ENTITY, pos, state);
     setConstants();
+  }
+
+  public void writeTargets(BlockPos[] sourcestowrite, BlockPos[] destinationstowrite) {
+    for (int x = 0; x < sourcestowrite.length - 1; x++) {
+      if (sourcestowrite[x] != null && x < sourceContainers.length - 1) {
+        sourceContainers[x] = sourcestowrite[x];
+      }
+    }
+
+    for (int x = 0; x < destinationstowrite.length - 1; x++) {
+      if (destinationstowrite[x] != null && x < destinationContainers.length - 1) {
+        destinationContainers[x] = destinationstowrite[x];
+      }
+    }
   }
 
   public void setConstants() {
@@ -136,4 +151,8 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
   public void transferEssenceToAll(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, essenceType type) {
 
   }
+
+  public static void tick(World world, BlockPos blockPos, BlockState blockState, EssenceTransferEntity essenceTransferEntity) {
+  }
+
 }

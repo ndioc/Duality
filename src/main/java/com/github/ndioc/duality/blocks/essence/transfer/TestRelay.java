@@ -1,5 +1,9 @@
 package com.github.ndioc.duality.blocks.essence.transfer;
 
+import com.github.ndioc.duality.blockentities.animation.AnimatedPillarEntity;
+import com.github.ndioc.duality.blockentities.blockentitytypes;
+import com.github.ndioc.duality.blockentities.essence.EssenceTransferEntity;
+import com.github.ndioc.duality.utilities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,12 +21,19 @@ public class TestRelay extends BlockWithEntity {
 
   @Override
   public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-    return null;
+    return new EssenceTransferEntity(pos, state);
   }
 
+  @Nullable
   @Override
-  public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-    return super.getTicker(world, state, type);
+  public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+    if (!world.isClient()) {
+      return utilities.validateTicker(type, blockentitytypes.ESSENCE_TRANSFER_ENTITY, EssenceTransferEntity::tick);
+    }
+    else {
+      return null;
+    }
   }
-
 }
+
+
