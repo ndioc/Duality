@@ -37,7 +37,18 @@ public class essenceTransferBlockItem extends BlockItem {
   private int maxSources;
   private int maxDestinations;
 
-  boolean isclient;
+  private boolean compareBlockPos(BlockPos pos1, BlockPos pos2) {
+
+    int x1 = pos1.getX();
+    int y1 = pos1.getY();
+    int z1 = pos1.getZ();
+    int x2 = pos2.getX();
+    int y2 = pos2.getY();
+    int z2 = pos2.getZ();
+
+    return (x1 == x2 && y1 == y2 && z1 == z2);
+
+  }
 
   private String writeToArrays(BlockPos position, PlayerEntity player, NbtCompound nbt) {
     boolean presentinsources = false;
@@ -48,28 +59,21 @@ public class essenceTransferBlockItem extends BlockItem {
     BlockPos[] sources = readNBT(nbt, "Sources");
     BlockPos[] destinations = readNBT(nbt, "Destinations");
 
-    if (sources.length == 0){
-      sources = new BlockPos[maxSources];
-    }
-    if (destinations.length == 0) {
-      destinations = new BlockPos[maxDestinations];
-    }
-
     for (int x = 0; x < maxSources; x++) {
-      if (sources[x] == position) {
+      if (compareBlockPos(sources[x], position)) {
         presentinsources = true;
         break;
       }
     }
-    for (int x = 0; x < maxDestinations; x++) {
-      if (destinations[x] == position) {
+    for (int x = 0; x < maxDestinations && !presentinsources; x++) {
+      if (compareBlockPos(destinations[x], position)) {
         presentindestinations = true;
         break;
       }
     }
-    if (!presentinsources || !presentindestinations) {
+    if (!presentinsources && !presentindestinations) {
       for (int x = 0; x < maxSources; x++) {
-        if (sources[x] == zeroX3) {
+        if (compareBlockPos(sources[x], zeroX3)) {
           sources[x] = position;
           writeNBT(sources, nbt, "Sources");
           return "Block set as source.";
@@ -83,28 +87,28 @@ public class essenceTransferBlockItem extends BlockItem {
     }
     if (presentinsources) {
       for (int x = 0; x < maxSources; x++) {
-        if (sources[x] == position) {
+        if (compareBlockPos(sources[x], position)) {
           sources[x] = zeroX3;
           writeNBT(sources, nbt, "Sources");
           break;
         }
       }
-      for (int y = 0; y < maxDestinations; y++) {
-        if (destinations[y] == zeroX3) {
-          destinations[y] = position;
+      for (int x = 0; x < maxDestinations; x++) {
+        if (compareBlockPos(destinations[x], zeroX3)) {
+          destinations[x] = position;
           writeNBT(destinations, nbt, "Destinations");
           return "Block set as destination.";
-        } else if (y == maxDestinations - 1) {
-          destinations[y] = position;
+        } else if (x == maxDestinations - 1) {
+          destinations[x] = position;
           writeNBT(destinations, nbt, "Destinations");
-          return "Destinations full, overwriting last destination.";
+          return "Destinations full";
         }
 
       }
     }
     if (presentindestinations) {
       for (int x = 0; x < maxDestinations; x++) {
-        if (destinations[x] == position) {
+        if (compareBlockPos(destinations[x], position)) {
           destinations[x] = zeroX3;
           writeNBT(destinations, nbt, "Destinations");
           return "Block removed from selection.";
@@ -124,7 +128,7 @@ public class essenceTransferBlockItem extends BlockItem {
   }
 
   private void printToClient(String text, PlayerEntity player) {
-    if (isclient) {
+    if (player.getWorld().isClient()) {
       Text message = Text.of(text);
       player.sendMessage(message, true);
     }
@@ -148,16 +152,7 @@ public class essenceTransferBlockItem extends BlockItem {
       return;
     }
 
-    for (int x = 0, y = 0; x < positionarray.length - 1; x++) {
-      if(positionarray[x] == null) {
-        positionNBT[y] = 0;
-        y++;
-        positionNBT[y] = 0;
-        y++;
-        positionNBT[y] = 0;
-        y++;
-        continue;
-      }
+    for (int x = 0, y = 0; x < positionarray.length; x++) {
       positionNBT[y] = positionarray[x].getX();
       y++;
       positionNBT[y] = positionarray[x].getY();
@@ -173,7 +168,7 @@ public class essenceTransferBlockItem extends BlockItem {
     int[] array = nbt.getIntArray(key);
     int arrayDepth = array.length / 3;
     BlockPos[] output = new BlockPos[arrayDepth];
-    for (int u = 0, v = 0; u < arrayDepth - 1; u++) {
+    for (int u = 0, v = 0; u < arrayDepth; u++) {
       int x = array[v];
       v++;
       int y = array[v];
@@ -188,20 +183,21 @@ public class essenceTransferBlockItem extends BlockItem {
   @Override
   public ActionResult useOnBlock(ItemUsageContext context) {
 
-    NbtCompound nbt = context.getStack().getNbt();
+    PlayerEntity player = context.getPlayer();
+    World world = context.getWorld();
+    ItemStack itemStack = context.getStack();
+
+    NbtCompound nbt = itemStack.getNbt();
     if (nbt == null) {
       nbt = createNbt();
     }
 
-    PlayerEntity player = context.getPlayer();
-    World world = context.getWorld();
-
     if (player != null && world != null && player.isSneaking()) {
-      isclient = world.isClient;
         BlockEntity entity = world.getBlockEntity(context.getBlockPos());
         if (entity != null && entity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
           printToClient(writeToArrays(context.getBlockPos(), player, nbt), player);
-          return ActionResult.PASS;
+          itemStack.setNbt(nbt);
+            return ActionResult.PASS;
         }
         else {
           printToClient("This block is not an Essence Container", player);
