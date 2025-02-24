@@ -3,9 +3,11 @@ package com.github.ndioc.duality.items.blockitems.essence.transfer;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.blockentities.essence.EssenceTransferEntity;
 import com.github.ndioc.duality.mechanics.essence.essenceBlockConstants;
+import com.github.ndioc.duality.util.nbt.BlockPosNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -39,6 +41,9 @@ public class essenceTransferBlockItem extends BlockItem {
 
   private int maxSources;
   private int maxDestinations;
+
+  private BlockPos[] sourceCache;
+  private BlockPos[] destinationCache;
 
   private boolean compareBlockPos(BlockPos pos1, BlockPos pos2) {
 
@@ -171,6 +176,21 @@ public class essenceTransferBlockItem extends BlockItem {
   }
 
   @Override
+  public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
+    super.inventoryTick(stack, world, entity, slot, selected);
+    if (!selected && stack.hasNbt()) {
+      stack.setNbt(null);
+    }
+    else if (world.isClient && selected) {
+      NbtCompound nbt = stack.getNbt();
+      if (nbt != null) {
+        BlockPos[] src = BlockPosNBT.readBlockPosNBT(nbt, "Sources");
+        BlockPos[] dest = BlockPosNBT.readBlockPosNBT(nbt, "Destinations");
+      }
+    }
+  }
+
+  @Override
   protected boolean postPlacement(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state) {
     if (stack.isOf(TEST_RELAY_ITEM)) {
       BlockEntity entitytotypecheck = world.getBlockEntity(pos);
@@ -179,6 +199,7 @@ public class essenceTransferBlockItem extends BlockItem {
         NbtCompound nbt = stack.getNbt();
         if (nbt != null) {
             entity.writeTargets(readBlockPosNBT(nbt, "Sources"), readBlockPosNBT(nbt, "Destinations"));
+            stack.setNbt(null);
         }
       }
     }
