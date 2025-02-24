@@ -5,14 +5,40 @@ import com.github.ndioc.duality.main;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import com.github.ndioc.duality.mechanics.essence.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
 public class EssenceTransferEntity extends BlockEntity implements essenceTransfer {
 
   public EssenceTransferEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_TRANSFER_ENTITY, pos, state);
     setConstants();
+    sourceContainers = new BlockPos[maxSourceContainers];
+    destinationContainers = new BlockPos[maxDestinationContainers];
+  }
+
+  @Override
+  protected void writeNbt(NbtCompound nbt) {
+    super.writeNbt(nbt);
+    nbt.putInt("maxSources", maxSourceContainers);
+    nbt.putInt("maxDestinations", maxDestinationContainers);
+    writeBlockPosNBT(sourceContainers, nbt, "Sources");
+    writeBlockPosNBT(destinationContainers, nbt, "Destinations");
+  }
+
+  @Override
+  public void readNbt(NbtCompound nbt) {
+    super.readNbt(nbt);
+    maxSourceContainers = nbt.getInt("maxSources");
+    sourceContainers = new BlockPos[maxSourceContainers];
+    sourceContainers = readBlockPosNBT(nbt, "Sources");
+
+    maxDestinationContainers = nbt.getInt("maxDestinations");
+    destinationContainers = new BlockPos[maxDestinationContainers];
+    destinationContainers = readBlockPosNBT(nbt, "Destinations");
   }
 
   public void writeTargets(BlockPos[] sourcestowrite, BlockPos[] destinationstowrite) {

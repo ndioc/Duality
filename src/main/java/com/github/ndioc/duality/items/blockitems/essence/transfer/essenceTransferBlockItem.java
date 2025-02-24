@@ -19,6 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
+import static com.github.ndioc.duality.items.items.TEST_RELAY_ITEM;
+import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
+
 public class essenceTransferBlockItem extends BlockItem {
   public essenceTransferBlockItem(Block block, Settings settings) {
     super(block, settings);
@@ -56,8 +59,8 @@ public class essenceTransferBlockItem extends BlockItem {
 
     final BlockPos zeroX3 = new BlockPos(BlockPos.ZERO);
 
-    BlockPos[] sources = readNBT(nbt, "Sources");
-    BlockPos[] destinations = readNBT(nbt, "Destinations");
+    BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
+    BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
 
     for (int x = 0; x < maxSources; x++) {
       if (compareBlockPos(sources[x], position)) {
@@ -75,13 +78,11 @@ public class essenceTransferBlockItem extends BlockItem {
       for (int x = 0; x < maxSources; x++) {
         if (compareBlockPos(sources[x], zeroX3)) {
           sources[x] = position;
-          writeNBT(sources, nbt, "Sources");
+          writeBlockPosNBT(sources, nbt, "Sources");
           return "Block set as source.";
         }
         else if (x == maxSources - 1) {
-          sources[x] = position;
-          writeNBT(sources, nbt, "Sources");
-          return "Sources full, overwriting last source.";
+          return "Sources full";
         }
       }
     }
@@ -89,18 +90,16 @@ public class essenceTransferBlockItem extends BlockItem {
       for (int x = 0; x < maxSources; x++) {
         if (compareBlockPos(sources[x], position)) {
           sources[x] = zeroX3;
-          writeNBT(sources, nbt, "Sources");
+          writeBlockPosNBT(sources, nbt, "Sources");
           break;
         }
       }
       for (int x = 0; x < maxDestinations; x++) {
         if (compareBlockPos(destinations[x], zeroX3)) {
           destinations[x] = position;
-          writeNBT(destinations, nbt, "Destinations");
+          writeBlockPosNBT(destinations, nbt, "Destinations");
           return "Block set as destination.";
         } else if (x == maxDestinations - 1) {
-          destinations[x] = position;
-          writeNBT(destinations, nbt, "Destinations");
           return "Destinations full";
         }
 
@@ -110,7 +109,7 @@ public class essenceTransferBlockItem extends BlockItem {
       for (int x = 0; x < maxDestinations; x++) {
         if (compareBlockPos(destinations[x], position)) {
           destinations[x] = zeroX3;
-          writeNBT(destinations, nbt, "Destinations");
+          writeBlockPosNBT(destinations, nbt, "Destinations");
           return "Block removed from selection.";
         }
       }
@@ -118,13 +117,14 @@ public class essenceTransferBlockItem extends BlockItem {
     return "shit something went wrong again";
   }
 
-  private void wipeArrays(NbtCompound nbt) {
-    BlockPos[] sources = readNBT(nbt, "Sources");
+  private void wipeArrays(NbtCompound nbt, ItemStack itemStack) {
+    BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
     Arrays.fill(sources, BlockPos.ZERO);
-    writeNBT(sources, nbt, "Sources");
-    BlockPos[] destinations = readNBT(nbt, "Destinations");
+    writeBlockPosNBT(sources, nbt, "Sources");
+    BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
     Arrays.fill(destinations, BlockPos.ZERO);
-    writeNBT(destinations, nbt, "Destinations");
+    writeBlockPosNBT(destinations, nbt, "Destinations");
+    itemStack.setNbt(nbt);
   }
 
   private void printToClient(String text, PlayerEntity player) {
@@ -141,43 +141,6 @@ public class essenceTransferBlockItem extends BlockItem {
     nbt.putIntArray("Sources", new int[maxSources * 3]);
     nbt.putIntArray("Destinations", new int[maxDestinations * 3]);
     return nbt;
-  }
-
-  private void writeNBT(BlockPos[] positionarray, NbtCompound nbt, String key) {
-    int[] positionNBT = new int[positionarray.length * 3];
-
-    if (positionarray.length == 0) {
-      Arrays.fill(positionNBT,0);
-      nbt.putIntArray(key, positionNBT);
-      return;
-    }
-
-    for (int x = 0, y = 0; x < positionarray.length; x++) {
-      positionNBT[y] = positionarray[x].getX();
-      y++;
-      positionNBT[y] = positionarray[x].getY();
-      y++;
-      positionNBT[y] = positionarray[x].getZ();
-      y++;
-    }
-
-    nbt.putIntArray(key, positionNBT);
-  }
-
-  private BlockPos[] readNBT(NbtCompound nbt, String key) {
-    int[] array = nbt.getIntArray(key);
-    int arrayDepth = array.length / 3;
-    BlockPos[] output = new BlockPos[arrayDepth];
-    for (int u = 0, v = 0; u < arrayDepth; u++) {
-      int x = array[v];
-      v++;
-      int y = array[v];
-      v++;
-      int z = array[v];
-      v++;
-      output[u] = new BlockPos(x, y, z);
-    }
-    return output;
   }
 
   @Override
@@ -209,11 +172,20 @@ public class essenceTransferBlockItem extends BlockItem {
 
   @Override
   protected boolean postPlacement(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state) {
-    if (stack.getItem() == this.asItem() && world.getBlockEntity(pos) != null && world.getBlockEntity(pos).getType() == blockentitytypes.ESSENCE_TRANSFER_ENTITY && stack.getNbt() != null) {
-      EssenceTransferEntity entity = (EssenceTransferEntity) world.getBlockEntity(pos);
-      essenceTransferBlockItem item = (essenceTransferBlockItem) stack.getItem();
-      entity.writeTargets(item.readNBT(stack.getNbt(), "Sources"), item.readNBT(stack.getNbt(), "Destinations"));
-      item.wipeArrays(stack.getNbt());
+    if (stack.isOf(TEST_RELAY_ITEM)) {
+      BlockEntity entitytotypecheck = world.getBlockEntity(pos);
+      if (entitytotypecheck != null && entitytotypecheck.getType() == blockentitytypes.ESSENCE_TRANSFER_ENTITY) {
+        EssenceTransferEntity entity = (EssenceTransferEntity) world.getBlockEntity(pos);
+        NbtCompound nbt = stack.getNbt();
+        if (nbt != null) {
+          try {
+            entity.writeTargets(readBlockPosNBT(nbt, "Sources"), readBlockPosNBT(nbt, "Destinations"));
+          } catch (Exception e) {
+            throw new RuntimeException(e);
+          }
+
+        }
+      }
     }
     return super.postPlacement(pos, world, player, stack, state);
   }
