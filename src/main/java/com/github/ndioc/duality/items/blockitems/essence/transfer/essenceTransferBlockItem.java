@@ -178,12 +178,7 @@ public class essenceTransferBlockItem extends BlockItem {
         EssenceTransferEntity entity = (EssenceTransferEntity) world.getBlockEntity(pos);
         NbtCompound nbt = stack.getNbt();
         if (nbt != null) {
-          try {
             entity.writeTargets(readBlockPosNBT(nbt, "Sources"), readBlockPosNBT(nbt, "Destinations"));
-          } catch (Exception e) {
-            throw new RuntimeException(e);
-          }
-
         }
       }
     }

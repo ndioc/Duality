@@ -19,15 +19,14 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
   public WispwoodLogInstance (MaterialManager matMan, AnimatedPillarEntity entity){
     super(matMan, entity);
 
-    model = matMan.defaultSolid()
+    model = matMan.defaultTransparent()
         .material(Materials.TRANSFORMED)
         .getModel(blocks.WISPWOOD_VEIN.getDefaultState())
         .createInstance();
 
       model.loadIdentity()
           .translate(getInstancePosition())
-          .setBlockLight(15)
-          .setSkyLight(15);
+          .setBlockLight(15);
   }
 
   @Override
@@ -159,11 +158,6 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
           .setBlockLight(15);
 
     }
-  }
-
-  @Override
-  public void updateLight() {
-    relight(getWorldPosition(), model);
   }
 
   @Override

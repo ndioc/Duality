@@ -23,11 +23,6 @@ public class blocks {
           .requiresTool()
           .burnable()));
 
-  public static final Block WISPWOOD_VEIN = registerblock(
-      "wispwood_vein", false,
-      new WispwoodVein(FabricBlockSettings.create()
-      ));
-
   public static final Block TEST_ORB = registerblock(
       "test_orb", true,
       new testorb(FabricBlockSettings.create()
@@ -42,6 +37,13 @@ public class blocks {
       "test_relay",
       false,
       new TestRelay(FabricBlockSettings.create()
+      ));
+
+  // Register blocks to get access to their models to use with flywheel
+
+  public static final Block WISPWOOD_VEIN = registerblock(
+      "wispwood_vein", false,
+      new WispwoodVein(FabricBlockSettings.create()
       ));
 
 }
