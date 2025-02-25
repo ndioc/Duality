@@ -41,6 +41,11 @@ public class blocks {
 
   // Register blocks to get access to their models to use with flywheel
 
+  public static final Block TESTING = registerblock(
+      "selection_outline", true,
+      new Block(FabricBlockSettings.create()
+      ));
+
   public static final Block WISPWOOD_VEIN = registerblock(
       "wispwood_vein", false,
       new WispwoodVein(FabricBlockSettings.create()
