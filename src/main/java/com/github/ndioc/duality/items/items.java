@@ -6,6 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FoodComponent;
+import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 
 import static com.github.ndioc.duality.blocks.blocks.*;
@@ -22,7 +23,7 @@ public class items {
 
   public static final Item WISP_FRUIT = registeritem("wisp_fruit",new Item(new FabricItemSettings()
           .maxCount(16)
-          .food(new FoodComponent.Builder()
+      .food(new FoodComponent.Builder()
                   .hunger(4)
                   .saturationModifier(0.6f)
                   .statusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE,30*20, 1),1f)

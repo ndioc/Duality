@@ -15,7 +15,9 @@
 
   "environment": "*",
   "entrypoints": {
-    "fabric-datagen": ["com.github.ndioc.duality.dataGen"],
+    "fabric-datagen": [
+      "com.github.ndioc.duality.DataGen"
+    ],
     "client": ["com.github.ndioc.duality.client.mainClient"],
     "main": ["com.github.ndioc.duality.main"]
   },

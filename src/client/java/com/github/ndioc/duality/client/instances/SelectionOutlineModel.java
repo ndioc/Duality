@@ -1,5 +1,7 @@
 package com.github.ndioc.duality.client.instances;
 
+import com.github.ndioc.duality.main;
+import com.github.ndioc.duality.util.objects.rendering.*;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.*;
@@ -14,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +29,13 @@ import java.util.function.Supplier;
 public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBakedModel {
 
   private Mesh mesh;
+
+  private QuadData[] quadsUP = new QuadData[1];
+  private QuadData[] quadsDOWN = new QuadData[1];
+  private QuadData[] quadsEAST = new QuadData[1];
+  private QuadData[] quadsWEST = new QuadData[1];
+  private QuadData[] quadsNORTH = new QuadData[1];
+  private QuadData[] quadsSOUTH = new QuadData[1];
 
   // | UNBAKED MODEL START |
 
@@ -46,9 +56,45 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
     QuadEmitter quadEmitter = meshBuilder.getEmitter();
 
     for (Direction direction : Direction.values()) {
-      quadEmitter.square(direction, 0f, 0f, 1f, 1f, 0f);
-      quadEmitter.color(255, 255, 255, 255);
-      quadEmitter.emit();
+      switch (direction) {
+        case UP:
+          for (QuadData quadData : quadsUP) {
+            SquareData squD = quadData.getSquareData();
+            ColorData colD = quadData.getColorData();
+            SpriteData sprD = quadData.getSpriteData();
+          }
+          break;
+        case DOWN:
+          for (QuadData quadData : quadsDOWN) {
+
+          }
+          break;
+        case EAST:
+          for (QuadData quadData : quadsEAST) {
+
+          }
+          break;
+        case WEST:
+          for (QuadData quadData : quadsWEST) {
+
+          }
+          break;
+        case NORTH:
+          for (QuadData quadData : quadsNORTH) {
+
+          }
+          break;
+        case SOUTH:
+          for (QuadData quadData : quadsSOUTH) {
+
+          }
+          break;
+        default:
+          main.LOGGER.warn("SelectionOutlineModel Switch used default case");
+        quadEmitter.square(direction, 0f, 0f, 1f, 1f, 0f);
+        quadEmitter.color(255, 255, 255, 255);
+        quadEmitter.emit();
+      }
     }
     mesh = meshBuilder.build();
 
