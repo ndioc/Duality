@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.util.objects.rendering;
+package com.github.ndioc.duality.client.util.objects.rendering;
 
 import java.util.Objects;
 

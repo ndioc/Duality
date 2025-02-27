@@ -10,14 +10,6 @@ import static com.github.ndioc.duality.main.MOD_ID;
 public class registerModels implements ModelLoadingPlugin {
 
   public static final ModelIdentifier[] WispwoodVeinModels = new ModelIdentifier[7];
-
-  private void createWispwoodModelIDs() {
-    final String[] variants = new String[]{"0","1","2","3","4","5","6"};
-    for (int x = 0; x < 7; x++) {
-      WispwoodVeinModels[x] = new ModelIdentifier(MOD_ID, "wispwood_vein", variants[x]);
-    }
-  }
-
   public static final ModelIdentifier SELECTION_OUTLINE_MODEL = new ModelIdentifier(new Identifier(MOD_ID, "selection_outline"),"");
 
   @Override
@@ -31,5 +23,12 @@ public class registerModels implements ModelLoadingPlugin {
         return originalModel;
       }
     });
+  }
+
+  private void createWispwoodModelIDs() {
+    final String[] variants = new String[]{"0","1","2","3","4","5","6"};
+    for (int x = 0; x < 7; x++) {
+      WispwoodVeinModels[x] = new ModelIdentifier(MOD_ID, "wispwood_vein", variants[x]);
+    }
   }
 }

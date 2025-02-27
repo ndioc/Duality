@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.client.models.blockentities;
 
+import com.github.ndioc.duality.client.util.objects.rendering.*;
 import com.github.ndioc.duality.main;
-import com.github.ndioc.duality.util.objects.rendering.*;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.*;
@@ -10,7 +10,7 @@ import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.*;
-import net.minecraft.client.texture.Sprite;
+import net.minecraft.client.texture.*;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -59,85 +59,37 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
       switch (direction) {
         case UP:
           for (QuadData quadData : quadsUP) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
         case DOWN:
           for (QuadData quadData : quadsDOWN) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
         case EAST:
           for (QuadData quadData : quadsEAST) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
         case WEST:
           for (QuadData quadData : quadsWEST) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
         case NORTH:
           for (QuadData quadData : quadsNORTH) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
         case SOUTH:
           for (QuadData quadData : quadsSOUTH) {
-            SquareData squD = quadData.getSquareData();
-            ColorData colD = quadData.getColorData();
-            SpriteData sprD = quadData.getSpriteData();
-
-            quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-            quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
-            quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
-            quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
-            quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+            readQuadData(quadData, quadEmitter, direction);
             quadEmitter.emit();
           }
           break;
@@ -215,29 +167,95 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
 
   // | FABRIC MODEL END |
 
-  private void createQuadData() {
+  private void readQuadData(QuadData quadData, QuadEmitter quadEmitter, Direction direction) {
+    SquareData squD = quadData.getSquareData();
+    ColorData colD = quadData.getColorData();
+    SpriteData sprD = quadData.getSpriteData();
 
+    quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
+    quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
+    quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
+    quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
+    quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
+  }
+// LEARN HOW TO CREATE A SPRITE IN THE CODE THEN IT MIGHT WORK
+  private void createQuadData() {
+    registerQuadData(new QuadData(new SquareData(0.25f, 0.25f, 0.75f, 0.75f, 0f, 0, 0, 0, 0), new ColorData(255, 255, 255, 255), new SpriteData(, 0, 0f, 0f)), new Direction[]{Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH});
   }
 
   public void registerQuadData(QuadData quadData, Direction[] directions) {
     for (Direction dir : directions) {
       if (dir == Direction.UP) {
-
+        if (quadsUP[0] == null && quadsUP.length == 1) {
+          quadsUP[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsUP;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsUP = arraytowrite;
+        }
       }
       if (dir == Direction.DOWN) {
-
+        if (quadsDOWN[0] == null && quadsDOWN.length == 1) {
+          quadsDOWN[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsDOWN;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsDOWN = arraytowrite;
+        }
       }
       if (dir == Direction.EAST) {
-
+        if (quadsEAST[0] == null && quadsEAST.length == 1) {
+          quadsEAST[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsEAST;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsEAST = arraytowrite;
+        }
       }
       if (dir == Direction.WEST) {
-
+        if (quadsWEST[0] == null && quadsWEST.length == 1) {
+          quadsWEST[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsWEST;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsWEST = arraytowrite;
+        }
       }
       if (dir == Direction.NORTH) {
-
+        if (quadsNORTH[0] == null && quadsNORTH.length == 1) {
+          quadsNORTH[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsNORTH;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsNORTH = arraytowrite;
+        }
       }
       if (dir == Direction.SOUTH) {
-
+        if (quadsSOUTH[0] == null && quadsSOUTH.length == 1) {
+          quadsSOUTH[0] = quadData;
+        }
+        else {
+          QuadData[] arraytoread = quadsSOUTH;
+          QuadData[] arraytowrite = new QuadData[arraytoread.length + 1];
+          System.arraycopy(arraytoread, 0, arraytowrite, 0, arraytoread.length);
+          arraytowrite[arraytowrite.length - 1] = quadData;
+          quadsSOUTH = arraytowrite;
+        }
       }
     }
   }
