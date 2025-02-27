@@ -2,12 +2,12 @@ package com.github.ndioc.duality.blocks;
 
 import com.github.ndioc.duality.blocks.essence.storage.*;
 import com.github.ndioc.duality.blocks.essence.transfer.*;
+import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
 import com.github.ndioc.duality.blocks.natural.wispwood.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.sound.BlockSoundGroup;
 
-import static com.github.ndioc.duality.items.items.*;
 import static com.github.ndioc.duality.utilities.*;
 
 public class blocks {
@@ -41,9 +41,9 @@ public class blocks {
 
   // Register blocks to get access to their models to use with flywheel
 
-  public static final Block TESTING = registerblock(
+  public static final Block SELECTION_OUTLINE = registerblock(
       "selection_outline", true,
-      new Block(FabricBlockSettings.create()
+      new SelectionOutline(FabricBlockSettings.create()
       ));
 
   public static final Block WISPWOOD_VEIN = registerblock(
