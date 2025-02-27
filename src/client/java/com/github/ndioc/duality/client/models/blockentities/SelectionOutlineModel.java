@@ -13,6 +13,7 @@ import net.minecraft.client.render.model.json.*;
 import net.minecraft.client.texture.*;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -25,9 +26,12 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static com.github.ndioc.duality.main.MOD_ID;
+
 public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBakedModel {
 
   private Mesh mesh;
+  private Sprite sprite;
 
   private QuadData[] quadsUP = new QuadData[1];
   private QuadData[] quadsDOWN = new QuadData[1];
@@ -53,6 +57,7 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
     Renderer renderer = RendererAccess.INSTANCE.getRenderer();
     MeshBuilder meshBuilder = renderer.meshBuilder();
     QuadEmitter quadEmitter = meshBuilder.getEmitter();
+    sprite = textureGetter.apply(new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(MOD_ID, "selection_outline")));
     createQuadData();
 
     for (Direction direction : Direction.values()) {
@@ -134,7 +139,7 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
 
   @Override
   public Sprite getParticleSprite() {
-    return null;
+    return sprite;
   }
 
   @Override
@@ -173,14 +178,16 @@ public class SelectionOutlineModel implements UnbakedModel, BakedModel, FabricBa
     SpriteData sprD = quadData.getSpriteData();
 
     quadEmitter.square(direction, squD.getLeft(), squD.getBottom(), squD.getRight(), squD.getTop(), squD.getDepth());
-    quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
+    if (squD.getX() != Float.MIN_VALUE || squD.getY() != Float.MIN_VALUE || squD.getZ() != Float.MIN_VALUE) {
+      quadEmitter.pos(squD.getVertexIndex(), squD.getX(), squD.getY(), squD.getZ());
+    }
     quadEmitter.color(colD.getRed(), colD.getGreen(), colD.getBlue(), colD.getAlpha());
     quadEmitter.spriteBake(sprD.getSprite(), sprD.getBakeFlags());
     quadEmitter.uv(squD.getVertexIndex(), sprD.getU(), sprD.getV());
   }
 // LEARN HOW TO CREATE A SPRITE IN THE CODE THEN IT MIGHT WORK
   private void createQuadData() {
-    registerQuadData(new QuadData(new SquareData(0.25f, 0.25f, 0.75f, 0.75f, 0f, 0, 0, 0, 0), new ColorData(255, 255, 255, 255), new SpriteData(, 0, 0f, 0f)), new Direction[]{Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH});
+    registerQuadData(new QuadData(new SquareData(0f, 0f, 1f, 1f, 0f, 0, Float.MIN_VALUE, Float.MIN_VALUE, Float.MIN_VALUE), new ColorData(255, 255, 255, 255), new SpriteData(sprite, 0, 0f, 0f)), new Direction[]{Direction.UP, Direction.DOWN, Direction.EAST, Direction.WEST, Direction.NORTH, Direction.SOUTH});
   }
 
   public void registerQuadData(QuadData quadData, Direction[] directions) {

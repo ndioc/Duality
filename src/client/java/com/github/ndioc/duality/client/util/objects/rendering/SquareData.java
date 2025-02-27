@@ -14,7 +14,7 @@ public class SquareData {
   private float y;
   private float z;
 
-  public SquareData(float left, float bottom, float right, float top, float depth, int vertexIndex, int x, int y, int z) {
+  public SquareData(float left, float bottom, float right, float top, float depth, int vertexIndex, float x, float y, float z) {
     this.left = left;
     this.bottom = bottom;
     this.right = right;
