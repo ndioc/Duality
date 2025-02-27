@@ -1,6 +1,6 @@
 package com.github.ndioc.duality.client.models;
 
-import com.github.ndioc.duality.client.instances.SelectionOutlineModel;
+import com.github.ndioc.duality.client.models.blockentities.SelectionOutlineModel;
 import net.fabricmc.fabric.api.client.model.loading.v1.ModelLoadingPlugin;
 import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.util.Identifier;
@@ -23,7 +23,6 @@ public class registerModels implements ModelLoadingPlugin {
   @Override
   public void onInitializeModelLoader(Context loaderContext) {
     loaderContext.modifyModelOnLoad().register((originalModel, context) -> {
-      // THIS CAST WILL PROBABLY FUCK EVERYTHING UP
       final Identifier modelID = context.id();
       if (modelID != null && modelID.equals(SELECTION_OUTLINE_MODEL)) {
         return new SelectionOutlineModel();

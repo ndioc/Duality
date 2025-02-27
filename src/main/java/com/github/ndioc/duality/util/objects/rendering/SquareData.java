@@ -9,12 +9,21 @@ public class SquareData {
   private float top;
   private float depth;
 
-  public SquareData(float left, float bottom, float right, float top, float depth) {
+  private int vertexIndex;
+  private float x;
+  private float y;
+  private float z;
+
+  public SquareData(float left, float bottom, float right, float top, float depth, int vertexIndex, int x, int y, int z) {
     this.left = left;
     this.bottom = bottom;
     this.right = right;
     this.top = top;
     this.depth = depth;
+    this.vertexIndex = vertexIndex;
+    this.x = x;
+    this.y = y;
+    this.z = z;
   }
 
   public float getLeft() {
@@ -35,6 +44,22 @@ public class SquareData {
 
   public float getDepth() {
     return this.depth;
+  }
+
+  public int getVertexIndex() {
+    return this.vertexIndex;
+  }
+
+  public float getX() {
+    return this.x;
+  }
+
+  public float getY() {
+    return this.y;
+  }
+
+  public float getZ() {
+    return this.z;
   }
 
   @Override
