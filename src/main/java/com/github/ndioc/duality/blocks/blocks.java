@@ -26,18 +26,18 @@ public class blocks {
   public static final Block TEST_ORB = registerblock(
       "test_orb", true,
       new testorb(FabricBlockSettings.create()
-      ));
+          .nonOpaque()));
 
   public static final Block CREATIVE_ORB = registerblock(
       "creative_orb", true,
       new creativeorb(FabricBlockSettings.create()
-      ));
+          .nonOpaque()));
 
   public static final Block TEST_RELAY = registerblock(
       "test_relay",
       false,
       new TestRelay(FabricBlockSettings.create()
-      ));
+          .nonOpaque()));
 
   // Register blocks to get access to their models to use with flywheel
 
