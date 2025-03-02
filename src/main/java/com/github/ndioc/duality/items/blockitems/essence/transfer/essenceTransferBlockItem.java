@@ -1,9 +1,9 @@
 package com.github.ndioc.duality.items.blockitems.essence.transfer;
 
 import com.github.ndioc.duality.blockentities.blockentitytypes;
+import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blockentities.essence.EssenceTransferEntity;
 import com.github.ndioc.duality.mechanics.essence.essenceBlockConstants;
-import com.github.ndioc.duality.util.nbt.BlockPosNBT;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,8 +18,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Arrays;
 
 import static com.github.ndioc.duality.items.items.TEST_RELAY_ITEM;
 import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
@@ -41,9 +39,6 @@ public class essenceTransferBlockItem extends BlockItem {
 
   private int maxSources;
   private int maxDestinations;
-
-  private BlockPos[] sourceCache;
-  private BlockPos[] destinationCache;
 
   private boolean compareBlockPos(BlockPos pos1, BlockPos pos2) {
 
@@ -84,6 +79,7 @@ public class essenceTransferBlockItem extends BlockItem {
         if (compareBlockPos(sources[x], zeroX3)) {
           sources[x] = position;
           writeBlockPosNBT(sources, nbt, "Sources");
+          cycleSelected(position, player.getWorld());
           return "Block set as source.";
         }
         else if (x == maxSources - 1) {
@@ -103,6 +99,7 @@ public class essenceTransferBlockItem extends BlockItem {
         if (compareBlockPos(destinations[x], zeroX3)) {
           destinations[x] = position;
           writeBlockPosNBT(destinations, nbt, "Destinations");
+          cycleSelected(position, player.getWorld());
           return "Block set as destination.";
         } else if (x == maxDestinations - 1) {
           return "Destinations full";
@@ -115,21 +112,12 @@ public class essenceTransferBlockItem extends BlockItem {
         if (compareBlockPos(destinations[x], position)) {
           destinations[x] = zeroX3;
           writeBlockPosNBT(destinations, nbt, "Destinations");
+          cycleSelected(position, player.getWorld());
           return "Block removed from selection.";
         }
       }
     }
     return "shit something went wrong again";
-  }
-
-  private void wipeArrays(NbtCompound nbt, ItemStack itemStack) {
-    BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
-    Arrays.fill(sources, BlockPos.ZERO);
-    writeBlockPosNBT(sources, nbt, "Sources");
-    BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
-    Arrays.fill(destinations, BlockPos.ZERO);
-    writeBlockPosNBT(destinations, nbt, "Destinations");
-    itemStack.setNbt(nbt);
   }
 
   private void printToClient(String text, PlayerEntity player) {
@@ -146,6 +134,28 @@ public class essenceTransferBlockItem extends BlockItem {
     nbt.putIntArray("Sources", new int[maxSources * 3]);
     nbt.putIntArray("Destinations", new int[maxDestinations * 3]);
     return nbt;
+  }
+
+  private void cycleSelected(BlockPos position, World world) {
+    if (!world.isClient()) {
+      return;
+    }
+    BlockEntity entitytocheck = world.getBlockEntity(position);
+    if (entitytocheck != null && entitytocheck.getType() == blockentitytypes.ESSENCE_CONTAINER) {
+      EssenceContainerEntity entity = (EssenceContainerEntity) entitytocheck;
+      int selected = entity.getSelected();
+      switch (selected) {
+        case -1:
+          entity.setSelected(1);
+          break;
+        case 1:
+          entity.setSelected(2);
+          break;
+        case 2:
+          entity.setSelected(-1);
+          break;
+      }
+    }
   }
 
   @Override
@@ -165,13 +175,12 @@ public class essenceTransferBlockItem extends BlockItem {
         if (entity != null && entity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
           printToClient(writeToArrays(context.getBlockPos(), player, nbt), player);
           itemStack.setNbt(nbt);
-            return ActionResult.PASS;
         }
         else {
           printToClient("This block is not an Essence Container", player);
-          return ActionResult.PASS;
         }
-      }
+      return ActionResult.PASS;
+    }
     return super.useOnBlock(context);
   }
 
@@ -179,14 +188,22 @@ public class essenceTransferBlockItem extends BlockItem {
   public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
     super.inventoryTick(stack, world, entity, slot, selected);
     if (!selected && stack.hasNbt()) {
-      stack.setNbt(null);
-    }
-    else if (world.isClient && selected) {
       NbtCompound nbt = stack.getNbt();
-      if (nbt != null) {
-        BlockPos[] src = BlockPosNBT.readBlockPosNBT(nbt, "Sources");
-        BlockPos[] dest = BlockPosNBT.readBlockPosNBT(nbt, "Destinations");
+      BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
+      BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
+      for (int x = 0; x < sources.length; x++) {
+        EssenceContainerEntity blockEntity = (EssenceContainerEntity) world.getBlockEntity(sources[x]);
+        if (blockEntity != null && blockEntity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
+          blockEntity.setSelected(-1);
+        }
       }
+      for (int x = 0; x < destinations.length; x++) {
+        EssenceContainerEntity blockEntity = (EssenceContainerEntity) world.getBlockEntity(destinations[x]);
+        if (blockEntity != null && blockEntity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
+          blockEntity.setSelected(-1);
+        }
+      }
+      stack.setNbt(null);
     }
   }
 
@@ -198,8 +215,25 @@ public class essenceTransferBlockItem extends BlockItem {
         EssenceTransferEntity entity = (EssenceTransferEntity) world.getBlockEntity(pos);
         NbtCompound nbt = stack.getNbt();
         if (nbt != null) {
-            entity.writeTargets(readBlockPosNBT(nbt, "Sources"), readBlockPosNBT(nbt, "Destinations"));
-            stack.setNbt(null);
+          entity.writeTargets(readBlockPosNBT(nbt, "Sources"), readBlockPosNBT(nbt, "Destinations"));
+
+          BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
+          BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
+
+          for (int x = 0; x < sources.length; x++) {
+            EssenceContainerEntity blockEntity = (EssenceContainerEntity) world.getBlockEntity(sources[x]);
+            if (blockEntity != null && blockEntity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
+              blockEntity.setSelected(-1);
+            }
+          }
+          for (int x = 0; x < destinations.length; x++) {
+            EssenceContainerEntity blockEntity = (EssenceContainerEntity) world.getBlockEntity(destinations[x]);
+            if (blockEntity != null && blockEntity.getType() == blockentitytypes.ESSENCE_CONTAINER) {
+              blockEntity.setSelected(-1);
+            }
+          }
+
+          stack.setNbt(null);
         }
       }
     }

@@ -18,6 +18,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
   int numberOfContainers;
   int[] allowedContainers;
 
+  int selected = -1;
   boolean unlimited;
 
   public EssenceContainerEntity(BlockPos pos, BlockState state) {
@@ -55,6 +56,14 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
     else {
       main.LOGGER.error("Translation Key of essenceContainer is incorrect causing the fetching of constants to fail. shit");
     }
+  }
+
+  public int getSelected() {
+    return selected;
+  }
+
+  public void setSelected(int selected) {
+    this.selected = selected;
   }
 
   private int[] writeContainerQuantityToNBT () {

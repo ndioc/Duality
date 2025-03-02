@@ -1,7 +1,13 @@
 {
   "variants": {
-  "": {
-    "model": "duality:block/selection_outline"
-  }
+   "selected=0": {
+     "model": "duality:block/selection_outline/0"
+   },
+   "selected=1": {
+      "model": "duality:block/selection_outline/1"
+    },
+    "selected=2": {
+      "model": "duality:block/selection_outline/2"
+    }
   }
 }

@@ -42,14 +42,14 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
   }
 
   public void writeTargets(BlockPos[] sourcestowrite, BlockPos[] destinationstowrite) {
-    for (int x = 0; x < sourcestowrite.length - 1; x++) {
-      if (sourcestowrite[x] != null && x < sourceContainers.length - 1) {
+    for (int x = 0; x < sourcestowrite.length; x++) {
+      if (sourcestowrite[x] != null) {
         sourceContainers[x] = sourcestowrite[x];
       }
     }
 
-    for (int x = 0; x < destinationstowrite.length - 1; x++) {
-      if (destinationstowrite[x] != null && x < destinationContainers.length - 1) {
+    for (int x = 0; x < destinationstowrite.length; x++) {
+      if (destinationstowrite[x] != null) {
         destinationContainers[x] = destinationstowrite[x];
       }
     }
