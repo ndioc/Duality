@@ -49,7 +49,7 @@ public abstract class essenceBlockConstants {
         }
 
         public int getHighestContainerCount() {
-            return 5;
+            return essenceType.values().length;
         }
 
     }
@@ -117,7 +117,7 @@ public abstract class essenceBlockConstants {
 
     public static int[][] fetchConstants(String translationKey) {
         int[] array1 = new int[6];
-        int[] array2 = new int[1];
+        int[] array2 = null;
         switch(translationKey) {
             case "block.duality.test_orb":
                 array1[0] = essenceContainers.TESTORB.volumePerContainer;

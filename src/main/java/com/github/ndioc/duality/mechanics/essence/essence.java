@@ -4,14 +4,12 @@ package com.github.ndioc.duality.mechanics.essence;
 public class essence {
 
   private final essenceType TYPE;
-  private final int ID;
 
   private int quantity;
   private final int capacity;
 
   public essence(essenceType type, int capacity, boolean unlimited) {
     TYPE = type;
-    ID = type.getNumericalID();
     this.capacity = capacity;
 
     if (unlimited) {
@@ -23,17 +21,10 @@ public class essence {
 
   }
 
-  public essence(essenceType type, int capacity, int Q, boolean unlimited) {
+  public essence(essenceType type, int capacity, int quantity) {
     TYPE = type;
-    ID = type.getNumericalID();
     this.capacity = capacity;
-
-    if (unlimited) {
-      quantity = this.capacity;
-    }
-    else {
-      quantity = Q;
-    }
+    this.quantity = quantity;
   }
 
   public int getQuantity() {
@@ -42,10 +33,6 @@ public class essence {
 
   public int getCapacity() {
     return this.capacity;
-  }
-
-  public int getID() {
-    return this.ID;
   }
 
   public essenceType getType() {

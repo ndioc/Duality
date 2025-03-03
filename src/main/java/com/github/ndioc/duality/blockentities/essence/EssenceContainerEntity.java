@@ -3,6 +3,7 @@ package com.github.ndioc.duality.blockentities.essence;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.mechanics.essence.*;
+import com.github.ndioc.duality.mechanics.selection.SelectableBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -11,26 +12,29 @@ import net.minecraft.util.math.BlockPos;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class EssenceContainerEntity extends BlockEntity implements essenceContainer {
+public class EssenceContainerEntity extends BlockEntity implements essenceContainer, SelectableBlockEntity {
 
   int volumePerContainer;
   int maxTransferPerSecond;
   int numberOfContainers;
   int[] allowedContainers;
+  boolean unlimited;
 
   int selected = -1;
-  boolean unlimited;
 
   public EssenceContainerEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_CONTAINER, pos, state);
-    setConstants();
+    setConstants(fetchConstants(this.getCachedState().getBlock().getTranslationKey()));
   }
 
   essence[] container;
   int[] allocatedContainers;
 
-  public void setConstants() {
-    int[][] AiA = essenceBlockConstants.fetchConstants(this.getCachedState().getBlock().getTranslationKey());
+  public essence[] getEssenceArray() {
+    return container;
+  }
+
+  public void setConstants(int[][] AiA) {
     if(AiA != null) {
       volumePerContainer = AiA[0][0];
       maxTransferPerSecond = AiA[0][1];
@@ -39,11 +43,11 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
       allowedContainers = AiA[1];
 
       if (unlimited) {
-        container = new essence[essenceType.values().length];
-        allocatedContainers = new int[essenceType.values().length];
+        container = new essence[essenceType.getEssenceTypeCount()];
+        allocatedContainers = new int[essenceType.getEssenceTypeCount()];
 
         for (int x = 0; x < allowedContainers.length; x++) {
-          container[x] = createEssenceObject(essenceType.getEssenceTypeByID(allowedContainers[x]), volumePerContainer);
+          container[x] = createEssenceObject(essenceType.getEssenceTypeByID(allowedContainers[x]), volumePerContainer, unlimited);
           allocatedContainers[x] = allowedContainers[x];
         }
       }
@@ -79,7 +83,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
   private void recreateContainers(int[] quantity, int[] types) {
     for (int x = 0; x < types.length; x++) {
       if (types[x] != -100) {
-      container[x] = recreateEssenceObject(essenceType.getEssenceTypeByID(types[x]), volumePerContainer, quantity[x]);
+      recreateEssenceObject(essenceType.getEssenceTypeByID(types[x]), volumePerContainer, quantity[x]);
       }
     }
   }
@@ -100,26 +104,10 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
     allocatedContainers = nbt.getIntArray("Essence Container Types");
   }
 
-  public essence createEssenceObject(essenceType type, int capacity) {
-     return new essence(type, capacity, unlimited);
-  }
-
-  public essence recreateEssenceObject(essenceType type, int capacity, int quantity) {
-    return new essence(type, capacity, quantity, unlimited);
-  }
-
   public void deleteEssenceObject(int arraynum) {
     container[arraynum] = null;
     allocatedContainers[arraynum] = -100;
     markDirty();
-  }
-
-  public EssenceContainerEntity getContainerEntity(BlockPos position) {
-    BlockEntity checktype = Objects.requireNonNull(this.world).getBlockEntity(position);
-    if (checktype != null && checktype.getType() == blockentitytypes.ESSENCE_CONTAINER) {
-      return (EssenceContainerEntity) checktype;
-    }
-    return null;
   }
 
   public boolean canReceiveEssence(essenceType type) {
@@ -173,7 +161,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
         }
         return container[x].addEssence(amount)  + amounttoreturn;
       }
-      if (allocatedContainers[x] == 0) {
+      if (allocatedContainers[x] == -100) {
           firstfreecontainer = x;
           break;
       }
@@ -185,7 +173,7 @@ public class EssenceContainerEntity extends BlockEntity implements essenceContai
     }
 
     if (firstfreecontainer != -1) {
-      container[firstfreecontainer] = createEssenceObject(type, volumePerContainer);
+      createEssenceObject(type, volumePerContainer, unlimited);
       markDirty();
       return container[firstfreecontainer].addEssence(amount)  + amounttoreturn;
     }

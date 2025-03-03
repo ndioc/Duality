@@ -50,6 +50,10 @@ public enum essenceType implements essenceCore {
     };
   }
 
+  public static int getEssenceTypeCount() {
+    return essenceType.values().length;
+  }
+
   public float getbaseEfficiencyMult() {
     return this.baseEfficiencyMult;
   }
