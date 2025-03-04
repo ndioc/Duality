@@ -1,5 +1,7 @@
-package com.github.ndioc.duality.mechanics.essence;
+package com.github.ndioc.duality.mechanics.essence.objects;
 
+
+import com.github.ndioc.duality.mechanics.essence.essenceType;
 
 public class essence {
 

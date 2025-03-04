@@ -1,28 +1,35 @@
 package com.github.ndioc.duality.mechanics.essence;
 
+import com.github.ndioc.duality.mechanics.essence.objects.EssenceContainerConstants;
+import com.github.ndioc.duality.mechanics.essence.objects.essence;
 import net.minecraft.nbt.NbtCompound;
 
-public interface essenceContainer {
-
-  default int[][] fetchConstants(String TranslationKey) {
-    int[][] AiA = essenceBlockConstants.fetchConstants(TranslationKey);
-    if (AiA == null) {
-      String exception = "ERROR FETCHING CONSTANTS FOR | " + TranslationKey;
-      throw new RuntimeException(exception);
-    }
-    else {
-      return AiA;
-    }
-  }
+public interface EssenceContainer {
 
   essence[] getEssenceArray();
-  NbtCompound getNbt();
+  EssenceContainerConstants getConstants();
 
-  int getVolumePerContainer();
-  int getMaxTransferPerSecond();
-  int getNumberOfContainers();
-  int[] getAllowedEssenceTypes();
-  boolean isUnlimited();
+
+  default int getVolumePerContainer() {
+    return getConstants().getVolumePerContainer();
+  }
+
+  default int getMaxTransferPerSecond() {
+    return getConstants().getMaxTransferPerSecond();
+  }
+
+  default int getNumberOfContainers() {
+    return getConstants().getNumberOfContainers();
+  }
+
+  default int[] getAllowedEssenceTypes() {
+    return getConstants().getAllowedEssenceTypes();
+  }
+
+  default boolean isUnlimited() {
+    return getConstants().isUnlimited();
+  }
+
 
   default boolean createEssenceObject(essenceType type, int capacity, boolean unlimited) {
     essence[] array = getEssenceArray();
@@ -34,6 +41,7 @@ public interface essenceContainer {
     }
     return false;
   }
+
   default void recreateEssenceObject(essenceType type, int capacity, int quantity) {
     essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
@@ -58,12 +66,24 @@ public interface essenceContainer {
     return -1;
   }
 
+  default boolean canReceiveEssence(essenceType type) {
+    essence[] array = getEssenceArray();
+    int index = findArrayIndex(type);
+
+    return array[index].getQuantity() < array[index].getCapacity();
+  }
+
   default int addEssence(essenceType type, int amount) {
     essence[] array = getEssenceArray();
     int index = findArrayIndex(type);
 
     if (index == -1) {
-      return amount;
+      if (createEssenceObject(type, getVolumePerContainer(), isUnlimited())) {
+
+      }
+      else {
+        return amount;
+      }
     }
 
     return array[index].addEssence(amount);
@@ -75,11 +95,14 @@ public interface essenceContainer {
     int index = findArrayIndex(type);
 
     if (index == -1) {
-      return amount;
+      return 0;
     }
 
-    return array[index].removeEssence(amount);
-
+    int removed = array[index].removeEssence(amount);
+    if (removed < amount) {
+      deleteEssenceObject(index);
+    }
+    return removed;
   }
 
   default void writeContainersToNBT(NbtCompound nbt) {

@@ -2,6 +2,7 @@ package com.github.ndioc.duality.blockentities.essence;
 
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.main;
+import com.github.ndioc.duality.mechanics.essence.objects.EssenceConveyorConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import com.github.ndioc.duality.mechanics.essence.*;
@@ -9,9 +10,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import static com.github.ndioc.duality.blocks.essence.Constants.fetchConveyorConstants;
 import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
-public class EssenceTransferEntity extends BlockEntity implements essenceTransfer {
+public class EssenceTransferEntity extends BlockEntity implements EssenceTransfer {
 
   public EssenceTransferEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_TRANSFER_ENTITY, pos, state);
@@ -56,21 +58,21 @@ public class EssenceTransferEntity extends BlockEntity implements essenceTransfe
   }
 
   public void setConstants() {
-    int[][] AiA = essenceBlockConstants.fetchConstants(this.getCachedState().getBlock().getTranslationKey());
-    if (AiA != null) {
-      amountPerTransfer = AiA[0][0];
-      ticksBetweenTransfer = AiA[0][1];
-      travelSpeedMult = AiA[0][2];
-      distanceBeforeLossMult = AiA[0][3];
-      maxSourceContainers = AiA[0][4];
-      maxDestinationContainers = AiA[0][5];
+    EssenceConveyorConstants constants = fetchConveyorConstants(this.getCachedState().getBlock().getTranslationKey());
+    if (constants != null) {
+      amountPerTransfer = constants.getAmountPerTransfer();
+      ticksBetweenTransfer = constants.getTicksBetweenTransfers();
+      travelSpeedMult = constants.getTravelSpeedMult();
+      distanceBeforeLossMult = constants.getDistanceBeforeLossMult();
+      maxSourceContainers = constants.getMaxSources();
+      maxDestinationContainers = constants.getMaxDestinations();
     }
   }
 
   private int amountPerTransfer;
   private int ticksBetweenTransfer;
-  private int travelSpeedMult;
-  private int distanceBeforeLossMult;
+  private float travelSpeedMult;
+  private float distanceBeforeLossMult;
   private int maxSourceContainers;
   private int maxDestinationContainers;
 

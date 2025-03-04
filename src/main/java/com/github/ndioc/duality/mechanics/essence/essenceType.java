@@ -49,6 +49,9 @@ public enum essenceType implements essenceCore {
       default -> null;
     };
   }
+  public static int[] getAllEssenceTypeIDs() {
+    return new int[]{-1, 0, 1};
+  }
 
   public static int getEssenceTypeCount() {
     return essenceType.values().length;
