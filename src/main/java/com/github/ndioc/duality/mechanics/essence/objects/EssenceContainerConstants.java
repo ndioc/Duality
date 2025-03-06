@@ -1,11 +1,9 @@
 package com.github.ndioc.duality.mechanics.essence.objects;
 
-import com.github.ndioc.duality.mechanics.essence.EssenceType;
-
 public enum EssenceContainerConstants {
 
   TEST_ORB(64000, 320, 3, false, new int[]{-1, 0, 1}),
-  CREATIVE_ORB(256000, 1280,EssenceType.getEssenceTypeCount(), true, EssenceType.getAllEssenceTypeIDs());
+  CREATIVE_ORB(256000, 1280, EssenceType.getEssenceTypeCount(), true, EssenceType.getAllEssenceTypeIDs());
 
   private int VolumePerContainer;
   private int MaxTransferPerSecond;

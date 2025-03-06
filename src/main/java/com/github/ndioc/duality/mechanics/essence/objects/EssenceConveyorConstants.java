@@ -2,9 +2,9 @@ package com.github.ndioc.duality.mechanics.essence.objects;
 
 public enum EssenceConveyorConstants {
 
-  TEST_RELAY(60, 5, 1f, 1f, 2, 3),
-  LONG_RANGE(400, 40, 1.25f, 2f, 1, 1),
-  YEETER(3200, 300, 3f, 5f, 1, 1);
+  TEST_RELAY(60, 10, 1f, 1f, 2, 3, 2),
+  LONG_RANGE(400, 40, 1.25f, 2f, 1, 1, 6),
+  YEETER(3200, 300, 3f, 5f, 1, 1, 50);
 
   private final int AmountPerTransfer;
   private final int TicksBetweenTransfers;
@@ -15,37 +15,43 @@ public enum EssenceConveyorConstants {
   private final int MaxSources;
   private final int MaxDestinations;
 
-  EssenceConveyorConstants(int AmountPerTransfer, int TicksbetweenTransfers, float TravelSpeedMult, float DistanceBeforeLossMult, int MaxSources, int MaxDestinations) {
+  private final int InitTickDelay;
+  private final int EssenceConsumedPerTransferCycle;
+
+  EssenceConveyorConstants(int AmountPerTransfer, int TicksbetweenTransfers, float TravelSpeedMult, float DistanceBeforeLossMult, int MaxSources, int MaxDestinations, int InitTickDelay, int EssenceConsumedPerTransferCycle) {
     this.AmountPerTransfer = AmountPerTransfer;
     this.TicksBetweenTransfers = TicksbetweenTransfers;
     this.TravelSpeedMult = TravelSpeedMult;
     this.DistanceBeforeLossMult = DistanceBeforeLossMult;
     this.MaxSources = MaxSources;
     this.MaxDestinations = MaxDestinations;
+    this.InitTickDelay = InitTickDelay;
+    this.EssenceConsumedPerTransferCycle = EssenceConsumedPerTransferCycle;
   }
 
   public int getAmountPerTransfer() {
     return AmountPerTransfer;
   }
-
   public int getTicksBetweenTransfers() {
     return TicksBetweenTransfers;
   }
-
   public float getTravelSpeedMult() {
     return TravelSpeedMult;
   }
-
   public float getDistanceBeforeLossMult() {
     return DistanceBeforeLossMult;
   }
-
   public int getMaxSources() {
     return MaxSources;
   }
-
   public int getMaxDestinations() {
     return MaxDestinations;
+  }
+  public int getInitTickDelay() {
+    return InitTickDelay;
+  }
+  public int getEssenceConsumedPerTransferCycle() {
+    return EssenceConsumedPerTransferCycle;
   }
 
   public static EssenceConveyorConstants fetchConveyorConstants(String TranslationKey) {

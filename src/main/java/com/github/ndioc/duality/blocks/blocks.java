@@ -39,10 +39,10 @@ public class blocks {
       new TestRelay(FabricBlockSettings.create()
           .nonOpaque()));
 
-  // Register blocks to get access to their models to use with flywheel
+  // Register blocks to get access to their models for use with flywheel
 
   public static final Block SELECTION_OUTLINE = registerblock(
-      "selection_outline", true,
+      "selection_outline", false,
       new SelectionOutline(FabricBlockSettings.create()
       ));
 

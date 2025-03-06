@@ -14,6 +14,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +39,7 @@ public class EssenceConveyorItem extends BlockItem implements SelectionItem {
   public ActionResult useOnBlock(ItemUsageContext context) {
     PlayerEntity player = context.getPlayer();
     if (player != null && player.isSneaking()) {
-      selectBlockEntity(context.getBlockPos(), SelectionStates.TARGETING, context.getStack(), context.getWorld());
+      printToClient(player, selectBlockEntity(context.getBlockPos(), SelectionStates.TARGETING, context.getStack(), context.getWorld()));
       return ActionResult.PASS;
     }
     return super.useOnBlock(context);
@@ -59,7 +60,7 @@ public class EssenceConveyorItem extends BlockItem implements SelectionItem {
     NbtCompound nbt = stack.getNbt();
     if (entitytocheck instanceof SelectableEntity) {
       EssenceConveyorEntity entity = (EssenceConveyorEntity) entitytocheck;
-      entity.writeSelection(nbt);
+      entity.writeTargets(nbt);
     }
     deleteSelections(nbt, SelectionStates.TARGETING, world);
     deleteNBT(stack);

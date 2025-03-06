@@ -2,12 +2,7 @@ package com.github.ndioc.duality.mechanics.selection;
 
 public enum SelectionStates {
 
-  /*  0 = hide model
-      1 = source | 2 = destination
-
-  */
-
-  TARGETING(new int[]{0, 1, 2});
+  TARGETING(new int[]{0, 1, 2, 3});
 
   private final int[] states;
 

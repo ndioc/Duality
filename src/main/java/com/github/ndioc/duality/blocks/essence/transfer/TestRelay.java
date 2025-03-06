@@ -27,7 +27,7 @@ public class TestRelay extends BlockWithEntity {
   @Override
   public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
     if (!world.isClient()) {
-      return utilities.validateTicker(type, blockentitytypes.ESSENCE_TRANSFER_ENTITY, EssenceConveyorEntity::tick);
+      return utilities.validateTicker(type, blockentitytypes.ESSENCE_CONVEYOR, EssenceConveyorEntity::tick);
     }
     else {
       return null;

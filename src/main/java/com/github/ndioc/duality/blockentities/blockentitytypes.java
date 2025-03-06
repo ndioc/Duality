@@ -15,7 +15,7 @@ public class blockentitytypes {
   public static final BlockEntityType<EssenceContainerEntity> ESSENCE_CONTAINER = utilities.RegisterBlockEntityType("essence_container",
       FabricBlockEntityTypeBuilder.create(EssenceContainerEntity::new, blocks.TEST_ORB).build());
 
-  public static final BlockEntityType<EssenceConveyorEntity> ESSENCE_TRANSFER_ENTITY = utilities.RegisterBlockEntityType("essence_transfer_entity",
+  public static final BlockEntityType<EssenceConveyorEntity> ESSENCE_CONVEYOR = utilities.RegisterBlockEntityType("essence_conveyor",
       FabricBlockEntityTypeBuilder.create(EssenceConveyorEntity::new, blocks.TEST_RELAY).build());
 
   public static void initialize(){

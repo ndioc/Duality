@@ -1,4 +1,6 @@
-package com.github.ndioc.duality.mechanics.essence;
+package com.github.ndioc.duality.mechanics.essence.objects;
+
+import com.github.ndioc.duality.mechanics.essence.EssenceCore;
 
 public enum EssenceType implements EssenceCore {
 
@@ -9,7 +11,7 @@ public enum EssenceType implements EssenceCore {
   private final int numericalID;
 
   private final float baseEfficiencyMult;
-  private final float baseTravelSpeed;
+  private final float travelSpeedMult;
 
   private final int baseDistanceBeforeLoss;
   private final int effectOnLife;
@@ -18,7 +20,7 @@ public enum EssenceType implements EssenceCore {
 
       final int numericalID,
       final float baseEfficiencyMult,
-      final float baseTravelSpeed,
+      final float travelSpeedMult,
 
       final int baseDistanceBeforeLoss,
       final int effectOnLife
@@ -27,7 +29,7 @@ public enum EssenceType implements EssenceCore {
 
     this.numericalID = numericalID;
     this.baseEfficiencyMult = baseEfficiencyMult;
-    this.baseTravelSpeed = baseTravelSpeed;
+    this.travelSpeedMult = travelSpeedMult;
     this.baseDistanceBeforeLoss = baseDistanceBeforeLoss;
     this.effectOnLife = effectOnLife;
 
@@ -61,8 +63,8 @@ public enum EssenceType implements EssenceCore {
     return this.baseEfficiencyMult;
   }
 
-  public float getbaseTravelSpeed() {
-    return this.baseTravelSpeed;
+  public float getTravelSpeedMult() {
+    return this.travelSpeedMult;
   }
 
   public int getbaseDistanceBeforeLoss() {

@@ -7,7 +7,7 @@ import net.minecraft.state.property.IntProperty;
 
 public class SelectionOutline extends Block {
 
-  public static final IntProperty SELECTION = IntProperty.of("selected",0, 2);
+  public static final IntProperty SELECTION = IntProperty.of("selected",0, 3);
 
   public SelectionOutline(Settings settings) {
     super(settings);

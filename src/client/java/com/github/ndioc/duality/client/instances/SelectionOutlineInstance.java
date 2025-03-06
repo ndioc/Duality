@@ -52,17 +52,10 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
 
   @Override
   public void tick() {
-    int selection = blockEntity.getCurrentSelection();
-    BlockState model;
-    if (selection == 0) {
-      model = Blocks.AIR.getDefaultState();
-    }
-    else {
-      model = SELECTION_OUTLINE.getDefaultState().with(SelectionOutline.SELECTION, selection);
-    }
+
     materialManager.defaultTransparent()
         .material(Materials.TRANSFORMED)
-        .getModel(model)
+        .getModel(SELECTION_OUTLINE.getDefaultState().with(SelectionOutline.SELECTION, blockEntity.getCurrentSelection()))
         .stealInstance(selectionModel);
 
     selectionModel.loadIdentity()

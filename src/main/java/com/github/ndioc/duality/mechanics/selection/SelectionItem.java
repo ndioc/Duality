@@ -1,12 +1,14 @@
 package com.github.ndioc.duality.mechanics.selection;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
+import com.github.ndioc.duality.main;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
@@ -16,6 +18,12 @@ public interface SelectionItem {
 
   default void deleteNBT(ItemStack stack) {
     stack.setNbt(null);
+  }
+
+  default void printToClient(PlayerEntity player, String message) {
+    if (message != null && player != null) {
+      player.sendMessage(Text.of(message), true);
+    }
   }
 
   default void setSelectionOnEntity(World world, BlockPos position, int selection) {
@@ -79,8 +87,9 @@ public interface SelectionItem {
         BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
 
         final int selectionNONE = 0;
-        final int selectionSRC = 1;
-        final int selectionDST = 2;
+        final int selectable = 1;
+        final int selectionSRC = 2;
+        final int selectionDST = 3;
 
         boolean sourcesFull = true;
         boolean destinationsFull = true;
@@ -114,7 +123,8 @@ public interface SelectionItem {
             writeBlockPosNBT(sources, nbt, "Sources");
             setSelectionOnEntity(world, position, selectionSRC);
             stack.setNbt(nbt);
-            return "Added to Sources";
+            //added to source
+            return null;
           }
           else {
             destinations = writePos(position, destinations);
@@ -132,7 +142,8 @@ public interface SelectionItem {
             writeBlockPosNBT(destinations, nbt, "Destinations");
             setSelectionOnEntity(world, position, selectionDST);
             stack.setNbt(nbt);
-            return "Added to Destinations";
+            //added to destinations
+            return null;
           }
           else {
             sources = removePos(position, sources);
@@ -147,9 +158,11 @@ public interface SelectionItem {
           writeBlockPosNBT(destinations, nbt, "Destinations");
           setSelectionOnEntity(world, position, selectionNONE);
           stack.setNbt(nbt);
-          return "Removed from Selection";
+          //removed from selection
+          return null;
         }
     }
-    return "Invalid Selection State";
+    main.LOGGER.error("Invalid Selection State | {} | in SelectionItem", selectionState.name());
+    return null;
   }
 }

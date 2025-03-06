@@ -2,6 +2,7 @@ package com.github.ndioc.duality.mechanics.essence;
 
 import com.github.ndioc.duality.mechanics.essence.objects.EssenceContainerConstants;
 import com.github.ndioc.duality.mechanics.essence.objects.Essence;
+import com.github.ndioc.duality.mechanics.essence.objects.EssenceType;
 import net.minecraft.nbt.NbtCompound;
 
 public interface EssenceContainer {
