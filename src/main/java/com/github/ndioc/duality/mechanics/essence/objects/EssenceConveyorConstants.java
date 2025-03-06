@@ -1,6 +1,11 @@
 package com.github.ndioc.duality.mechanics.essence.objects;
 
-public class EssenceConveyorConstants {
+public enum EssenceConveyorConstants {
+
+  TEST_RELAY(60, 5, 1f, 1f, 2, 3),
+  LONG_RANGE(400, 40, 1.25f, 2f, 1, 1),
+  YEETER(3200, 300, 3f, 5f, 1, 1);
+
   private final int AmountPerTransfer;
   private final int TicksBetweenTransfers;
 
@@ -10,7 +15,7 @@ public class EssenceConveyorConstants {
   private final int MaxSources;
   private final int MaxDestinations;
 
-  public EssenceConveyorConstants(int AmountPerTransfer, int TicksbetweenTransfers, float TravelSpeedMult, float DistanceBeforeLossMult, int MaxSources, int MaxDestinations) {
+  EssenceConveyorConstants(int AmountPerTransfer, int TicksbetweenTransfers, float TravelSpeedMult, float DistanceBeforeLossMult, int MaxSources, int MaxDestinations) {
     this.AmountPerTransfer = AmountPerTransfer;
     this.TicksBetweenTransfers = TicksbetweenTransfers;
     this.TravelSpeedMult = TravelSpeedMult;
@@ -20,26 +25,35 @@ public class EssenceConveyorConstants {
   }
 
   public int getAmountPerTransfer() {
-    return this.AmountPerTransfer;
+    return AmountPerTransfer;
   }
 
   public int getTicksBetweenTransfers() {
-    return this.TicksBetweenTransfers;
+    return TicksBetweenTransfers;
   }
 
   public float getTravelSpeedMult() {
-    return this.TravelSpeedMult;
+    return TravelSpeedMult;
   }
 
   public float getDistanceBeforeLossMult() {
-    return this.DistanceBeforeLossMult;
+    return DistanceBeforeLossMult;
   }
 
   public int getMaxSources() {
-    return this.MaxSources;
+    return MaxSources;
   }
 
   public int getMaxDestinations() {
-    return this.MaxDestinations;
+    return MaxDestinations;
+  }
+
+  public static EssenceConveyorConstants fetchConveyorConstants(String TranslationKey) {
+    return switch (TranslationKey) {
+      case "block.duality.test_relay" -> TEST_RELAY;
+      case "block.duality.long_range_test_relay" -> LONG_RANGE;
+      case "block.duality.yeeter_test" -> YEETER;
+      default -> null;
+    };
   }
 }

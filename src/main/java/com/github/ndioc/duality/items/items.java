@@ -1,12 +1,11 @@
 package com.github.ndioc.duality.items;
 
-import com.github.ndioc.duality.items.blockitems.essence.transfer.essenceTransferBlockItem;
+import com.github.ndioc.duality.items.blockitems.essence.transfer.EssenceConveyorItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.FoodComponent;
-import net.minecraft.item.FoodComponents;
 import net.minecraft.item.Item;
 
 import static com.github.ndioc.duality.blocks.blocks.*;
@@ -33,7 +32,7 @@ public class items {
 
   // Register Custom Block Items
 
-  public static final BlockItem TEST_RELAY_ITEM = registerblockitem("test_relay", new essenceTransferBlockItem(TEST_RELAY, new FabricItemSettings()));
+  public static final BlockItem TEST_RELAY_ITEM = registerblockitem("test_relay", new EssenceConveyorItem(TEST_RELAY, new FabricItemSettings()));
 
 }
 

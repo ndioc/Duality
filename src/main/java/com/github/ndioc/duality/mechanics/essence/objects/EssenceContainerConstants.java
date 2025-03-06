@@ -1,6 +1,11 @@
 package com.github.ndioc.duality.mechanics.essence.objects;
 
-public class EssenceContainerConstants {
+import com.github.ndioc.duality.mechanics.essence.EssenceType;
+
+public enum EssenceContainerConstants {
+
+  TEST_ORB(64000, 320, 3, false, new int[]{-1, 0, 1}),
+  CREATIVE_ORB(256000, 1280,EssenceType.getEssenceTypeCount(), true, EssenceType.getAllEssenceTypeIDs());
 
   private int VolumePerContainer;
   private int MaxTransferPerSecond;
@@ -8,7 +13,7 @@ public class EssenceContainerConstants {
   private int[] AllowedEssenceTypes;
   private boolean isUnlimited;
 
-  public EssenceContainerConstants(int VolumePerContainer, int MaxTransferPerSecond, int NumberOfContainers, boolean isUnlimited, int[] AllowedEssenceTypes) {
+  EssenceContainerConstants(int VolumePerContainer, int MaxTransferPerSecond, int NumberOfContainers, boolean isUnlimited, int[] AllowedEssenceTypes) {
     this.VolumePerContainer = VolumePerContainer;
     this.MaxTransferPerSecond = MaxTransferPerSecond;
     this.NumberOfContainers = NumberOfContainers;
@@ -17,22 +22,30 @@ public class EssenceContainerConstants {
   }
 
   public int getVolumePerContainer() {
-    return this.VolumePerContainer;
+    return VolumePerContainer;
   }
 
   public int getMaxTransferPerSecond() {
-    return this.MaxTransferPerSecond;
+    return MaxTransferPerSecond;
   }
 
   public int getNumberOfContainers() {
-    return this.NumberOfContainers;
+    return NumberOfContainers;
   }
 
   public boolean isUnlimited() {
-    return this.isUnlimited;
+    return isUnlimited;
   }
 
   public int[] getAllowedEssenceTypes() {
-    return this.AllowedEssenceTypes;
+    return AllowedEssenceTypes;
+  }
+
+  public static EssenceContainerConstants fetchContainerConstants(String TranslationKey) {
+    return switch (TranslationKey) {
+      case "block.duality.test_orb" -> TEST_ORB;
+      case "block.duality.creative_orb" -> CREATIVE_ORB;
+      default -> null;
+    };
   }
 }

@@ -1,8 +1,8 @@
 package com.github.ndioc.duality.mechanics.essence;
 
-public interface essenceCore {
+public interface EssenceCore {
 
-  essenceType getEssenceType();
+  EssenceType getEssenceType();
   float getbaseEfficiencyMult();
   float getbaseTravelSpeed();
   int getbaseDistanceBeforeLoss();

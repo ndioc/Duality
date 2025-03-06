@@ -1,12 +1,12 @@
 package com.github.ndioc.duality.mechanics.essence;
 
 import com.github.ndioc.duality.mechanics.essence.objects.EssenceContainerConstants;
-import com.github.ndioc.duality.mechanics.essence.objects.essence;
+import com.github.ndioc.duality.mechanics.essence.objects.Essence;
 import net.minecraft.nbt.NbtCompound;
 
 public interface EssenceContainer {
 
-  essence[] getEssenceArray();
+  Essence[] getEssenceArray();
   EssenceContainerConstants getConstants();
 
 
@@ -31,33 +31,33 @@ public interface EssenceContainer {
   }
 
 
-  default boolean createEssenceObject(essenceType type, int capacity, boolean unlimited) {
-    essence[] array = getEssenceArray();
+  default boolean createEssenceObject(EssenceType type, int capacity, boolean unlimited) {
+    Essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
       if (array[x] == null) {
-        array[x] = new essence(type, capacity, unlimited);
+        array[x] = new Essence(type, capacity, unlimited);
         return true;
       }
     }
     return false;
   }
 
-  default void recreateEssenceObject(essenceType type, int capacity, int quantity) {
-    essence[] array = getEssenceArray();
+  default void recreateEssenceObject(EssenceType type, int capacity, int quantity) {
+    Essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
       if (array[x] == null) {
-        array[x] = new essence(type, capacity, quantity);
+        array[x] = new Essence(type, capacity, quantity);
       }
     }
   }
 
   default void deleteEssenceObject(int index) {
-    essence[] array = getEssenceArray();
+    Essence[] array = getEssenceArray();
     array[index] = null;
   }
 
-  default int findArrayIndex(essenceType type) {
-    essence[] array = getEssenceArray();
+  default int findArrayIndex(EssenceType type) {
+    Essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
       if (array[x].getType().getNumericalID() == type.getNumericalID()) {
         return x;
@@ -66,20 +66,21 @@ public interface EssenceContainer {
     return -1;
   }
 
-  default boolean canReceiveEssence(essenceType type) {
-    essence[] array = getEssenceArray();
+  default boolean canReceiveEssence(EssenceType type) {
+    Essence[] array = getEssenceArray();
     int index = findArrayIndex(type);
 
     return array[index].getQuantity() < array[index].getCapacity();
   }
 
-  default int addEssence(essenceType type, int amount) {
-    essence[] array = getEssenceArray();
+  default int addEssence(EssenceType type, int amount) {
+    Essence[] array = getEssenceArray();
     int index = findArrayIndex(type);
 
     if (index == -1) {
       if (createEssenceObject(type, getVolumePerContainer(), isUnlimited())) {
-
+        index = findArrayIndex(type);
+        return array[index].addEssence(amount);
       }
       else {
         return amount;
@@ -90,8 +91,8 @@ public interface EssenceContainer {
 
   }
 
-  default int removeEssence(essenceType type, int amount) {
-    essence[] array = getEssenceArray();
+  default int removeEssence(EssenceType type, int amount) {
+    Essence[] array = getEssenceArray();
     int index = findArrayIndex(type);
 
     if (index == -1) {
@@ -106,7 +107,7 @@ public interface EssenceContainer {
   }
 
   default void writeContainersToNBT(NbtCompound nbt) {
-    essence[] array = getEssenceArray();
+    Essence[] array = getEssenceArray();
 
     int[] types = new int[array.length];
     int[] quantities = new int[array.length];
@@ -134,13 +135,13 @@ public interface EssenceContainer {
 
     if (unlimited) {
       for (int type : types) {
-        createEssenceObject(essenceType.getEssenceTypeByID(type), getVolumePerContainer(), true);
+        createEssenceObject(EssenceType.getEssenceTypeByID(type), getVolumePerContainer(), true);
       }
     }
     else {
       for (int x = 0; x < types.length; x++) {
         if (types[x] != -100) {
-          recreateEssenceObject(essenceType.getEssenceTypeByID(types[x]), getVolumePerContainer(), quantities[x]);
+          recreateEssenceObject(EssenceType.getEssenceTypeByID(types[x]), getVolumePerContainer(), quantities[x]);
         }
       }
     }

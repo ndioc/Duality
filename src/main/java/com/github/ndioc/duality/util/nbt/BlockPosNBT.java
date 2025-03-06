@@ -1,5 +1,7 @@
 package com.github.ndioc.duality.util.nbt;
 
+import com.github.ndioc.duality.mechanics.essence.objects.EssenceContainerConstants;
+import com.github.ndioc.duality.mechanics.essence.objects.EssenceConveyorConstants;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -17,15 +19,6 @@ public class BlockPosNBT {
     }
 
     for (int x = 0, y = 0; x < positionarray.length; x++) {
-      if (positionarray[x] == null) {
-        positionNBT[y] = 0;
-        y++;
-        positionNBT[y] = 0;
-        y++;
-        positionNBT[y] = 0;
-        y++;
-        continue;
-      }
       positionNBT[y] = positionarray[x].getX();
       y++;
       positionNBT[y] = positionarray[x].getY();
@@ -51,6 +44,21 @@ public class BlockPosNBT {
       output[u] = new BlockPos(x, y, z);
     }
     return output;
+  }
+
+  public static BlockPos BlockPosNull() {
+    return new BlockPos(Integer.MIN_VALUE, Integer.MIN_VALUE, Integer.MIN_VALUE);
+  }
+
+  public static NbtCompound createTargetingNBT(EssenceConveyorConstants constants) {
+    NbtCompound nbt = new NbtCompound();
+    int[] sources = new int[3 * constants.getMaxSources()];
+    int[] destinations = new int[3 * constants.getMaxDestinations()];
+    Arrays.fill(sources, Integer.MIN_VALUE);
+    Arrays.fill(destinations, Integer.MIN_VALUE);
+    nbt.putIntArray("Sources", sources);
+    nbt.putIntArray("Destinations", destinations);
+    return nbt;
   }
 
 }

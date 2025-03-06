@@ -52,10 +52,9 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
 
   @Override
   public void tick() {
-    int selection = blockEntity.getSelected();
+    int selection = blockEntity.getCurrentSelection();
     BlockState model;
-    if (selection < 0) {
-      main.LOGGER.info("wow this so cool i will lag ur ass");
+    if (selection == 0) {
       model = Blocks.AIR.getDefaultState();
     }
     else {

@@ -1,18 +1,20 @@
 package com.github.ndioc.duality.mechanics.essence.objects;
 
 
-import com.github.ndioc.duality.mechanics.essence.essenceType;
+import com.github.ndioc.duality.mechanics.essence.EssenceType;
 
-public class essence {
+public class Essence {
 
-  private final essenceType TYPE;
+  private final EssenceType TYPE;
 
   private int quantity;
   private final int capacity;
+  private boolean unlimited;
 
-  public essence(essenceType type, int capacity, boolean unlimited) {
+  public Essence(EssenceType type, int capacity, boolean unlimited) {
     TYPE = type;
     this.capacity = capacity;
+    this.unlimited = unlimited;
 
     if (unlimited) {
       quantity = this.capacity;
@@ -23,7 +25,7 @@ public class essence {
 
   }
 
-  public essence(essenceType type, int capacity, int quantity) {
+  public Essence(EssenceType type, int capacity, int quantity) {
     TYPE = type;
     this.capacity = capacity;
     this.quantity = quantity;
@@ -37,11 +39,14 @@ public class essence {
     return this.capacity;
   }
 
-  public essenceType getType() {
+  public EssenceType getType() {
     return this.TYPE;
   }
 
   public int addEssence(int input) {
+    if (unlimited) {
+      return 0;
+    }
     int overflow = (quantity + input) - capacity;
 
     if(overflow > 0) {
@@ -56,6 +61,9 @@ public class essence {
   }
 
   public int removeEssence(int input) {
+    if (unlimited) {
+      return input;
+    }
     int undercut = input + (quantity - input);
     if (quantity <= input) {
       quantity -= undercut;
@@ -66,9 +74,4 @@ public class essence {
       return input;
     }
   }
-
-  public void forceSetQuantity(int amount) {
-    quantity = amount;
-  }
-
 }

@@ -10,17 +10,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import static com.github.ndioc.duality.blocks.essence.Constants.fetchConveyorConstants;
+
+import static com.github.ndioc.duality.mechanics.essence.objects.EssenceConveyorConstants.fetchConveyorConstants;
 import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
-public class EssenceTransferEntity extends BlockEntity implements EssenceTransfer {
+public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyor {
 
-  public EssenceTransferEntity(BlockPos pos, BlockState state) {
+  public EssenceConveyorEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_TRANSFER_ENTITY, pos, state);
     setConstants();
     sourceContainers = new BlockPos[maxSourceContainers];
     destinationContainers = new BlockPos[maxDestinationContainers];
   }
+
 
   @Override
   protected void writeNbt(NbtCompound nbt) {
@@ -43,18 +45,9 @@ public class EssenceTransferEntity extends BlockEntity implements EssenceTransfe
     destinationContainers = readBlockPosNBT(nbt, "Destinations");
   }
 
-  public void writeTargets(BlockPos[] sourcestowrite, BlockPos[] destinationstowrite) {
-    for (int x = 0; x < sourcestowrite.length; x++) {
-      if (sourcestowrite[x] != null) {
-        sourceContainers[x] = sourcestowrite[x];
-      }
-    }
-
-    for (int x = 0; x < destinationstowrite.length; x++) {
-      if (destinationstowrite[x] != null) {
-        destinationContainers[x] = destinationstowrite[x];
-      }
-    }
+  public void writeSelection(NbtCompound nbt) {
+    sourceContainers = readBlockPosNBT(nbt, "Sources");
+    destinationContainers = readBlockPosNBT(nbt, "Destinations");
   }
 
   public void setConstants() {
@@ -134,7 +127,7 @@ public class EssenceTransferEntity extends BlockEntity implements EssenceTransfe
     return null;
   }
 
-  public void transferEssence(EssenceContainerEntity source, EssenceContainerEntity destination, int amount, essenceType type) {
+  public void transferEssence(EssenceContainerEntity source, EssenceContainerEntity destination, int amount, EssenceType type) {
     int essencetosend = source.removeEssence(type, amount);
     if (essencetosend != 0) {
       int essencetoreturn = destination.addEssence(type, essencetosend);
@@ -144,7 +137,7 @@ public class EssenceTransferEntity extends BlockEntity implements EssenceTransfe
     }
   }
 
-  public void transferEssenceRoundRobin(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, essenceType type) {
+  public void transferEssenceRoundRobin(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, EssenceType type) {
       int essencetosend = 0;
     for (int x = lastEntityTakenFrom + 1, y = lastEntitySentTo + 1, z = 0; z < Math.max(source.length, destination.length); z++) {
 
@@ -176,11 +169,11 @@ public class EssenceTransferEntity extends BlockEntity implements EssenceTransfe
     }
   }
 
-  public void transferEssenceToAll(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, essenceType type) {
+  public void transferEssenceToAll(EssenceContainerEntity[] source, EssenceContainerEntity[] destination, int amount, EssenceType type) {
 
   }
 
-  public static void tick(World world, BlockPos blockPos, BlockState blockState, EssenceTransferEntity essenceTransferEntity) {
+  public static void tick(World world, BlockPos blockPos, BlockState blockState, EssenceConveyorEntity essenceTransferEntity) {
   }
 
 }
