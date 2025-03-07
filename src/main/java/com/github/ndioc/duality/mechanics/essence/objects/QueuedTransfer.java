@@ -10,16 +10,22 @@ public class QueuedTransfer {
   private EssenceType essenceType;
   int quantity;
   long timeOfTransfer;
+  int timeFromSourceToConveyor;
+  int timeFromConveyorToDestination;
   long timeOfArrival;
+  boolean isReturned;
 
-  public QueuedTransfer(BlockPos source, BlockPos destination, BlockPos conveyor, EssenceType essenceType, int quantity, long timeOfTransfer, long timeOfArrival) {
+  public QueuedTransfer(BlockPos source, BlockPos destination, BlockPos conveyor, EssenceType essenceType, int quantity, long timeOfTransfer, int timeFromSourceToConveyor, int timeFromConveyorToDestination, boolean isReturned) {
     this.source = source;
     this.destination = destination;
     this.conveyor = conveyor;
     this.essenceType = essenceType;
     this.quantity = quantity;
     this.timeOfTransfer = timeOfTransfer;
-    this.timeOfArrival = timeOfArrival;
+    this.timeFromSourceToConveyor = timeFromSourceToConveyor;
+    this.timeFromConveyorToDestination = timeFromConveyorToDestination;
+    timeOfArrival = timeOfTransfer + timeFromSourceToConveyor + timeFromConveyorToDestination;
+    this.isReturned = isReturned;
   }
 
   public BlockPos getSource() {
@@ -46,7 +52,19 @@ public class QueuedTransfer {
     return timeOfTransfer;
   }
 
+  public int getTimeFromSourceToConveyor() {
+    return timeFromSourceToConveyor;
+  }
+
+  public int getTimeFromConveyorToDestination() {
+    return timeFromConveyorToDestination;
+  }
+
   public long getTimeOfArrival() {
     return timeOfArrival;
+  }
+
+  public boolean isReturned() {
+    return isReturned;
   }
 }

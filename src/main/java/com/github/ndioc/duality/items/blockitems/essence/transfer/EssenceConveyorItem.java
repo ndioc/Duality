@@ -60,7 +60,7 @@ public class EssenceConveyorItem extends BlockItem implements SelectionItem {
     NbtCompound nbt = stack.getNbt();
     if (entitytocheck instanceof SelectableEntity) {
       EssenceConveyorEntity entity = (EssenceConveyorEntity) entitytocheck;
-      entity.writeTargets(nbt);
+      entity.writeTargets(nbt, constants, world);
     }
     deleteSelections(nbt, SelectionStates.TARGETING, world);
     deleteNBT(stack);
