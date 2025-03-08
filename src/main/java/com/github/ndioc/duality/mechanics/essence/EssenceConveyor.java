@@ -24,6 +24,12 @@ public interface EssenceConveyor {
   EssenceContainerEntity[] getSources();
   void setSources(EssenceContainerEntity[] sources);
 
+  BlockPos[] getSourcePos();
+  void setSourcePos(BlockPos[] sourcePos);
+
+  BlockPos[] getDestinationPos();
+  void setDestinationPos(BlockPos[] destinationPos);
+
   EssenceContainerEntity[] getDestinations();
   void setDestinations(EssenceContainerEntity[] destinations);
 
@@ -42,14 +48,19 @@ public interface EssenceConveyor {
   int[] getLastTransferIndex();
   void setLastTransferIndex(int[] lastTransferIndex);
 
-  default void writeEntityToNBT(NbtCompound nbt) {
+  default void writeEntitiesToNBT(NbtCompound nbt) {
     writeBlockPosNBT(getBlockPosArrayFromEntityArray(getSources()), nbt, "Sources");
     writeBlockPosNBT(getBlockPosArrayFromEntityArray(getDestinations()), nbt, "Destinations");
   }
 
-  default void recreateEntityFromNBT(NbtCompound nbt, World world) {
-    setSources(getEntityArrayFromBlockPosArray(readBlockPosNBT(nbt, "Sources"), world));
-    setDestinations(getEntityArrayFromBlockPosArray(readBlockPosNBT(nbt, "Destinations"), world));
+  default void readBlockPosFromNBT(NbtCompound nbt) {
+    setSourcePos(readBlockPosNBT(nbt, "Sources"));
+    setDestinationPos(readBlockPosNBT(nbt, "Destinations"));
+  }
+
+  default void fetchEntities(World world) {
+    setSources(getEntityArrayFromBlockPosArray(getSourcePos(), world));
+    setDestinations(getEntityArrayFromBlockPosArray(getDestinationPos(), world));
   }
 
   default BlockPos[] getBlockPosArrayFromEntityArray(EssenceContainerEntity[] entityArray) {
@@ -110,6 +121,9 @@ public interface EssenceConveyor {
 
     BlockPos[] sourcePos = readBlockPosNBT(nbt, "Sources");
     BlockPos[] destinationPos = readBlockPosNBT(nbt, "Destinations");
+
+    setSourcePos(sourcePos);
+    setDestinationPos(destinationPos);
 
     EssenceContainerEntity[] sources = new EssenceContainerEntity[constants.getMaxSources()];
     EssenceContainerEntity[] destinations = new EssenceContainerEntity[constants.getMaxDestinations()];
@@ -267,10 +281,12 @@ public interface EssenceConveyor {
         for (int x = 0; x < queue.length; x++) {
           if (queue[x] == null) {
             queue[x] = new QueuedTransfer(source, destination, conveyor.getPos(), essenceType, actualQuantity, timeOfTransfer, sourceCache[0], destinationCache[0], isReturned);
+            break;
           }
           else if (x == queue.length - 1) {
             setEssenceTransferQueue(expandQueuedTransferArray(queue, constants));
             queue[x + 1] = new QueuedTransfer(source, destination, conveyor.getPos(), essenceType, actualQuantity, timeOfTransfer, sourceCache[0], destinationCache[0], isReturned);
+            break;
           }
         }
       }
@@ -336,12 +352,12 @@ public interface EssenceConveyor {
         TransferRequest request = null;
 
         for (int x = 0; x < destinations.length; x++) {
-          int destinationIndex = (x + 1) + lastTransferIndex[1] % destinations.length;
+          int destinationIndex = (x + 1 + lastTransferIndex[1]) % destinations.length;
           if (destinations[destinationIndex] == null) {
             continue;
           }
           for (int y = 0; y < sources.length; y++) {
-            int sourceIndex = (y + 1) + lastTransferIndex[0] % sources.length;
+            int sourceIndex = (y + 1 + lastTransferIndex[0]) % sources.length;
             if (sources[sourceIndex] == null) {
               continue;
             }

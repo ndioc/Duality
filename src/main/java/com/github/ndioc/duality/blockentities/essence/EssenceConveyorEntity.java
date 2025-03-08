@@ -22,10 +22,14 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
   private QueuedTransfer[] essenceTransferQueue;
   private int transferMode = 0;
   private int[] lastTransferIndex;
-  int timer = 0;
+  private int timer = 0;
+  private boolean firsttick = true;
 
   private EssenceContainerEntity[] sources;
   private EssenceContainerEntity[] destinations;
+
+  private BlockPos[] sourcePos;
+  private BlockPos[] destinationPos;
 
   private int[] sourceTimeCache;
   private int[] destinationTimeCache;
@@ -34,12 +38,12 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
 
   protected void writeNbt(NbtCompound nbt) {
     super.writeNbt(nbt);
-    writeEntityToNBT(nbt);
+    writeEntitiesToNBT(nbt);
   }
 
   public void readNbt(NbtCompound nbt) {
     super.readNbt(nbt);
-    recreateEntityFromNBT(nbt, world);
+    readBlockPosFromNBT(nbt);
   }
 
   public EssenceConveyorConstants getConveyorConstants() {
@@ -60,6 +64,22 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
 
   public void setSources(EssenceContainerEntity[] sources) {
     this.sources = sources;
+  }
+
+  public BlockPos[] getSourcePos() {
+    return sourcePos;
+  }
+
+  public void setSourcePos(BlockPos[] sourcePos) {
+    this.sourcePos = sourcePos;
+  }
+
+  public BlockPos[] getDestinationPos() {
+    return destinationPos;
+  }
+
+  public void setDestinationPos(BlockPos[] destinationPos) {
+    this.destinationPos = destinationPos;
   }
 
   public EssenceContainerEntity[] getDestinations() {
@@ -111,6 +131,10 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
   }
 
   public static void tick(World world, BlockPos position, BlockState state, EssenceConveyorEntity entity) {
+    if (entity.firsttick) {
+      entity.fetchEntities(world);
+      entity.firsttick = false;
+    }
     entity.readQueue(world);
 
     if (entity.timer >= entity.constants.getTicksBetweenTransfers()) {

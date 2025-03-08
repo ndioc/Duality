@@ -6,7 +6,7 @@ public enum EssenceType implements EssenceCore {
 
   HARMONIOUS(0, 0.98f, 1f, 48, 0),
   BLISS(1, 0.90f, 1.5f, 24, 2),
-  AGONY(-1, 0.85f, 0.5f, 16, -2);
+  AGONY(-1, 0.85f, 0.85f, 16, -2);
 
   private final int numericalID;
 

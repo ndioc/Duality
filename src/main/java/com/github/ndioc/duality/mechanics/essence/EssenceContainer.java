@@ -64,7 +64,7 @@ public interface EssenceContainer {
   default int findArrayIndex(EssenceType type) {
     Essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
-      if (array[x].getType().getNumericalID() == type.getNumericalID()) {
+      if (array[x] != null && array[x].getType().getNumericalID() == type.getNumericalID()) {
         return x;
       }
     }
