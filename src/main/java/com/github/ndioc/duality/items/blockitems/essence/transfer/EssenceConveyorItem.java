@@ -1,6 +1,7 @@
 package com.github.ndioc.duality.items.blockitems.essence.transfer;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceConveyorEntity;
+import com.github.ndioc.duality.mechanics.essence.EssenceConveyor;
 import com.github.ndioc.duality.mechanics.essence.objects.EssenceConveyorConstants;
 import com.github.ndioc.duality.mechanics.selection.SelectableEntity;
 import com.github.ndioc.duality.mechanics.selection.SelectionItem;
@@ -58,7 +59,7 @@ public class EssenceConveyorItem extends BlockItem implements SelectionItem {
   protected boolean postPlacement(BlockPos pos, World world, @Nullable PlayerEntity player, ItemStack stack, BlockState state) {
     BlockEntity entitytocheck = world.getBlockEntity(pos);
     NbtCompound nbt = stack.getNbt();
-    if (entitytocheck instanceof SelectableEntity) {
+    if (entitytocheck instanceof EssenceConveyor) {
       EssenceConveyorEntity entity = (EssenceConveyorEntity) entitytocheck;
       entity.writeTargets(nbt, constants, world);
     }

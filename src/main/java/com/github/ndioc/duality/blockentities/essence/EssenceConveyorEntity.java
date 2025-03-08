@@ -22,6 +22,7 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
   private QueuedTransfer[] essenceTransferQueue;
   private int transferMode = 0;
   private int[] lastTransferIndex;
+  int timer = 0;
 
   private EssenceContainerEntity[] sources;
   private EssenceContainerEntity[] destinations;
@@ -38,7 +39,7 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
 
   public void readNbt(NbtCompound nbt) {
     super.readNbt(nbt);
-    recreateEntityFromNBT(nbt, this.world);
+    recreateEntityFromNBT(nbt, world);
   }
 
   public EssenceConveyorConstants getConveyorConstants() {
@@ -110,14 +111,12 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
   }
 
   public static void tick(World world, BlockPos position, BlockState state, EssenceConveyorEntity entity) {
-    int x = 0;
-    x++;
     entity.readQueue(world);
 
-    if (x >= entity.constants.getTicksBetweenTransfers()) {
+    if (entity.timer >= entity.constants.getTicksBetweenTransfers()) {
       entity.nextTransfer(entity.transferMode, entity, world.getTime());
-      x = 0;
+      entity.timer = 0;
     }
+    entity.timer++;
   }
-
 }

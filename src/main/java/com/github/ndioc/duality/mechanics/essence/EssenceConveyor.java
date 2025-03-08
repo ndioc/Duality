@@ -67,7 +67,7 @@ public interface EssenceConveyor {
 
   default EssenceContainerEntity[] getEntityArrayFromBlockPosArray(BlockPos[] posArray, World world) {
     EssenceContainerEntity[] entityArray = new EssenceContainerEntity[posArray.length];
-    for (int x = 0; x < posArray.length; x++) {
+    for (int x = 0; x < posArray.length; x++) { // WORLD IS NULL HERE ON LOAD SO IT CANT FETCH THE BLOCK ENTITIES
       if (!posArray[x].equals(BlockPosNull())) {
         BlockEntity entityToAdd = world.getBlockEntity(posArray[x]);
         if (entityToAdd instanceof EssenceContainer) {
@@ -125,6 +125,9 @@ public interface EssenceConveyor {
         destinations = checkAndWriteEntityToFirstEmpty(position, destinations, world);
       }
     }
+
+    setSources(sources);
+    setDestinations(destinations);
   }
 
   default void deleteEntityFromSourceCache(int index) {
@@ -303,7 +306,7 @@ public interface EssenceConveyor {
     long gameTime = world.getTime();
     QueuedTransfer[] queue = getEssenceTransferQueue();
     for (int x = 0; x < queue.length; x++) {
-      if (queue[x] != null && gameTime == queue[x].getTimeOfArrival()) {
+      if (queue[x] != null && gameTime >= queue[x].getTimeOfArrival()) {
         completeTransfer(world, queue[x]);
         deleteQueuedTransfer(x);
       }
@@ -333,10 +336,16 @@ public interface EssenceConveyor {
         TransferRequest request = null;
 
         for (int x = 0; x < destinations.length; x++) {
-          int destinationIndex = x + lastTransferIndex[1] % destinations.length;
+          int destinationIndex = (x + 1) + lastTransferIndex[1] % destinations.length;
+          if (destinations[destinationIndex] == null) {
+            continue;
+          }
           for (int y = 0; y < sources.length; y++) {
-            int sourceIndex = y + lastTransferIndex[0] % sources.length;
-            request = destinations[destinationIndex].negotiateTransfer(sources[sourceIndex]);
+            int sourceIndex = (y + 1) + lastTransferIndex[0] % sources.length;
+            if (sources[sourceIndex] == null) {
+              continue;
+            }
+            request = destinations[destinationIndex].negotiateTransfer(sources[sourceIndex], conveyor.getConveyorConstants());
             if (request != null) {
               writeToQueue(destinations[destinationIndex].getPos(), sources[sourceIndex].getPos(), conveyor, request.getType(), request.getQuantity(), gameTime, conveyor.getConveyorConstants(), false);
               lastTransferIndex[0] = sourceIndex;

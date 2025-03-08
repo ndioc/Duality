@@ -1,10 +1,8 @@
 package com.github.ndioc.duality.mechanics.essence;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
-import com.github.ndioc.duality.mechanics.essence.objects.EssenceContainerConstants;
-import com.github.ndioc.duality.mechanics.essence.objects.Essence;
-import com.github.ndioc.duality.mechanics.essence.objects.EssenceType;
-import com.github.ndioc.duality.mechanics.essence.objects.TransferRequest;
+import com.github.ndioc.duality.main;
+import com.github.ndioc.duality.mechanics.essence.objects.*;
 import net.minecraft.nbt.NbtCompound;
 
 public interface EssenceContainer {
@@ -73,28 +71,53 @@ public interface EssenceContainer {
     return Integer.MIN_VALUE;
   }
 
-  default TransferRequest negotiateTransfer(EssenceContainerEntity entity) {
-    // destination asks source for theirEssence
+  default void initializeEntity() {
+    EssenceContainerConstants constants = getConstants();
+    if (constants == null) {
+      main.LOGGER.error("Fetching of constants for EssenceContainerEntity returned null!");
+      return;
+    }
+    Essence[] container = new Essence[constants.getNumberOfContainers()];
+    if (isUnlimited()) {
+      int[] types = constants.getAllowedEssenceTypes();
+      for (int x = 0; x < types.length; x++) {
+        container[x] = new Essence(EssenceType.getEssenceTypeByID(types[x]), constants.getVolumePerContainer(), isUnlimited());
+      }
+    }
+    setEssenceArray(container);
+  }
+
+  default TransferRequest negotiateTransfer(EssenceContainerEntity entity, EssenceConveyorConstants constants) {
+    // destination asks source for sourceEssence
     Essence[] destinationArray = getEssenceArray();
     Essence[] sourceArray = entity.getEssenceArray();
+    boolean destinationHasFreeSlot = false;
     EssenceType type = null;
     int amount = Integer.MIN_VALUE;
 
-    for (Essence myEssence : destinationArray) {
-      for (Essence theirEssence : sourceArray) {
-        if (myEssence != null) {
-          if (theirEssence != null && myEssence.getType() == theirEssence.getType()) {
-            int amountToCompare = Math.min(myEssence.getFreeCapacity(), theirEssence.getQuantity());
+    for (Essence destinationEssence : destinationArray) {
+      for (Essence sourceEssence : sourceArray) {
+        if (destinationEssence == null) {
+          destinationHasFreeSlot = true;
+        }
+          if (sourceEssence != null && destinationHasFreeSlot || sourceEssence != null && destinationEssence.getType() == sourceEssence.getType()) {
+            int amountToCompare;
+            if (destinationHasFreeSlot) {
+              amountToCompare = sourceEssence.getQuantity();
+            }
+            else {
+              amountToCompare = Math.min(destinationEssence.getFreeCapacity(), sourceEssence.getQuantity());
+            }
             if (amountToCompare > amount) {
               amount = amountToCompare;
-              type = myEssence.getType();
+              type = sourceEssence.getType();
             }
           }
         }
       }
-    }
 
     if (type != null) {
+      amount = Math.min(amount, constants.getAmountPerTransfer());
       return new TransferRequest(type, entity.removeEssence(type, amount));
     }
     return null;
@@ -153,12 +176,6 @@ public interface EssenceContainer {
     nbt.putIntArray("Types", types);
     nbt.putIntArray("Quantities", quantities);
 
-  }
-
-  default int getQuantityByType(EssenceType type) {
-    Essence[] array = getEssenceArray();
-    int index = findArrayIndex(type);
-    return array[index].getQuantity();
   }
 
   default void readContainersFromNBT(NbtCompound nbt) {

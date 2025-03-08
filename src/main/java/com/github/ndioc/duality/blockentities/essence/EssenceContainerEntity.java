@@ -18,7 +18,7 @@ public class EssenceContainerEntity extends BlockEntity implements EssenceContai
 
   public EssenceContainerEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_CONTAINER, pos, state);
-    container = new Essence[getConstants().getNumberOfContainers()];
+    initializeEntity();
   }
 
   private Essence[] container;
