@@ -38,6 +38,9 @@ public class EssenceContainerEntity extends BlockEntity implements EssenceContai
   public Essence[] getEssenceArray() {
     return container;
   }
+  public void setEssenceArray(Essence[] container) {
+   this.container = container;
+  }
   public int getCurrentSelection() {
     return selection;
   }

@@ -74,4 +74,8 @@ public class Essence {
       return input;
     }
   }
+
+  public int getFreeCapacity() {
+    return quantity - capacity;
+  }
 }

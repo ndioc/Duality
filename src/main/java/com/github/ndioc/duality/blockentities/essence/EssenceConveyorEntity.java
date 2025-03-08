@@ -15,9 +15,6 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
   public EssenceConveyorEntity(BlockPos pos, BlockState state) {
     super(blockentitytypes.ESSENCE_CONVEYOR, pos, state);
     constants = EssenceConveyorConstants.fetchConveyorConstants(state.getBlock().getTranslationKey());
-    if (constants == null) {
-      throw new RuntimeException("Constants Returned NULL in EssenceConveyorEntity!");
-    }
     initializeEntity(constants);
   }
 
@@ -36,10 +33,12 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
 
   protected void writeNbt(NbtCompound nbt) {
     super.writeNbt(nbt);
+    writeEntityToNBT(nbt);
   }
 
   public void readNbt(NbtCompound nbt) {
     super.readNbt(nbt);
+    recreateEntityFromNBT(nbt, this.world);
   }
 
   public EssenceConveyorConstants getConveyorConstants() {
@@ -116,7 +115,7 @@ public class EssenceConveyorEntity extends BlockEntity implements EssenceConveyo
     entity.readQueue(world);
 
     if (x >= entity.constants.getTicksBetweenTransfers()) {
-      entity.nextTransfer(entity.transferMode);
+      entity.nextTransfer(entity.transferMode, entity, world.getTime());
       x = 0;
     }
   }

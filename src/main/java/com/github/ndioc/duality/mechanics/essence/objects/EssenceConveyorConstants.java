@@ -2,9 +2,9 @@ package com.github.ndioc.duality.mechanics.essence.objects;
 
 public enum EssenceConveyorConstants {
 
-  TEST_RELAY(60, 10, 1f, 1f, 2, 3, 2),
-  LONG_RANGE(400, 40, 1.25f, 2f, 1, 1, 6),
-  YEETER(3200, 300, 3f, 5f, 1, 1, 50);
+  TEST_RELAY(60, 10, 1f, 1f, 2, 3, 2, 0),
+  LONG_RANGE(400, 40, 1.25f, 2f, 1, 1, 6, 0),
+  YEETER(3200, 300, 3f, 5f, 1, 1, 50, 0);
 
   private final int AmountPerTransfer;
   private final int TicksBetweenTransfers;

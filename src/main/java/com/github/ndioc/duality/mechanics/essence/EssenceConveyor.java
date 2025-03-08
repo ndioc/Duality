@@ -14,12 +14,9 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.Random;
 
-import static com.github.ndioc.duality.util.nbt.BlockPosNBT.BlockPosNull;
-import static com.github.ndioc.duality.util.nbt.BlockPosNBT.readBlockPosNBT;
+import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
 public interface EssenceConveyor {
-
-  EssenceConveyorConstants getConveyorConstants();
 
   QueuedTransfer[] getEssenceTransferQueue();
   void setEssenceTransferQueue(QueuedTransfer[] queuedTransfer);
@@ -44,6 +41,42 @@ public interface EssenceConveyor {
 
   int[] getLastTransferIndex();
   void setLastTransferIndex(int[] lastTransferIndex);
+
+  default void writeEntityToNBT(NbtCompound nbt) {
+    writeBlockPosNBT(getBlockPosArrayFromEntityArray(getSources()), nbt, "Sources");
+    writeBlockPosNBT(getBlockPosArrayFromEntityArray(getDestinations()), nbt, "Destinations");
+  }
+
+  default void recreateEntityFromNBT(NbtCompound nbt, World world) {
+    setSources(getEntityArrayFromBlockPosArray(readBlockPosNBT(nbt, "Sources"), world));
+    setDestinations(getEntityArrayFromBlockPosArray(readBlockPosNBT(nbt, "Destinations"), world));
+  }
+
+  default BlockPos[] getBlockPosArrayFromEntityArray(EssenceContainerEntity[] entityArray) {
+    BlockPos[] posArray = new BlockPos[entityArray.length];
+    for (int x = 0; x < entityArray.length; x++) {
+      if (entityArray[x] != null) {
+        posArray[x] = entityArray[x].getPos();
+      }
+      else {
+        posArray[x] = BlockPosNull();
+      }
+    }
+    return posArray;
+  }
+
+  default EssenceContainerEntity[] getEntityArrayFromBlockPosArray(BlockPos[] posArray, World world) {
+    EssenceContainerEntity[] entityArray = new EssenceContainerEntity[posArray.length];
+    for (int x = 0; x < posArray.length; x++) {
+      if (!posArray[x].equals(BlockPosNull())) {
+        BlockEntity entityToAdd = world.getBlockEntity(posArray[x]);
+        if (entityToAdd instanceof EssenceContainer) {
+          entityArray[x] = (EssenceContainerEntity) entityToAdd;
+        }
+      }
+    }
+    return entityArray;
+  }
 
   default EssenceContainerEntity[] checkAndWriteEntityToFirstEmpty(BlockPos position, EssenceContainerEntity[] array, World world) {
     for (int x = 0; x < array.length; x++) {
@@ -71,6 +104,10 @@ public interface EssenceConveyor {
   }
 
   default void writeTargets(NbtCompound nbt, EssenceConveyorConstants constants, World world) {
+    if (nbt == null) {
+      return;
+    }
+
     BlockPos[] sourcePos = readBlockPosNBT(nbt, "Sources");
     BlockPos[] destinationPos = readBlockPosNBT(nbt, "Destinations");
 
@@ -160,6 +197,7 @@ public interface EssenceConveyor {
     setDestinationLossCache(destinationLossCache);
 
     setEssenceTransferQueue(new QueuedTransfer[5 * (20 / constants.getTicksBetweenTransfers())]);
+    setLastTransferIndex(new int[]{0,0});
   }
 
   default int findArrayIndex(BlockPos position, EssenceContainerEntity[] arrayToCheckAgainst) {
@@ -272,26 +310,43 @@ public interface EssenceConveyor {
     }
   }
 
-  default void nextTransfer(int mode) {
-    int[] lastTransferIndex = getLastTransferIndex();
+  default void nextTransfer(int mode, EssenceConveyorEntity conveyor, long gameTime) {
     switch (mode) {
       case 1:
-        //mode 1: random
-        new Random().nextInt();
+        //mode 1: Transfer Randomly
+        Random ran = new Random();
+
 
         break;
 
       case 2:
-        //mode 2: currently nothing
+        //mode 2: Spread Evenly
+
+
         break;
+
       default:
         //mode 0: Round Robin
-
         EssenceContainerEntity[] sources = getSources();
         EssenceContainerEntity[] destinations = getDestinations();
+        int[] lastTransferIndex = getLastTransferIndex();
+        TransferRequest request = null;
 
-        for (int x = 0; x < sources.length; x++) {
-
+        for (int x = 0; x < destinations.length; x++) {
+          int destinationIndex = x + lastTransferIndex[1] % destinations.length;
+          for (int y = 0; y < sources.length; y++) {
+            int sourceIndex = y + lastTransferIndex[0] % sources.length;
+            request = destinations[destinationIndex].negotiateTransfer(sources[sourceIndex]);
+            if (request != null) {
+              writeToQueue(destinations[destinationIndex].getPos(), sources[sourceIndex].getPos(), conveyor, request.getType(), request.getQuantity(), gameTime, conveyor.getConveyorConstants(), false);
+              lastTransferIndex[0] = sourceIndex;
+              lastTransferIndex[1] = destinationIndex;
+              break;
+            }
+          }
+          if (request != null) {
+            break;
+          }
         }
         setLastTransferIndex(lastTransferIndex);
         break;
