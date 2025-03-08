@@ -63,8 +63,8 @@ public class EssenceConveyorItem extends BlockItem implements SelectionItem {
       EssenceConveyorEntity entity = (EssenceConveyorEntity) entitytocheck;
       entity.writeTargets(nbt, constants, world);
     }
-    deleteSelections(nbt, SelectionStates.TARGETING, world);
-    deleteNBT(stack);
+      deleteSelections(nbt, SelectionStates.TARGETING, world);
+      deleteNBT(stack);
     return super.postPlacement(pos, world, player, stack, state);
   }
 }

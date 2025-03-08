@@ -59,15 +59,18 @@ public interface SelectionItem {
   default void deleteSelections(NbtCompound nbt, SelectionStates selectionStates, World world) {
     switch (selectionStates) {
       case TARGETING:
+        if (nbt == null) {
+          return;
+        }
         BlockPos[] sources = readBlockPosNBT(nbt, "Sources");
         BlockPos[] destinations = readBlockPosNBT(nbt, "Destinations");
         for (BlockPos position : sources) {
-          if (position != null) {
+          if (!position.equals(BlockPosNull())) {
             setSelectionOnEntity(world, position, 0);
           }
         }
         for (BlockPos position : destinations) {
-          if (position != null) {
+          if (!position.equals(BlockPosNull())) {
             setSelectionOnEntity(world, position, 0);
           }
         }

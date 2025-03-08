@@ -49,8 +49,8 @@ public interface EssenceConveyor {
   void setLastTransferIndex(int[] lastTransferIndex);
 
   default void writeEntitiesToNBT(NbtCompound nbt) {
-    writeBlockPosNBT(getBlockPosArrayFromEntityArray(getSources()), nbt, "Sources");
-    writeBlockPosNBT(getBlockPosArrayFromEntityArray(getDestinations()), nbt, "Destinations");
+    writeBlockPosNBT(getSourcePos(), nbt, "Sources");
+    writeBlockPosNBT(getDestinationPos(), nbt, "Destinations");
   }
 
   default void readBlockPosFromNBT(NbtCompound nbt) {
@@ -61,19 +61,6 @@ public interface EssenceConveyor {
   default void fetchEntities(World world) {
     setSources(getEntityArrayFromBlockPosArray(getSourcePos(), world));
     setDestinations(getEntityArrayFromBlockPosArray(getDestinationPos(), world));
-  }
-
-  default BlockPos[] getBlockPosArrayFromEntityArray(EssenceContainerEntity[] entityArray) {
-    BlockPos[] posArray = new BlockPos[entityArray.length];
-    for (int x = 0; x < entityArray.length; x++) {
-      if (entityArray[x] != null) {
-        posArray[x] = entityArray[x].getPos();
-      }
-      else {
-        posArray[x] = BlockPosNull();
-      }
-    }
-    return posArray;
   }
 
   default EssenceContainerEntity[] getEntityArrayFromBlockPosArray(BlockPos[] posArray, World world) {
