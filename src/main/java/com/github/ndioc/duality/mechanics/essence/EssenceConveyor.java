@@ -245,7 +245,7 @@ public interface EssenceConveyor {
 
         if (sourceCache[0] == Integer.MIN_VALUE) {
           double distanceToSource = Math.sqrt(source.getSquaredDistance(conveyor.getPos()));
-          sourceCache[0] = (int) Math.round((distanceToSource / (speed / 20)));
+          sourceCache[0] = (int) Math.round((distanceToSource / (speed / 20) + constants.getInitTickDelay()));
           setSourceTimeCache(writeToCache(sourceCache[0], getSourceTimeCache(), findArrayIndex(source, getSources())));
           if (sourceCache[1] == Integer.MIN_VALUE) {
             sourceCache[1] = essenceType.calculateLossPercentage(distanceToSource, Math.round(essenceType.getbaseDistanceBeforeLoss() * constants.getDistanceBeforeLossMult()));
@@ -254,7 +254,7 @@ public interface EssenceConveyor {
         }
         if (destinationCache[0] == Integer.MIN_VALUE) {
           double distanceToDestination = Math.sqrt(destination.getSquaredDistance(conveyor.getPos()));
-          destinationCache[0] = (int) Math.round((distanceToDestination / (speed / 20)));
+          destinationCache[0] = (int) Math.round((distanceToDestination / (speed / 20) + constants.getInitTickDelay()));
           setDestinationTimeCache(writeToCache(destinationCache[0], getDestinationTimeCache(), findArrayIndex(destination, getDestinations())));
           if (destinationCache[1] == Integer.MIN_VALUE) {
             destinationCache[1] = essenceType.calculateLossPercentage(distanceToDestination, Math.round(essenceType.getbaseDistanceBeforeLoss() * constants.getDistanceBeforeLossMult()));
@@ -262,7 +262,7 @@ public interface EssenceConveyor {
           }
         }
 
-        int actualQuantity = Math.round((quantity - ((quantity * intPercentageToFloat(destinationCache[1])) + (quantity * intPercentageToFloat(destinationCache[1])))) * essenceType.getbaseEfficiencyMult());
+        int actualQuantity = Math.round((quantity - ((quantity * intPercentageToFloat(destinationCache[1])) + (quantity - (quantity * intPercentageToFloat(destinationCache[1]))))) * essenceType.getbaseEfficiencyMult());
 
         QueuedTransfer[] queue = getEssenceTransferQueue();
         for (int x = 0; x < queue.length; x++) {
