@@ -103,7 +103,7 @@ public interface EssenceContainer {
           if (sourceEssence != null && destinationHasFreeSlot || sourceEssence != null && destinationEssence.getType() == sourceEssence.getType()) {
             int amountToCompare;
             if (destinationHasFreeSlot) {
-              amountToCompare = sourceEssence.getQuantity();
+              amountToCompare = Math.min(getConstants().getVolumePerContainer(), sourceEssence.getQuantity());
             }
             else {
               amountToCompare = Math.min(destinationEssence.getFreeCapacity(), sourceEssence.getQuantity());
@@ -116,7 +116,7 @@ public interface EssenceContainer {
         }
       }
 
-    if (type != null) {
+    if (type != null && amount > 0) {
       amount = Math.min(amount, constants.getAmountPerTransfer());
       return new TransferRequest(type, entity.removeEssence(type, amount));
     }

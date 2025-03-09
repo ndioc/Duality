@@ -54,6 +54,7 @@ public interface EssenceConveyor {
   }
 
   default void readBlockPosFromNBT(NbtCompound nbt) {
+    // ESSENCE ARRAY[0] GETS COPIED INTO OTHER ARRAYS, POSSIBLY ONLY IF NULL?
     setSourcePos(readBlockPosNBT(nbt, "Sources"));
     setDestinationPos(readBlockPosNBT(nbt, "Destinations"));
   }
@@ -262,7 +263,7 @@ public interface EssenceConveyor {
           }
         }
 
-        int actualQuantity = Math.round((quantity - ((quantity * intPercentageToFloat(destinationCache[1])) + (quantity - (quantity * intPercentageToFloat(destinationCache[1]))))) * essenceType.getbaseEfficiencyMult());
+        int actualQuantity = Math.round((quantity - ((quantity * intPercentageToFloat(destinationCache[1])) + (quantity * intPercentageToFloat(destinationCache[1])))) * essenceType.getbaseEfficiencyMult());
 
         QueuedTransfer[] queue = getEssenceTransferQueue();
         for (int x = 0; x < queue.length; x++) {
@@ -307,7 +308,7 @@ public interface EssenceConveyor {
 
   default void readQueue(World world) {
     long gameTime = world.getTime();
-    QueuedTransfer[] queue = getEssenceTransferQueue();
+      QueuedTransfer[] queue = getEssenceTransferQueue();
     for (int x = 0; x < queue.length; x++) {
       if (queue[x] != null && gameTime >= queue[x].getTimeOfArrival()) {
         completeTransfer(world, queue[x]);
@@ -364,5 +365,4 @@ public interface EssenceConveyor {
         break;
     }
   }
-
 }
