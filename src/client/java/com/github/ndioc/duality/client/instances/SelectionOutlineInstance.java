@@ -2,13 +2,11 @@ package com.github.ndioc.duality.client.instances;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
-import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
@@ -55,7 +53,7 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
 
     materialManager.defaultTransparent()
         .material(Materials.TRANSFORMED)
-        .getModel(SELECTION_OUTLINE.getDefaultState().with(SelectionOutline.SELECTION, blockEntity.getCurrentSelection()))
+        .getModel(SELECTION_OUTLINE.getDefaultState().with(SelectionOutline.SELECTED, blockEntity.getCurrentSelection()))
         .stealInstance(selectionModel);
 
     selectionModel.loadIdentity()

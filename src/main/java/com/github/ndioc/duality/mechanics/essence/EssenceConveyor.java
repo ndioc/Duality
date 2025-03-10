@@ -54,7 +54,6 @@ public interface EssenceConveyor {
   }
 
   default void readBlockPosFromNBT(NbtCompound nbt) {
-    // ESSENCE ARRAY[0] GETS COPIED INTO OTHER ARRAYS, POSSIBLY ONLY IF NULL?
     setSourcePos(readBlockPosNBT(nbt, "Sources"));
     setDestinationPos(readBlockPosNBT(nbt, "Destinations"));
   }
@@ -301,7 +300,13 @@ public interface EssenceConveyor {
           }
         }
       } catch (NullPointerException ignored) {
-        main.LOGGER.error("Attempt at Essence Transfer caused a NullPointerException!, this means something is very wrong");
+        if (!checkEntity(source)) {
+          deleteEntityFromSourceCache(findArrayIndex(queuedTransfer.getSource(), getSources()));
+        }
+
+        if (!checkEntity(destination)) {
+          deleteEntityFromDestinationCache(findArrayIndex(queuedTransfer.getDestination(), getDestinations()));
+        }
       }
     }
   }

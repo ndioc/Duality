@@ -44,6 +44,7 @@ public class blocks {
   public static final Block SELECTION_OUTLINE = registerblock(
       "selection_outline", false,
       new SelectionOutline(FabricBlockSettings.create()
+          .nonOpaque()
       ));
 
   public static final Block WISPWOOD_VEIN = registerblock(

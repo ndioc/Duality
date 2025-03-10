@@ -32,7 +32,6 @@ public interface EssenceContainer {
     return getConstants().isUnlimited();
   }
 
-
   default boolean createEssenceObject(EssenceType type, int capacity, boolean unlimited) {
     Essence[] array = getEssenceArray();
     for (int x = 0; x < array.length; x++) {
@@ -50,6 +49,7 @@ public interface EssenceContainer {
     for (int x = 0; x < array.length; x++) {
       if (array[x] == null) {
         array[x] = new Essence(type, capacity, quantity);
+        break;
       }
     }
     setEssenceArray(array);
@@ -193,6 +193,7 @@ public interface EssenceContainer {
         if (types[x] != -100) {
           recreateEssenceObject(EssenceType.getEssenceTypeByID(types[x]), getVolumePerContainer(), quantities[x]);
         }
+
       }
     }
   }

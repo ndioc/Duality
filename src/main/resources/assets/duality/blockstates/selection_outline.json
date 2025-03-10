@@ -8,6 +8,9 @@
     },
     "selected=2": {
       "model": "duality:block/selection_outline/2"
+    },
+    "selected=3": {
+      "model": "duality:block/selection_outline/3"
     }
   }
 }
