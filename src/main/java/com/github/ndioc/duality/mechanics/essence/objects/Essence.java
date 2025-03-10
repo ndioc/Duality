@@ -1,8 +1,5 @@
 package com.github.ndioc.duality.mechanics.essence.objects;
 
-
-import com.github.ndioc.duality.mechanics.essence.EssenceCore;
-
 public class Essence {
 
   private final EssenceType TYPE;

@@ -1,6 +1,7 @@
 package com.github.ndioc.duality.client.instances;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
+import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.TickableInstance;
@@ -30,7 +31,7 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
 
     containerModel = matMan.defaultTransparent()
         .material(Materials.TRANSFORMED)
-        .getModel(Blocks.GLASS.getDefaultState())
+        .getModel(blocks.ORB_CONTAINER.getDefaultState())
         .createInstance();
 
     containerModel.loadIdentity()

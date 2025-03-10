@@ -1,7 +1,7 @@
 {
   "variants": {
   "": {
-    "model": "duality:block/test_orb"
+    "model": "duality:block/test_orb/test_orb"
   }
   }
 }

@@ -1,5 +1,6 @@
 package com.github.ndioc.duality.blocks;
 
+import com.github.ndioc.duality.blocks.essence.OrbContainer;
 import com.github.ndioc.duality.blocks.essence.storage.*;
 import com.github.ndioc.duality.blocks.essence.transfer.*;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
@@ -44,6 +45,12 @@ public class blocks {
   public static final Block SELECTION_OUTLINE = registerblock(
       "selection_outline", false,
       new SelectionOutline(FabricBlockSettings.create()
+          .nonOpaque()
+      ));
+
+  public static final Block ORB_CONTAINER = registerblock(
+      "orb_container", false,
+      new OrbContainer(FabricBlockSettings.create()
           .nonOpaque()
       ));
 
