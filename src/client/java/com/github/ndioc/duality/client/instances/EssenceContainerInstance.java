@@ -9,15 +9,16 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import net.minecraft.util.math.BlockPos;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
-public class EssenceContainerInstance extends BlockEntityInstance<EssenceContainerEntity> implements DynamicInstance {
+public class EssenceContainerInstance extends BlockEntityInstance<EssenceContainerEntity> implements DynamicInstance  {
 
   private ModelData containerModel;
   private ModelData selectionModel;
 
-  private long lastFrameTime;
+  private float modelOffset = 0.2f;
 
   public EssenceContainerInstance(MaterialManager matMan, EssenceContainerEntity blockEntity) {
     super(matMan, blockEntity);
@@ -44,8 +45,8 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
   public void beginFrame() {
 
     double sine = Math.sin(world.getTime() / 8d);
-    main.LOGGER.info("sine: {}", sine);
-    containerModel.translateY(sine / 128d);
+    double floatingOffset = sine / 128d;
+    containerModel.translateY(floatingOffset + modelOffset);
 
     materialManager.defaultTransparent()
         .material(Materials.TRANSFORMED)
