@@ -1,6 +1,6 @@
 package com.github.ndioc.duality.client;
 
-import com.github.ndioc.duality.client.instances.SelectionOutlineInstance;
+import com.github.ndioc.duality.client.instances.EssenceContainerInstance;
 import com.github.ndioc.duality.client.instances.WispwoodLogInstance;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
@@ -15,7 +15,7 @@ public class flywheelInstances {
 
     InstancedRenderRegistry.configure(blockentitytypes.ESSENCE_CONTAINER)
         .alwaysSkipRender()
-        .factory(SelectionOutlineInstance::new)
+        .factory(EssenceContainerInstance::new)
         .apply();
 
   }

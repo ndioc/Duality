@@ -3,22 +3,32 @@ package com.github.ndioc.duality.client.instances;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
+import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.api.instance.TickableInstance;
+import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import net.minecraft.block.Blocks;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
-public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContainerEntity> implements TickableInstance {
+public class EssenceContainerInstance extends BlockEntityInstance<EssenceContainerEntity> implements DynamicInstance {
 
-  private ModelData selectionModel;
   private ModelData containerModel;
+  private ModelData selectionModel;
 
-  public SelectionOutlineInstance(MaterialManager matMan, EssenceContainerEntity entity) {
-    super(matMan, entity);
+  private long lastFrameTime;
+
+  public EssenceContainerInstance(MaterialManager matMan, EssenceContainerEntity blockEntity) {
+    super(matMan, blockEntity);
+
+    containerModel = matMan.defaultTransparent()
+        .material(Materials.TRANSFORMED)
+        .getModel(blocks.ORB_CONTAINER.getDefaultState())
+        .createInstance();
+
+    containerModel.loadIdentity()
+        .translate(getInstancePosition());
 
     selectionModel = matMan.defaultTransparent()
         .material(Materials.TRANSFORMED)
@@ -29,28 +39,13 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
         .translate(getInstancePosition())
         .setBlockLight(15);
 
-    containerModel = matMan.defaultTransparent()
-        .material(Materials.TRANSFORMED)
-        .getModel(blocks.ORB_CONTAINER.getDefaultState())
-        .createInstance();
-
-    containerModel.loadIdentity()
-        .translate(getInstancePosition());
   }
 
-  @Override
-  protected void remove() {
-    selectionModel.delete();
-    containerModel.delete();
-  }
+  public void beginFrame() {
 
-  @Override
-  public void updateLight() {
-    relight(getWorldPosition(), containerModel);
-  }
-
-  @Override
-  public void tick() {
+    double sine = Math.sin(world.getTime() / 8d);
+    main.LOGGER.info("sine: {}", sine);
+    containerModel.translateY(sine / 128d);
 
     materialManager.defaultTransparent()
         .material(Materials.TRANSFORMED)
@@ -60,5 +55,11 @@ public class SelectionOutlineInstance extends BlockEntityInstance<EssenceContain
     selectionModel.loadIdentity()
         .translate(getInstancePosition())
         .setBlockLight(15);
+
   }
+
+  protected void remove() {
+    containerModel.delete();
+  }
+
 }
