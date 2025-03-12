@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.client.instances;
+package com.github.ndioc.duality.client.instances.blocks;
 
 import com.github.ndioc.duality.blocks.natural.wispwood.WispwoodVein;
 import com.github.ndioc.duality.blockentities.animation.AnimatedPillarEntity;

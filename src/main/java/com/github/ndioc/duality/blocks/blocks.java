@@ -26,12 +26,12 @@ public class blocks {
 
   public static final Block TEST_ORB = registerblock(
       "test_orb", true,
-      new testorb(FabricBlockSettings.create()
+      new TestOrb(FabricBlockSettings.create()
           .nonOpaque()));
 
   public static final Block CREATIVE_ORB = registerblock(
       "creative_orb", true,
-      new creativeorb(FabricBlockSettings.create()
+      new CreativeOrb(FabricBlockSettings.create()
           .nonOpaque()));
 
   public static final Block TEST_RELAY = registerblock(

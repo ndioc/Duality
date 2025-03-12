@@ -10,7 +10,7 @@ public interface EssenceContainer {
   Essence[] getEssenceArray();
   void setEssenceArray(Essence[] container);
   EssenceContainerConstants getConstants();
-
+  boolean isActivated();
 
   default int getVolumePerContainer() {
     return getConstants().getVolumePerContainer();

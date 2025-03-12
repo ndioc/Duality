@@ -7,9 +7,9 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class testorb extends BlockWithEntity {
+public class CreativeOrb extends BlockWithEntity {
 
-  public testorb(Settings settings) {
+  public CreativeOrb(Settings settings) {
     super(settings);
   }
 
@@ -18,5 +18,4 @@ public class testorb extends BlockWithEntity {
   public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
     return new EssenceContainerEntity(pos, state);
   }
-
 }
