@@ -3,11 +3,13 @@ package com.github.ndioc.duality.client.instances.blocks;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
+import com.github.ndioc.duality.client.mainClient;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import net.minecraft.client.util.math.MatrixStack;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
@@ -16,9 +18,10 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
   private ModelData containerModel;
   private ModelData selectionModel;
 
-  private int frame = 0; //mainClient.random.nextInt(90);
+  private int frame = mainClient.random.nextInt(90);
 
   private final float rotationPerFrame = 0.05454f; // ~ 3.125 deg per frame
+  private MatrixStack matrixStack = new MatrixStack();
 
   public EssenceContainerInstance(MaterialManager matMan, EssenceContainerEntity blockEntity) {
     super(matMan, blockEntity);
@@ -51,10 +54,11 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
     if (!blockEntity.isActivated()) {
       double sine = Math.sin(frame / 10f);
       double floatingOffset = sine * 0.0078125d; // sine / 128
+      containerModel.transform(matrixStack);
       containerModel.translateY(floatingOffset);
-      //containerModel.rotateCentered(Direction.UP, rotationPerFrame * 0.5f);
-      //containerModel.rotateCentered(Direction.NORTH, rotationPerFrame * -0.37f);
-      //containerModel.rotateCentered(Direction.EAST, rotationPerFrame * 0.21f);
+      //containerModel.rotateCentered(Direction.UP, rotationPerFrame * 0.5f * frame);
+      //containerModel.rotateCentered(Direction.NORTH, rotationPerFrame * -0.37f * frame);
+      //containerModel.rotateCentered(Direction.EAST, rotationPerFrame * 0.21f * frame);
     }
 
     materialManager.defaultTransparent()
