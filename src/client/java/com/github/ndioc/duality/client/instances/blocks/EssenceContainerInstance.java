@@ -4,12 +4,12 @@ import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
 import com.github.ndioc.duality.client.mainClient;
+import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import net.minecraft.client.util.math.MatrixStack;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
@@ -18,10 +18,7 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
   private ModelData containerModel;
   private ModelData selectionModel;
 
-  private int frame = mainClient.random.nextInt(90);
-
-  private final float rotationPerFrame = 0.05454f; // ~ 3.125 deg per frame
-  private MatrixStack matrixStack = new MatrixStack();
+  private double currentY = 0d;
 
   public EssenceContainerInstance(MaterialManager matMan, EssenceContainerEntity blockEntity) {
     super(matMan, blockEntity);
@@ -47,18 +44,14 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
 
   public void beginFrame() {
 
-    if (frame > Integer.MAX_VALUE * 0.99f) {
-      frame = 0;
+    if (!blockEntity.isActivated()) {
+      main.LOGGER.info("DEBUG, currentY | {}", currentY);
+      containerModel.translate(getWorldPosition());
     }
 
-    if (!blockEntity.isActivated()) {
-      double sine = Math.sin(frame / 10f);
-      double floatingOffset = sine * 0.0078125d; // sine / 128
-      containerModel.transform(matrixStack);
-      containerModel.translateY(floatingOffset);
-      //containerModel.rotateCentered(Direction.UP, rotationPerFrame * 0.5f * frame);
-      //containerModel.rotateCentered(Direction.NORTH, rotationPerFrame * -0.37f * frame);
-      //containerModel.rotateCentered(Direction.EAST, rotationPerFrame * 0.21f * frame);
+    else {
+      containerModel.translate(0d, currentY * -1, 0d);
+      currentY = 0d;
     }
 
     materialManager.defaultTransparent()
@@ -70,7 +63,6 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
         .translate(getInstancePosition())
         .setBlockLight(15);
 
-    frame++;
   }
 
   protected void remove() {

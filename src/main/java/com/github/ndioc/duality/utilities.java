@@ -52,7 +52,7 @@ public class utilities {
         break;
       default:
         output = null;
-        main.LOGGER.warn("Method " + MOD_ID + "utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
+        main.LOGGER.warn("Method " + MOD_ID + ".utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
     }
     return output;
   }

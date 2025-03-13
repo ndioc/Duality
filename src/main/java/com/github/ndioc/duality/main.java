@@ -11,12 +11,10 @@ import org.apache.logging.log4j.Logger;
 
 public class main implements ModInitializer {
 
-  public static String MOD_ID = "duality";
-  public static String MOD_NAME = "DUALITY";
-
-  public static String CREATORS = "ndioc & TheLoaf55";
-
-  public static Logger LOGGER = LogManager.getLogger(MOD_ID);
+  public static final String MOD_ID = "duality";
+  public static final String MOD_NAME = "DUALITY";
+  public static final String CREATORS = "ndioc & TheLoaf55";
+  public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
 
   @Override
   public void onInitialize() {
