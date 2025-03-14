@@ -1,4 +1,4 @@
-package com.github.ndioc.duality.blocks.essence;
+package com.github.ndioc.duality.blocks.miscellaneous;
 
 import net.minecraft.block.Block;
 

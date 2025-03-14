@@ -75,7 +75,6 @@ public class EssenceContainerEntity extends BlockEntity implements EssenceContai
   }
 
   public static void tick(World world, BlockPos position, BlockState state, EssenceContainerEntity entity) {
-
     if (entity.timer >= 20) {
       for (Essence essence : entity.getEssenceArray()) {
         if (essence != null && essence.getQuantity() > 0) {

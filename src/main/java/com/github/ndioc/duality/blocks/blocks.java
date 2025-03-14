@@ -1,6 +1,6 @@
 package com.github.ndioc.duality.blocks;
 
-import com.github.ndioc.duality.blocks.essence.OrbContainer;
+import com.github.ndioc.duality.blocks.miscellaneous.OrbContainer;
 import com.github.ndioc.duality.blocks.essence.storage.*;
 import com.github.ndioc.duality.blocks.essence.transfer.*;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;

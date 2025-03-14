@@ -9,6 +9,7 @@ public class AnimationBuilder {
   public static AnimationData ContainerAnimation;
 
   public static void build() {
+    // Main method that gets called from mainClient.
     long start = System.currentTimeMillis();
     assembleContainerAnimation();
     main.LOGGER.info("{} successfully built animations, took {} milliseconds.", main.MOD_NAME,System.currentTimeMillis() - start);
@@ -16,33 +17,33 @@ public class AnimationBuilder {
   }
 
   public static void AnimationsToPrint() {
+    // use printAnimationToLog(AnimationData); for more information see printAnimationToLog();
   }
 
   public static void assembleContainerAnimation() {
-    int FPS = 60;
-    int degreesPerCalculation = 20;
-    int totalFrames = 534;
-    float baseRotation = 26.6966f;
+    final int FPS = 60;                     // sets Frame Rate of Animation, this is used together with System.currentTimeMillis() which is stored as the 'AnimationStartTime' in a variable inside the instance, which then together with the FPS gets calculated into the current frame, which makes the animation frame rate independent.
+    final int degreesPerCalculation = 20;   // this is the DEGREES for the sine wave generated later IE Math.sin(x * degrees), the degrees get converted to radians before calculating which is an unnecessary step to take, but I find degrees easier to work with.
+    final int totalFrames = 534;            // amount of frames to calculate in the animation.
+    final float baseRotation = 26.6966f;    // this is the rotation applied every frame, it is VERY important that this is close to zero at the end of the animation to make sure that it gets looped smoothly!
 
     Vec3d[] PosData = new Vec3d[totalFrames];
     Vec3d[] RotData = new Vec3d[totalFrames];
 
-    PosData[totalFrames - 1] = new Vec3d(0d, 0d, 0d);
+    PosData[totalFrames - 1] = new Vec3d(0d, 0d, 0d); // set last frame of the animation to zero to make it loop smoother
     RotData[totalFrames - 1] = new Vec3d(0d, 0d, 0d);
 
     for (int x = 0; x < totalFrames - 1; x++) {
+      // this is the loop where each frame of the animation is generated, x = frame.
+      // each frame gets generated into 3d double vectors and are put in an array where (index = frameNum). this gets put into an AnimationData object which the instance uses for each frame.
       double rotation = (baseRotation  / (180 * Math.PI)) * x;
       PosData[x] = new Vec3d(0d, (Math.sin((x * degreesPerCalculation) / (180 * Math.PI)) / 10d), 0d);
       RotData[x] = new Vec3d(rotation, (rotation * 0.5f), (rotation * 0.25f) * -1);
     }
-    ContainerAnimation = new AnimationData(FPS, PosData, RotData);
-    for (int x = 0; x < PosData.length ; x++) {
-      main.LOGGER.warn("position: {} | frame: {}",PosData[x], x);
-      main.LOGGER.warn("rotation: {} | frame: {}",RotData[x], x);
-    }
+    ContainerAnimation = new AnimationData(FPS, PosData, RotData); // use the previously generated arrays to generate an AnimationData object and put it into the ContainerAnimation variable.
   }
 
   public static void printAnimationToLog(AnimationData data) {
+    // this loop gets fed an AnimationData object and fetches each of the frames and prints the vectors to the log, which is used for debugging and smoothing out the animation.
     for (int x = 0; x < data.getTotalFrames(); x++) {
       main.LOGGER.info("Frame | {}", x);
       main.LOGGER.info("Position Data | {}", data.getFramePosData(x));

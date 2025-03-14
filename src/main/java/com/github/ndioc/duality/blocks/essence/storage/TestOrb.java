@@ -2,7 +2,6 @@ package com.github.ndioc.duality.blocks.essence.storage;
 
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
-import com.github.ndioc.duality.blockentities.essence.EssenceConveyorEntity;
 import com.github.ndioc.duality.utilities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;

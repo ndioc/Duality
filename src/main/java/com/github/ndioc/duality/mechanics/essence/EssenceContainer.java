@@ -3,7 +3,15 @@ package com.github.ndioc.duality.mechanics.essence;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.mechanics.essence.objects.*;
+import com.github.ndioc.duality.networking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.server.network.ServerPlayerEntity;
+
+import static com.github.ndioc.duality.networking.sendPacketToClient;
 
 public interface EssenceContainer {
 
@@ -30,6 +38,16 @@ public interface EssenceContainer {
 
   default boolean isUnlimited() {
     return getConstants().isUnlimited();
+  }
+
+  default void syncEntity(BlockEntity entity) {
+    PacketByteBuf packet = PacketByteBufs.create();
+    packet.writeBlockPos(entity.getPos());
+
+
+    for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+      sendPacketToClient(player, networking.ESSENCE_CONTAINER_SYNC_PACKET_ID, packet);
+    }
   }
 
   default boolean createEssenceObject(EssenceType type, int capacity, boolean unlimited) {
