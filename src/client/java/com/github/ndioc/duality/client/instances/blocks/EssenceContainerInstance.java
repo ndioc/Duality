@@ -3,22 +3,26 @@ package com.github.ndioc.duality.client.instances.blocks;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
-import com.github.ndioc.duality.client.mainClient;
+import com.github.ndioc.duality.client.animation.AnimationBuilder;
+import com.github.ndioc.duality.client.animation.objects.AnimationData;
 import com.github.ndioc.duality.main;
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import net.minecraft.util.math.Direction;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
 public class EssenceContainerInstance extends BlockEntityInstance<EssenceContainerEntity> implements DynamicInstance  {
 
   private ModelData containerModel;
+  private final AnimationData containerAnimation;
   private ModelData selectionModel;
 
-  private double currentY = 0d;
+  private long startFrame;
+  private boolean isActivated = false;
 
   public EssenceContainerInstance(MaterialManager matMan, EssenceContainerEntity blockEntity) {
     super(matMan, blockEntity);
@@ -31,7 +35,9 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
     containerModel.loadIdentity()
         .translate(getInstancePosition());
 
-    selectionModel = matMan.defaultTransparent()
+    containerAnimation = AnimationBuilder.ContainerAnimation;
+
+    selectionModel = matMan.defaultCutout()
         .material(Materials.TRANSFORMED)
         .getModel(SELECTION_OUTLINE.getDefaultState())
         .createInstance();
@@ -43,15 +49,19 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
   }
 
   public void beginFrame() {
-
-    if (!blockEntity.isActivated()) {
-      main.LOGGER.info("DEBUG, currentY | {}", currentY);
-      containerModel.translate(getWorldPosition());
-    }
-
-    else {
-      containerModel.translate(0d, currentY * -1, 0d);
-      currentY = 0d;
+    containerModel.loadIdentity();
+    containerModel.translate(getInstancePosition());
+    if (!isActivated) {
+      int frame = containerAnimation.getCurrentFrame(startFrame);
+      if (frame > containerAnimation.getTotalFrames() - 1) {
+        frame = 0;
+        startFrame = System.currentTimeMillis();
+      }
+      main.LOGGER.info("frame: {}", frame);
+      containerModel.translate(containerAnimation.getFramePosData(frame));
+      containerModel.rotateCentered(Direction.UP, containerAnimation.getFrameRotationDataUP(frame));
+      containerModel.rotateCentered(Direction.NORTH, containerAnimation.getFrameRotationDataNORTH(frame));
+      containerModel.rotateCentered(Direction.EAST, containerAnimation.getFrameRotationDataEAST(frame));
     }
 
     materialManager.defaultTransparent()
