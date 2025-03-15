@@ -3,7 +3,6 @@ package com.github.ndioc.duality.mechanics.essence;
 import com.github.ndioc.duality.blockentities.blockentitytypes;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blockentities.essence.EssenceConveyorEntity;
-import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.mechanics.essence.objects.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -131,26 +130,32 @@ public interface EssenceConveyor {
     setDestinations(destinations);
   }
 
-  default void deleteEntityFromSourceCache(int index) {
+  default void deleteEntityFromSources(int index) {
     EssenceContainerEntity[] sources = getSources();
+    BlockPos[] sourcesPos = getSourcePos();
     int[] sourceTimeCache = getSourceTimeCache();
     int[] sourceLossCache = getSourceLossCache();
     sources[index] = null;
+    sourcesPos[index] = BlockPosNull();
     sourceTimeCache[index] = Integer.MIN_VALUE;
     sourceLossCache[index] = Integer.MIN_VALUE;
     setSources(sources);
+    setSourcePos(sourcesPos);
     setSourceTimeCache(sourceTimeCache);
     setSourceLossCache(sourceLossCache);
   }
 
-  default void deleteEntityFromDestinationCache(int index) {
+  default void deleteEntityFromDestinations(int index) {
     EssenceContainerEntity[] destinations = getDestinations();
+    BlockPos[] destinationsPos = getDestinationPos();
     int[] destinationTimeCache = getDestinationTimeCache();
     int[] destinationLossCache = getDestinationLossCache();
     destinations[index] = null;
+    destinationsPos[index] = BlockPosNull();
     destinationTimeCache[index] = Integer.MIN_VALUE;
     destinationLossCache[index] = Integer.MIN_VALUE;
     setDestinations(destinations);
+    setDestinationPos(destinationsPos);
     setDestinationTimeCache(destinationTimeCache);
     setDestinationLossCache(destinationLossCache);
   }
@@ -279,11 +284,11 @@ public interface EssenceConveyor {
       }
 
       else {
-        deleteEntityFromSourceCache(findArrayIndex(source, getSources()));
+        deleteEntityFromSources(findArrayIndex(source, getSources()));
       }
     }
     else {
-      deleteEntityFromDestinationCache(findArrayIndex(destination, getDestinations()));
+      deleteEntityFromDestinations(findArrayIndex(destination, getDestinations()));
     }
   }
 
@@ -302,11 +307,11 @@ public interface EssenceConveyor {
       } catch (NullPointerException ignored) {
         // removing it from cache doesn't stop it from continuing to send, it only causes it to recalculate all variables
         if (!checkEntity(source)) {
-          deleteEntityFromSourceCache(findArrayIndex(queuedTransfer.getSource(), getSources()));
+          deleteEntityFromSources(findArrayIndex(queuedTransfer.getSource(), getSources()));
         }
 
         if (!checkEntity(destination)) {
-          deleteEntityFromDestinationCache(findArrayIndex(queuedTransfer.getDestination(), getDestinations()));
+          deleteEntityFromDestinations(findArrayIndex(queuedTransfer.getDestination(), getDestinations()));
         }
       }
     }
@@ -347,7 +352,7 @@ public interface EssenceConveyor {
 
         for (int x = 0; x < destinations.length; x++) {
           int destinationIndex = (x + 1 + lastTransferIndex[1]) % destinations.length;
-          if (destinations[destinationIndex] == null) {
+          if (destinations[destinationIndex] == null || destinations[destinationIndex].isUnlimited()) {
             continue;
           }
           for (int y = 0; y < sources.length; y++) {

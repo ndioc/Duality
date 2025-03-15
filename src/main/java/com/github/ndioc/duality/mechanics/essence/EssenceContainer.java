@@ -11,6 +11,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 
+import java.util.Arrays;
+
 import static com.github.ndioc.duality.networking.sendPacketToClient;
 
 public interface EssenceContainer {
@@ -19,6 +21,7 @@ public interface EssenceContainer {
   void setEssenceArray(Essence[] container);
   EssenceContainerConstants getConstants();
   boolean isActivated();
+  void interfaceMarkDirty();
 
   default int getVolumePerContainer() {
     return getConstants().getVolumePerContainer();
@@ -56,6 +59,7 @@ public interface EssenceContainer {
       if (array[x] == null) {
         array[x] = new Essence(type, capacity, unlimited);
         setEssenceArray(array);
+        interfaceMarkDirty();
         return true;
       }
     }
@@ -67,6 +71,7 @@ public interface EssenceContainer {
     for (int x = 0; x < array.length; x++) {
       if (array[x] == null) {
         array[x] = new Essence(type, capacity, quantity);
+        interfaceMarkDirty();
         break;
       }
     }
@@ -77,6 +82,7 @@ public interface EssenceContainer {
     Essence[] array = getEssenceArray();
     array[index] = null;
     setEssenceArray(array);
+    interfaceMarkDirty();
   }
 
   default int findArrayIndex(EssenceType type) {
@@ -105,38 +111,84 @@ public interface EssenceContainer {
     setEssenceArray(container);
   }
 
+  default boolean isFull() {
+    Essence[] array = getEssenceArray();
+    for (Essence essence : array) {
+      if (essence == null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   default TransferRequest negotiateTransfer(EssenceContainerEntity entity, EssenceConveyorConstants constants) {
     // destination asks source for sourceEssence
+
     Essence[] destinationArray = getEssenceArray();
     Essence[] sourceArray = entity.getEssenceArray();
-    boolean destinationHasFreeSlot = false;
-    EssenceType type = null;
-    int amount = Integer.MIN_VALUE;
+    int index = 0;
 
-    for (Essence destinationEssence : destinationArray) {
-      for (Essence sourceEssence : sourceArray) {
+    int arrayLength = Math.max(sourceArray.length, destinationArray.length);
+
+    EssenceType[] availableTypes = new EssenceType[arrayLength];
+
+    int[] amount = new int[arrayLength];
+    Arrays.fill(amount, Integer.MIN_VALUE);
+
+    // checking what types are available for transfer
+
+    for (Essence sourceEssence : sourceArray) {
+      if (sourceEssence == null) {
+        continue;
+      }
+      for (Essence destinationEssence : destinationArray) {
         if (destinationEssence == null) {
-          destinationHasFreeSlot = true;
+          availableTypes[index] = sourceEssence.getType();
+          index++;
+          break;
         }
-          if (sourceEssence != null && destinationHasFreeSlot || sourceEssence != null && destinationEssence.getType() == sourceEssence.getType()) {
-            int amountToCompare;
-            if (destinationHasFreeSlot) {
-              amountToCompare = Math.min(getConstants().getVolumePerContainer(), sourceEssence.getQuantity());
-            }
-            else {
-              amountToCompare = Math.min(destinationEssence.getFreeCapacity(), sourceEssence.getQuantity());
-            }
-            if (amountToCompare > amount) {
-              amount = amountToCompare;
-              type = sourceEssence.getType();
-            }
-          }
+        if (sourceEssence.getType() == destinationEssence.getType()) {
+          availableTypes[index] = sourceEssence.getType();
+          index++;
+          break;
         }
       }
+    }
 
-    if (type != null && amount > 0) {
-      amount = Math.min(amount, constants.getAmountPerTransfer());
-      return new TransferRequest(type, entity.removeEssence(type, amount));
+    // checking what type is best to send to maximise amount sent.
+    index = 0;
+    boolean isFull = isFull();
+    for (EssenceType type : availableTypes) {
+      int destinationIndex = findArrayIndex(type);
+      int sourceIndex = entity.findArrayIndex(type);
+      if (destinationIndex == Integer.MIN_VALUE) {
+        if (!isFull) {
+          amount[index] = Math.min(getVolumePerContainer(), sourceArray[sourceIndex].getQuantity());
+          index++;
+          continue;
+        }
+        amount[index] = Integer.MIN_VALUE;
+        index++;
+        continue;
+      }
+      amount[index] = Math.min(destinationArray[destinationIndex].getFreeCapacity(), sourceArray[sourceIndex].getQuantity());
+      index++;
+    }
+
+    // create the Transfer Request
+
+    EssenceType typeToSend = null;
+    int amountToSend = Integer.MAX_VALUE;
+
+    for (int x = 0; x < amount.length; x++) {
+      if (amount[x] > 0 && amount[x] < amountToSend) {
+        typeToSend = availableTypes[x];
+        amountToSend = amount[x];
+      }
+    }
+
+    if (typeToSend != null && amountToSend < Integer.MAX_VALUE) {
+      return new TransferRequest(typeToSend, Math.min(constants.getAmountPerTransfer(), amountToSend));
     }
     return null;
   }
@@ -148,15 +200,15 @@ public interface EssenceContainer {
     if (index == Integer.MIN_VALUE) {
       if (createEssenceObject(type, getVolumePerContainer(), isUnlimited())) {
         index = findArrayIndex(type);
+        interfaceMarkDirty();
         return array[index].addEssence(amount);
       }
       else {
         return amount;
       }
     }
-
+    interfaceMarkDirty();
     return array[index].addEssence(amount);
-
   }
 
   default int removeEssence(EssenceType type, int amount) {
@@ -171,6 +223,7 @@ public interface EssenceContainer {
     if (removed < amount) {
       deleteEssenceObject(index);
     }
+    interfaceMarkDirty();
     return removed;
   }
 
@@ -193,7 +246,6 @@ public interface EssenceContainer {
     nbt.putBoolean("Unlimited", isUnlimited());
     nbt.putIntArray("Types", types);
     nbt.putIntArray("Quantities", quantities);
-
   }
 
   default void readContainersFromNBT(NbtCompound nbt) {

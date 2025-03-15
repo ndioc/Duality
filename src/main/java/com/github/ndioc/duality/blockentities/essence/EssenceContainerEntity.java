@@ -61,6 +61,9 @@ public class EssenceContainerEntity extends BlockEntity implements EssenceContai
   public boolean isActivated() {
     return activated;
   }
+  public void interfaceMarkDirty() {
+    markDirty();
+  }
 
   @Override
   protected void writeNbt(NbtCompound nbt) {
