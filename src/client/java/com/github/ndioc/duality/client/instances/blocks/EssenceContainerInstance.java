@@ -57,7 +57,6 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
         frame = 0;
         startFrame = System.currentTimeMillis();
       }
-      main.LOGGER.info("frame: {}", frame);
       containerModel.translate(containerAnimation.getFramePosData(frame));
       containerModel.rotateCentered(Direction.UP, containerAnimation.getFrameRotationDataUP(frame));
       containerModel.rotateCentered(Direction.NORTH, containerAnimation.getFrameRotationDataNORTH(frame));

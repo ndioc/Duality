@@ -300,6 +300,7 @@ public interface EssenceConveyor {
           }
         }
       } catch (NullPointerException ignored) {
+        // removing it from cache doesn't stop it from continuing to send, it only causes it to recalculate all variables
         if (!checkEntity(source)) {
           deleteEntityFromSourceCache(findArrayIndex(queuedTransfer.getSource(), getSources()));
         }
