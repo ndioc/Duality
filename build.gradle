@@ -31,6 +31,10 @@ repositories {
         name "tterrag maven"
         url "https://maven.tterrag.com/"
     }
+    maven {
+        name "Createmod maven"
+        url "https://maven.createmod.net/"
+    }
 }
 
 dependencies {
@@ -40,7 +44,9 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "com.jozufozu.flywheel:flywheel-fabric-${project.minecraft_version}:${flywheel_version}"
+
+    modApi "dev.engine-room.flywheel:flywheel-fabric-api-${project.minecraft_version}:${flywheel_version}"
+    modImplementation "dev.engine-room.flywheel:flywheel-fabric-${project.minecraft_version}:${flywheel_version}"
 }
 
 processResources {
