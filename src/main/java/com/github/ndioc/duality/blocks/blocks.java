@@ -5,8 +5,10 @@ import com.github.ndioc.duality.blocks.essence.storage.*;
 import com.github.ndioc.duality.blocks.essence.transfer.*;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
 import com.github.ndioc.duality.blocks.natural.wispwood.*;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.BlockSoundGroup;
 
 import static com.github.ndioc.duality.utilities.*;
@@ -41,6 +43,9 @@ public class blocks {
           .nonOpaque()));
 
   // Register blocks to get access to their models for use with flywheel
+/*
+
+// REPLACE THESE WITH PARTIAL MODELS
 
   public static final Block SELECTION_OUTLINE = registerblock(
       "selection_outline", false,
@@ -58,5 +63,5 @@ public class blocks {
       "wispwood_vein", false,
       new WispwoodVein(FabricBlockSettings.create()
       ));
-
+*/
 }

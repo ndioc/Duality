@@ -1,5 +1,5 @@
 package com.github.ndioc.duality.client.instances.blocks;
-
+/*
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
 import com.github.ndioc.duality.blocks.blocks;
 import com.github.ndioc.duality.blocks.miscellaneous.SelectionOutline;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.Direction;
 
 import static com.github.ndioc.duality.blocks.blocks.SELECTION_OUTLINE;
 
-public class EssenceContainerInstance extends BlockEntityInstance<EssenceContainerEntity> implements DynamicInstance  {
+public class EssenceContainerInstance extends SimpleBlockEntityVisual<EssenceContainerEntity> implements DynamicInstance  {
 
   private ModelData containerModel;
   private final AnimationData containerAnimation;
@@ -83,3 +83,4 @@ public class EssenceContainerInstance extends BlockEntityInstance<EssenceContain
     relight(getWorldPosition(), containerModel);
   }
 }
+*/

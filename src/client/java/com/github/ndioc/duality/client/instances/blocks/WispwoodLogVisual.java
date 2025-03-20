@@ -1,39 +1,65 @@
 package com.github.ndioc.duality.client.instances.blocks;
 
-import com.github.ndioc.duality.blocks.natural.wispwood.WispwoodVein;
 import com.github.ndioc.duality.blockentities.animation.AnimatedPillarEntity;
-import com.github.ndioc.duality.blocks.blocks;
-import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.api.instance.TickableInstance;
-import com.jozufozu.flywheel.backend.Backend;
-import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
-import com.jozufozu.flywheel.config.BackendType;
-import com.jozufozu.flywheel.core.Materials;
-import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.github.ndioc.duality.main;
+import dev.engine_room.flywheel.api.backend.BackendManager;
+import dev.engine_room.flywheel.api.instance.Instance;
+import dev.engine_room.flywheel.api.material.Material;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.backend.Backends;
+import dev.engine_room.flywheel.lib.material.SimpleMaterial;
+import dev.engine_room.flywheel.lib.model.part.InstanceTree;
+import dev.engine_room.flywheel.lib.model.part.ModelTrees;
+import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
+import dev.engine_room.flywheel.lib.visual.SimpleTickableVisual;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
-public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntity> implements TickableInstance {
+import java.util.function.Consumer;
 
-  private final ModelData model;
+public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarEntity> implements SimpleTickableVisual {
 
-  public WispwoodLogInstance (MaterialManager matMan, AnimatedPillarEntity entity){
-    super(matMan, entity);
+  private final Material material = SimpleMaterial.builder()
+      .texture(new Identifier(main.MOD_ID, ""))
+      .mipmap(false)
+      .diffuse(true)
+      .build();
 
-    model = matMan.defaultTransparent()
-        .material(Materials.TRANSFORMED)
-        .getModel(blocks.WISPWOOD_VEIN.getDefaultState())
-        .createInstance();
+  private final InstanceTree instanceTree;
+  private final InstanceTree veins;
 
-      model.loadIdentity()
-          .translate(getInstancePosition())
-          .setBlockLight(15);
+  public WispwoodLogVisual(VisualizationContext ctx, AnimatedPillarEntity blockEntity, float partialTick){
+    super(ctx, blockEntity, partialTick);
+
+    instanceTree = InstanceTree.create(instancerProvider(), ModelTrees.of());
+    veins = instanceTree.childOrThrow("WispwoodVeins");
+
+    BlockPos pos = getVisualPosition();
+      veins.translateAndRotate(new Matrix4f().translate(pos.getX(), pos.getY(), pos.getZ()));
   }
 
   @Override
-  public void tick() {
+  public void collectCrumblingInstances(Consumer<@Nullable Instance> consumer) {
 
-    if (Backend.getBackendType() == BackendType.BATCHING || Backend.getBackendType() == BackendType.OFF) {
-      model.delete();
+  }
+
+  @Override
+  public void updateLight(float v) {
+  }
+
+  @Override
+  protected void _delete() {
+    veins.delete();
+  }
+
+  @Override
+  public void tick(Context context) {
+
+    if (BackendManager.currentBackend() == Backends.INDIRECT) {
+      veins.delete();
     }
 
     else {
@@ -43,7 +69,7 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
       final int animationpause = 46;
 
       int frameoffset = (animationlength - animationoverlap) * blockEntity.getIndex();
-      int frame = Math.toIntExact((world.getTime() - frameoffset + blockEntity.randomoffset) % (animationlength + animationpause));
+      int frame = Math.toIntExact((level.getTime() - frameoffset + blockEntity.randomoffset) % (animationlength + animationpause));
 
       // basic transform variables
       int veinmodel;
@@ -144,7 +170,7 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
         scaley = 0.25f;
         scalez = 0.25f;
       }
-
+/*
       materialManager.defaultSolid()
           .material(Materials.TRANSFORMED)
           .getModel(blocks.WISPWOOD_VEIN.getDefaultState().with(WispwoodVein.VEINSTATES, veinmodel))
@@ -156,13 +182,8 @@ public class WispwoodLogInstance extends BlockEntityInstance<AnimatedPillarEntit
           .scale(scalex, scaley, scalez)
           .rotateCentered(direction, rotate)
           .setBlockLight(15);
-
+*/
     }
-  }
 
-  @Override
-  public void remove(){
-    model.delete();
   }
-
 }

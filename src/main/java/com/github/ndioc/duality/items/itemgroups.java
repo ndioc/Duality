@@ -21,7 +21,6 @@ public class itemgroups {
 
           // add item to item group: entries.add(class.ITEM_NAME);
             entries.add(blocks.WISPWOOD_LOG);
-            entries.add(blocks.SELECTION_OUTLINE);
 
             entries.add(blocks.TEST_ORB);
             entries.add(blocks.TEST_RELAY);
