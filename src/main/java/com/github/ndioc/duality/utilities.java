@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-import static com.github.ndioc.duality.main.MOD_ID;
+import static com.github.ndioc.duality.Duality.MOD_ID;
 
 public class utilities {
 
@@ -52,13 +52,13 @@ public class utilities {
         break;
       default:
         output = null;
-        main.LOGGER.warn("Method " + MOD_ID + ".utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
+        Duality.LOGGER.warn("Method " + MOD_ID + ".utilities.StringtoAxis got an invalid input, Defaulting to the Y Axis.");
     }
     return output;
   }
 
   public static <T extends BlockEntityType<?>> T RegisterBlockEntityType(String path, T type) {
-    return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(main.MOD_ID, path), type);
+    return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(Duality.MOD_ID, path), type);
   }
 
   @Nullable

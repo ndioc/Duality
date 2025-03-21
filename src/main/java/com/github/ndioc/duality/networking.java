@@ -8,8 +8,8 @@ import net.minecraft.util.Identifier;
 public class networking {
 
   // declare packet IDs
-  public static final Identifier ANIMATED_PILLAR_SYNC_PACKET_ID = new Identifier(main.MOD_ID, "animated_pillar");
-  public static final Identifier ESSENCE_CONTAINER_SYNC_PACKET_ID = new Identifier(main.MOD_ID, "essence_container");
+  public static final Identifier ANIMATED_PILLAR_SYNC_PACKET_ID = new Identifier(Duality.MOD_ID, "animated_pillar");
+  public static final Identifier ESSENCE_CONTAINER_SYNC_PACKET_ID = new Identifier(Duality.MOD_ID, "essence_container");
 
   // a general purpose networking method straight from the wiki
   public static void sendPacketToClient(ServerPlayerEntity player, Identifier id, PacketByteBuf buffer) {

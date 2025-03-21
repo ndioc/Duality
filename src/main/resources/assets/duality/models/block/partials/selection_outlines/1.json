@@ -1,8 +1,7 @@
 {
 	"texture_size": [1, 1],
 	"textures": {
-		"0": "duality:block/selection_outline/2",
-		"particle": "duality:block/selection_outline/2"
+		"0": "duality:block/partials/selection_outline/1"
 	},
 	"elements": [
 		{

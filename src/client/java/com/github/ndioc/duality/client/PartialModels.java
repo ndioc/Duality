@@ -1,10 +1,10 @@
-package com.github.ndioc.duality.client.models;
+package com.github.ndioc.duality.client;
 
-import com.github.ndioc.duality.main;
+import com.github.ndioc.duality.Duality;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.util.Identifier;
 
-public class registerPartialModels {
+public class PartialModels {
 
   public static PartialModel[] WispwoodVeinModels;
   public static PartialModel[] SelectionOutlineModels;
@@ -17,18 +17,18 @@ public class registerPartialModels {
   }
 
   private static void createArrays() {
-    WispwoodVeinModels = createModelArray("model\\partials\\log_veins\\wispwood\\vein_", 7);
-    SelectionOutlineModels = createModelArray("model\\partials\\selection_outline\\", 4);
+    WispwoodVeinModels = createBlockModelArray("/partials/log_veins/wispwood/", 7);
+    SelectionOutlineModels = createBlockModelArray("/partials/selection_outlines/", 4);
   }
 
   private static void createModels() {
-    OrbContainerModel = PartialModel.of(Identifier.of(main.MOD_ID, "model\\partials\\orb_container"));
+    OrbContainerModel = PartialModel.of(Identifier.of(Duality.MOD_ID, "block/partials/orb_container"));
   }
 
-  private static PartialModel[] createModelArray(String path, int length) {
+  private static PartialModel[] createBlockModelArray(String path, int length) {
     PartialModel[] output = new PartialModel[length];
     for (int x = 0; x < output.length; x++) {
-      output[x] = PartialModel.of(Identifier.of(main.MOD_ID, path + x));
+      output[x] = PartialModel.of(Duality.asResourcePath("block" + path + x));
     }
     return output;
   }
