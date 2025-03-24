@@ -8,11 +8,9 @@ import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
-import dev.engine_room.flywheel.lib.model.Models;
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.model.SimpleModel;
 import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
 import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
-import net.minecraft.util.math.Direction;
 
 import java.util.function.Consumer;
 
@@ -21,7 +19,7 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
   private final TransformedInstance container;
   private final OrientedInstance selection;
 
-  private final PartialModel[] selectionModels = PartialModels.SelectionOutlineModels;
+  private final SimpleModel[] selectionModels = PartialModels.SelectionOutlineModels;
   private final AnimationData containerAnimation = AnimationBuilder.ContainerAnimation;
 
   private boolean isActivated = false;
@@ -31,12 +29,12 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
   public OrbContainerVisual(VisualizationContext ctx, EssenceContainerEntity blockEntity, float partialTick) {
     super(ctx, blockEntity, partialTick);
 
-    container = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(PartialModels.OrbContainerModel))
+    container = instancerProvider().instancer(InstanceTypes.TRANSFORMED, PartialModels.OrbContainerModel)
         .createInstance()
         .translate(getVisualPosition())
         .setIdentityTransform();
 
-    selection = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(selectionModels[0]))
+    selection = instancerProvider().instancer(InstanceTypes.ORIENTED, selectionModels[0])
         .createInstance()
         .position(getVisualPosition());
   }
@@ -69,12 +67,12 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
         startFrame = System.currentTimeMillis();
       }
       container.translate(containerAnimation.getFramePosData(frame));
-      container.rotateCentered(containerAnimation.getFrameRotationDataUP(frame), Direction.UP);
-      container.rotateCentered(containerAnimation.getFrameRotationDataNORTH(frame), Direction.NORTH);
-      container.rotateCentered(containerAnimation.getFrameRotationDataEAST(frame), Direction.EAST);
+      container.rotateYCentered(containerAnimation.getFrameRotationDataUP(frame));
+      container.rotateXCentered(containerAnimation.getFrameRotationDataNORTH(frame));
+      container.rotateZCentered(containerAnimation.getFrameRotationDataEAST(frame));
     }
 
-    instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(PartialModels.SelectionOutlineModels[blockEntity.getCurrentSelection()]))
+    instancerProvider().instancer(InstanceTypes.ORIENTED, PartialModels.SelectionOutlineModels[blockEntity.getCurrentSelection()])
         .stealInstance(selection);
 
     container.setChanged();

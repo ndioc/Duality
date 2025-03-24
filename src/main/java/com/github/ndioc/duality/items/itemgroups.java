@@ -12,7 +12,7 @@ import net.minecraft.util.Identifier;
 public class itemgroups {
 
   public static class Duality {
-    public static final ItemGroup DUALITY = Registry.register(Registries.ITEM_GROUP, new Identifier(com.github.ndioc.duality.Duality.MOD_ID,"duality_itemgroup"), FabricItemGroup.builder()
+    public static final ItemGroup dualityMainItemGroup = Registry.register(Registries.ITEM_GROUP, new Identifier(com.github.ndioc.duality.Duality.MOD_ID,"duality_itemgroup"), FabricItemGroup.builder()
 
         .icon(() -> new ItemStack(blocks.WISPWOOD_LOG))
         .displayName(Text.translatable("itemgroup.duality.duality"))

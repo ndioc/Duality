@@ -11,7 +11,7 @@ public class DualityClient implements ClientModInitializer {
 
   @Override
   public void onInitializeClient() {
-    PartialModels.register();
+    PartialModels.fetch();
     registerRenderLayers.registerLayers();
     AnimationBuilder.build();
     FlywheelVisuals.initialize();

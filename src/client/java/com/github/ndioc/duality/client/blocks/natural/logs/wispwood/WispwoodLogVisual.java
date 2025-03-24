@@ -9,6 +9,7 @@ import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
 import dev.engine_room.flywheel.lib.model.Models;
+import dev.engine_room.flywheel.lib.model.SimpleModel;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
 import dev.engine_room.flywheel.lib.visual.SimpleTickableVisual;
@@ -23,12 +24,12 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   private final TransformedInstance veins;
 
   private final AnimationData veinAnimation = AnimationBuilder.WispwoodLogAnimation;
-  private final PartialModel[] partialModels = PartialModels.WispwoodVeinModels;
+  private final SimpleModel[] veinModels = PartialModels.WispwoodVeinModels;
 
   public WispwoodLogVisual(VisualizationContext ctx, AnimatedPillarEntity blockEntity, float partialTick){
     super(ctx, blockEntity, partialTick);
 
-    veins = instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(partialModels[0]))
+    veins = instancerProvider().instancer(InstanceTypes.TRANSFORMED, veinModels[0])
         .createInstance()
         .translate(getVisualPosition())
         .scale(0.9999f)
@@ -36,6 +37,7 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
         .setIdentityTransform();
 
     veins.light(15,15);
+    veins.color(0,0,255);
     veins.setChanged();
 
   }
@@ -48,15 +50,15 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
     };
   }
 
-  private PartialModel getModel(int frame) {
+  private SimpleModel getModel(int frame) {
     return switch (frame) {
-      case 0,22 ->partialModels[0];
-      case 1,21 -> partialModels[1];
-      case 2,20 -> partialModels[2];
-      case 3,19 -> partialModels[3];
-      case 4,18 -> partialModels[4];
-      case 5,17 -> partialModels[5];
-      default -> partialModels[6];
+      case 0,22 -> veinModels[0];
+      case 1,21 -> veinModels[1];
+      case 2,20 -> veinModels[2];
+      case 3,19 -> veinModels[3];
+      case 4,18 -> veinModels[4];
+      case 5,17 -> veinModels[5];
+      default -> veinModels[6];
     };
   }
 
@@ -85,11 +87,11 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
       int frame = Math.toIntExact((level.getTime() - frameoffset + blockEntity.randomoffset) % (veinAnimation.getTotalFrames()));
 
       // basic transform variables
-      PartialModel veinmodel = getModel(frame);
+      SimpleModel veinmodel = getModel(frame);
 
     veins.setVisible(frame <= 22);
 
-      instancerProvider().instancer(InstanceTypes.TRANSFORMED, Models.partial(veinmodel))
+      instancerProvider().instancer(InstanceTypes.TRANSFORMED, veinmodel)
           .stealInstance(veins);
 
       veins.translate(veinAnimation.getFramePosData(frame));
@@ -98,6 +100,7 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
         case "z": veins.rotateYCentered(veinAnimation.getFrameRotationDataNORTH(frame)); break;
         case "x": veins.rotateZCentered(veinAnimation.getFrameRotationDataEAST(frame)); break;
       }
+
       veins.light(15, 15);
       veins.setChanged();
   }
