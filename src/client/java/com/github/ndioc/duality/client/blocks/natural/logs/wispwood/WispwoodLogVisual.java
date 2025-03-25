@@ -22,7 +22,7 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   private final TransformedInstance veins;
 
   private final AnimationData veinAnimation = AnimationBuilder.WispwoodLogAnimation;
-  private SimpleModel[] veinModels = SimpleModels.WispwoodVeinModels;
+  private SimpleModel[] veinModels = fetchModels();
 
   public WispwoodLogVisual(VisualizationContext ctx, AnimatedPillarEntity blockEntity, float partialTick){
     super(ctx, blockEntity, partialTick);
@@ -54,9 +54,6 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   }
 
   private SimpleModel getModel(int frame) {
-    if (veinModels == null) {
-      veinModels = fetchModels();
-    }
     return switch (frame) {
       case 0,22 -> veinModels[0];
       case 1,21 -> veinModels[1];
