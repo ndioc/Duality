@@ -18,8 +18,12 @@
     "fabric-datagen": [
       "com.github.ndioc.duality.DataGen"
     ],
-    "client": ["com.github.ndioc.duality.client.mainClient"],
-    "main": ["com.github.ndioc.duality.main"]
+    "client": [
+      "com.github.ndioc.duality.client.DualityClient"
+    ],
+    "main": [
+      "com.github.ndioc.duality.Duality"
+    ]
   },
 
   "mixins": [

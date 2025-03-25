@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.mechanics.selection;
 
+import com.github.ndioc.duality.Duality;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
-import com.github.ndioc.duality.main;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -165,7 +165,7 @@ public interface SelectionItem {
           return null;
         }
     }
-    main.LOGGER.error("Invalid Selection State | {} | in SelectionItem", selectionState.name());
+    Duality.LOGGER.error("Invalid Selection State | {} | in SelectionItem", selectionState.name());
     return null;
   }
 }

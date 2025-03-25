@@ -1,7 +1,7 @@
 package com.github.ndioc.duality.mechanics.essence;
 
+import com.github.ndioc.duality.Duality;
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
-import com.github.ndioc.duality.main;
 import com.github.ndioc.duality.mechanics.essence.objects.*;
 import com.github.ndioc.duality.networking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -98,7 +98,7 @@ public interface EssenceContainer {
   default void initializeEntity() {
     EssenceContainerConstants constants = getConstants();
     if (constants == null) {
-      main.LOGGER.error("Fetching of constants for EssenceContainerEntity returned null!");
+      Duality.LOGGER.error("Fetching of constants for EssenceContainerEntity returned null!");
       return;
     }
     Essence[] container = new Essence[constants.getNumberOfContainers()];

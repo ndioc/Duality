@@ -1,12 +1,11 @@
 {
 	"textures": {
-		"0": "duality:block/wispwood_log/veins"
+		"0": "duality:block/partials/log_veins/wispwood"
 	},
 	"elements": [
 		{
 			"from": [14.1, 0, 1],
 			"to": [15.1, 1, 15],
-			"light_emission": 1,
 			"rotation": {"angle": 0, "axis": "y", "origin": [14.1, 0, 1]},
 			"faces": {
 				"north": {"uv": [0.25, 0.25, 0.75, 0.75], "texture": "#0"},

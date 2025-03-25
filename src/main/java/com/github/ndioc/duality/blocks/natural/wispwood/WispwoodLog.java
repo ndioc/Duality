@@ -39,5 +39,4 @@ public class WispwoodLog extends PillarBlock implements BlockEntityProvider {
       return null;
     }
   }
-
 }

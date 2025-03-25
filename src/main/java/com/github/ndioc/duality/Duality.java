@@ -6,10 +6,11 @@ import com.github.ndioc.duality.items.equipment.equipment;
 import com.github.ndioc.duality.items.itemgroups;
 import com.github.ndioc.duality.items.items;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class main implements ModInitializer {
+public class Duality implements ModInitializer {
 
   public static final String MOD_ID = "duality";
   public static final String MOD_NAME = "DUALITY";
@@ -31,4 +32,9 @@ public class main implements ModInitializer {
 
     LOGGER.info("{} By {} has been Successfully Loaded.", MOD_NAME, CREATORS);
   }
+
+  public static Identifier asResourcePath(String path) {
+    return new Identifier(MOD_ID, path);
+  }
+
 }
