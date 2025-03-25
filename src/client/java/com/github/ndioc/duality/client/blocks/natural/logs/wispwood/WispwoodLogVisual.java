@@ -22,7 +22,7 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   private final TransformedInstance veins;
 
   private final AnimationData veinAnimation = AnimationBuilder.WispwoodLogAnimation;
-  private SimpleModel[] veinModels = fetchModels();
+  private final SimpleModel[] veinModels = fetchModels();
 
   public WispwoodLogVisual(VisualizationContext ctx, AnimatedPillarEntity blockEntity, float partialTick){
     super(ctx, blockEntity, partialTick);
