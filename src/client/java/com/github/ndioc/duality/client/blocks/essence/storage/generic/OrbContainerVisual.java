@@ -1,9 +1,9 @@
 package com.github.ndioc.duality.client.blocks.essence.storage.generic;
 
 import com.github.ndioc.duality.blockentities.essence.EssenceContainerEntity;
-import com.github.ndioc.duality.client.PartialModels;
 import com.github.ndioc.duality.client.animation.AnimationBuilder;
 import com.github.ndioc.duality.client.animation.objects.AnimationData;
+import com.github.ndioc.duality.client.models.SimpleModels;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.OrientedInstance;
@@ -19,7 +19,7 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
   private final TransformedInstance container;
   private final OrientedInstance selection;
 
-  private final SimpleModel[] selectionModels = PartialModels.SelectionOutlineModels;
+  private final SimpleModel[] selectionModels = fetchModels();
   private final AnimationData containerAnimation = AnimationBuilder.ContainerAnimation;
 
   private boolean isActivated = false;
@@ -29,7 +29,7 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
   public OrbContainerVisual(VisualizationContext ctx, EssenceContainerEntity blockEntity, float partialTick) {
     super(ctx, blockEntity, partialTick);
 
-    container = instancerProvider().instancer(InstanceTypes.TRANSFORMED, PartialModels.OrbContainerModel)
+    container = instancerProvider().instancer(InstanceTypes.TRANSFORMED, SimpleModels.OrbContainerModel)
         .createInstance()
         .translate(getVisualPosition())
         .setIdentityTransform();
@@ -37,6 +37,13 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
     selection = instancerProvider().instancer(InstanceTypes.ORIENTED, selectionModels[0])
         .createInstance()
         .position(getVisualPosition());
+  }
+
+  private SimpleModel[] fetchModels() {
+    if (SimpleModels.SelectionOutlineModels == null || SimpleModels.OrbContainerModel == null) {
+      SimpleModels.bakeAllModels();
+    }
+    return SimpleModels.SelectionOutlineModels;
   }
 
   @Override
@@ -72,7 +79,7 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
       container.rotateZCentered(containerAnimation.getFrameRotationDataEAST(frame));
     }
 
-    instancerProvider().instancer(InstanceTypes.ORIENTED, PartialModels.SelectionOutlineModels[blockEntity.getCurrentSelection()])
+    instancerProvider().instancer(InstanceTypes.ORIENTED, selectionModels[blockEntity.getCurrentSelection()])
         .stealInstance(selection);
 
     container.setChanged();

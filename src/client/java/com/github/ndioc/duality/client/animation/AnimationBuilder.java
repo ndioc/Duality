@@ -20,7 +20,6 @@ public class AnimationBuilder {
 
   public static void AnimationsToPrint() {
     // use printAnimationToLog(AnimationData); for more information see printAnimationToLog();
-    printAnimationToLog(WispwoodLogAnimation);
   }
 
   public static void assembleContainerAnimation() {

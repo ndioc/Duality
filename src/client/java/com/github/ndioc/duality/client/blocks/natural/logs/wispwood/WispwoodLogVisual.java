@@ -1,9 +1,9 @@
 package com.github.ndioc.duality.client.blocks.natural.logs.wispwood;
 
 import com.github.ndioc.duality.blockentities.animation.AnimatedPillarEntity;
-import com.github.ndioc.duality.client.PartialModels;
 import com.github.ndioc.duality.client.animation.AnimationBuilder;
 import com.github.ndioc.duality.client.animation.objects.AnimationData;
+import com.github.ndioc.duality.client.models.SimpleModels;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
@@ -22,7 +22,7 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   private final TransformedInstance veins;
 
   private final AnimationData veinAnimation = AnimationBuilder.WispwoodLogAnimation;
-  private final SimpleModel[] veinModels = PartialModels.WispwoodVeinModels;
+  private SimpleModel[] veinModels = SimpleModels.WispwoodVeinModels;
 
   public WispwoodLogVisual(VisualizationContext ctx, AnimatedPillarEntity blockEntity, float partialTick){
     super(ctx, blockEntity, partialTick);
@@ -35,9 +35,14 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
         .setIdentityTransform();
 
     veins.light(15,15);
-    veins.color(0,0,255);
     veins.setChanged();
+  }
 
+  private SimpleModel[] fetchModels() {
+    if (SimpleModels.WispwoodVeinModels == null) {
+      SimpleModels.bakeAllModels();
+    }
+    return SimpleModels.WispwoodVeinModels;
   }
 
   private Direction getInitialRotation() {
@@ -49,6 +54,9 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
   }
 
   private SimpleModel getModel(int frame) {
+    if (veinModels == null) {
+      veinModels = fetchModels();
+    }
     return switch (frame) {
       case 0,22 -> veinModels[0];
       case 1,21 -> veinModels[1];
@@ -75,31 +83,37 @@ public class WispwoodLogVisual extends AbstractBlockEntityVisual<AnimatedPillarE
 
   @Override
   public void tick(Context context) {
-      veins.setTransform(veins.pose.identity());
-      veins.translate(getVisualPosition());
+    veins.setTransform(veins.pose.identity());
+    veins.translate(getVisualPosition());
 
-      final int animationoverlap = 6;
-      final int animationpause = 46;
+    final int animationoverlap = 6;
+    final int animationpause = 46;
 
-      int frameoffset = ((veinAnimation.getTotalFrames() - animationpause) - animationoverlap) * blockEntity.getIndex();
-      int frame = Math.toIntExact((level.getTime() - frameoffset + blockEntity.randomoffset) % (veinAnimation.getTotalFrames()));
+    int frameoffset = ((veinAnimation.getTotalFrames() - animationpause) - animationoverlap) * blockEntity.getIndex();
+    int frame = Math.toIntExact((level.getTime() - frameoffset + blockEntity.randomoffset) % (veinAnimation.getTotalFrames()));
 
-      // basic transform variables
-      SimpleModel veinmodel = getModel(frame);
+    // basic transform variables
+    SimpleModel veinmodel = getModel(frame);
 
     veins.setVisible(frame <= 22);
 
-      instancerProvider().instancer(InstanceTypes.TRANSFORMED, veinmodel)
-          .stealInstance(veins);
+    instancerProvider().instancer(InstanceTypes.TRANSFORMED, veinmodel)
+        .stealInstance(veins);
 
-      veins.translate(veinAnimation.getFramePosData(frame));
-      switch (blockEntity.axis) {
-        case "y": veins.rotateXCentered(veinAnimation.getFrameRotationDataUP(frame)); break;
-        case "z": veins.rotateYCentered(veinAnimation.getFrameRotationDataNORTH(frame)); break;
-        case "x": veins.rotateZCentered(veinAnimation.getFrameRotationDataEAST(frame)); break;
-      }
+    veins.translate(veinAnimation.getFramePosData(frame));
+    switch (blockEntity.axis) {
+      case "y":
+        veins.rotateXCentered(veinAnimation.getFrameRotationDataUP(frame));
+        break;
+      case "z":
+        veins.rotateYCentered(veinAnimation.getFrameRotationDataNORTH(frame));
+        break;
+      case "x":
+        veins.rotateZCentered(veinAnimation.getFrameRotationDataEAST(frame));
+        break;
+    }
 
-      veins.light(15, 15);
-      veins.setChanged();
+    veins.light(15, 15);
+    veins.setChanged();
   }
 }
