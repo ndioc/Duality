@@ -9,7 +9,7 @@ public class PartialModels {
   public static PartialModel[] WispwoodVeinPartials;
   public static PartialModel[] SelectionOutlinePartials;
 
-  public static PartialModel OrbContainerPartials;
+  public static PartialModel OrbContainerPartial;
 
   public static void fetch() {
     fetchModels();
@@ -17,7 +17,7 @@ public class PartialModels {
   }
 
   private static void fetchModels() {
-    OrbContainerPartials = PartialModel.of(Identifier.of(Duality.MOD_ID, "block/partials/orb_container"));
+    OrbContainerPartial = PartialModel.of(Identifier.of(Duality.MOD_ID, "block/partials/orb_container"));
   }
 
   private static void fetchArrays() {

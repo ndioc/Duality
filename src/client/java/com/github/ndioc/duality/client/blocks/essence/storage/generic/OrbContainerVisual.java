@@ -37,6 +37,8 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
     selection = instancerProvider().instancer(InstanceTypes.ORIENTED, selectionModels[0])
         .createInstance()
         .position(getVisualPosition());
+
+    selection.light(15,15);
   }
 
   private SimpleModel[] fetchModels() {
@@ -48,7 +50,6 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
 
   @Override
   public void collectCrumblingInstances(Consumer consumer) {
-    consumer.accept(container);
   }
 
   @Override
@@ -63,6 +64,7 @@ public class OrbContainerVisual extends AbstractBlockEntityVisual<EssenceContain
 
   @Override
   public void beginFrame(Context context) {
+    currentSelection = blockEntity.getCurrentSelection();
     selection.setVisible(currentSelection != 0);
 
     container.setTransform(container.pose.identity());

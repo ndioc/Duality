@@ -16,7 +16,7 @@ public class SimpleModels {
   public static void bakeAllModels() {
       WispwoodVeinModels = configurePartialArray(PartialModels.WispwoodVeinPartials, Materials.SOLID_BLOCK);
       SelectionOutlineModels = configurePartialArray(PartialModels.SelectionOutlinePartials, Materials.TRANSLUCENT_UNSHADED_BLOCK);
-      OrbContainerModel = applyMaterialToModel(PartialModels.OrbContainerPartials, Materials.CUTOUT_BLOCK);
+      OrbContainerModel = applyMaterialToModel(PartialModels.OrbContainerPartial, Materials.CUTOUT_BLOCK);
   }
 
   public static SimpleModel applyMaterialToModel(PartialModel inputModel, Material materialToApply) {

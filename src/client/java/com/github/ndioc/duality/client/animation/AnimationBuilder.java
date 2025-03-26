@@ -20,6 +20,8 @@ public class AnimationBuilder {
 
   public static void AnimationsToPrint() {
     // use printAnimationToLog(AnimationData); for more information see printAnimationToLog();
+
+    // WISPWOOD ANIMATION STUTTERS IN TRANSITION BETWEEN BLOCKS
   }
 
   public static void assembleContainerAnimation() {
@@ -60,8 +62,8 @@ public class AnimationBuilder {
         FrameRotData[x] = new Vec3d(3.141592d, 3.141592d, 3.141592d);
         continue;
       }
-      if (x >= 7 && x <= 23) {
-        FramePosData[x] = new Vec3d(0d, offset * (x - 7), 0d);
+      if (x >= 6 && x <= 23) {
+        FramePosData[x] = new Vec3d(0d, offset * (x - 6), 0d);
         FrameRotData[x] = new Vec3d(0d, 0d, 0d);
         continue;
       }
