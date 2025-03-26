@@ -15,6 +15,17 @@ import java.util.Random;
 
 import static com.github.ndioc.duality.util.nbt.BlockPosNBT.*;
 
+ /*
+
+    TODO || Implement 'Choke Points' | Make conveyors consume essence to maintain their 'tunnels'? | Split conveyors into 'pumps' and 'relays' |
+         || Implement 'Networking' between conveyors, IE make the conveyors take into account transfer frequencies, transfer times, transfer loss etc. |
+         || Implement 'multipumps' that can take and send essence between multiple sources and destination, like what i've already done but at a greater efficiency loss. |
+         || Give the player enough control to where their mistakes have real consequences, IE don't make the network to intelligent, make it send even if there is no where for the essence to go, the battery loses more efficiency the closer to full it gets,
+
+    REMEMBER TO USE COMMON METHODS BETWEEN ALL ESSENCE TRANSCEIVERS/PRODUCERS/CONSUMERS.
+
+  */
+
 public interface EssenceConveyor {
 
   QueuedTransfer[] getEssenceTransferQueue();

@@ -135,6 +135,17 @@ public interface EssenceContainer {
     int[] amount = new int[arrayLength];
     Arrays.fill(amount, Integer.MIN_VALUE);
 
+    // check if source has any essence at all
+
+    for (int x = 0; x < sourceArray.length; x++) {
+      if (sourceArray[x] != null) {
+        break;
+      }
+      else if(x == sourceArray.length - 1) {
+        return null;
+      }
+    }
+
     // checking what types are available for transfer
 
     for (Essence sourceEssence : sourceArray) {
